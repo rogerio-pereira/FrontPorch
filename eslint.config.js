@@ -74,6 +74,7 @@ export default defineConfigWithVueTs(
     },
     {
         ignores: [
+            '**/.docker/**',
             'vendor',
             'node_modules',
             'public',
