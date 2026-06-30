@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\RateLimiter;
 use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
@@ -45,5 +46,28 @@ class TwoFactorChallengeTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('auth/TwoFactorChallenge'),
             );
+    }
+
+    public function test_two_factor_challenge_is_rate_limited(): void
+    {
+        Features::twoFactorAuthentication([
+            'confirm' => true,
+            'confirmPassword' => true,
+        ]);
+
+        $user = User::factory()->withTwoFactor()->create();
+
+        $this->post(route('login'), [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        RateLimiter::increment(md5('two-factor'.$user->id), amount: 5);
+
+        $response = $this->post(route('two-factor.login.store'), [
+            'code' => '000000',
+        ]);
+
+        $response->assertTooManyRequests();
     }
 }

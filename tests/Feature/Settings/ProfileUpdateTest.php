@@ -43,6 +43,24 @@ class ProfileUpdateTest extends TestCase
         $this->assertNull($user->email_verified_at);
     }
 
+    public function test_email_must_be_unique_across_users()
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->from(route('profile.edit'))
+            ->patch(route('profile.update'), [
+                'name' => 'Test User',
+                'email' => $otherUser->email,
+            ]);
+
+        $response
+            ->assertSessionHasErrors('email')
+            ->assertRedirect(route('profile.edit'));
+    }
+
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged()
     {
         $user = User::factory()->create();
