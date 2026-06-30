@@ -2,6 +2,30 @@
 
 @import 'tw-animate-css';
 
+@font-face {
+    font-family: 'Montserrat Alt';
+    src: url('/fonts/MontserratAlt1-Thin.ttf') format('truetype');
+    font-weight: 100 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('/fonts/Montserrat-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('/fonts/Montserrat-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
@@ -9,9 +33,31 @@
 
 @theme inline {
     --font-sans:
-        Instrument Sans, ui-sans-serif, system-ui, sans-serif,
+        Montserrat, ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
+    --font-display:
+        'Montserrat Alt', Montserrat, ui-sans-serif, system-ui, sans-serif;
+
+    --color-brand-bg: #192630;
+    --color-brand-accent: #72887b;
+    --color-brand-accent-hover: #5f7266;
+    --color-brand-accent-muted: rgb(114 136 123 / 60%);
+
+    --color-surface-base: #192630;
+    --color-surface-raised: #1e2f3c;
+    --color-surface-overlay: #243847;
+
+    --color-border-subtle: rgb(255 255 255 / 8%);
+    --color-border-default: rgb(114 136 123 / 35%);
+    --color-border-strong: rgb(114 136 123 / 60%);
+
+    --color-success: #8fa894;
+    --color-success-muted: rgb(143 168 148 / 15%);
+    --color-error: #c47a7a;
+    --color-error-muted: rgb(196 122 122 / 15%);
+    --color-warning: #b8a088;
+    --color-info: #72887b;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -83,21 +129,39 @@
     body,
     html {
         --font-sans:
-            'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+            Montserrat, ui-sans-serif, system-ui, sans-serif,
             'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
             'Noto Color Emoji';
     }
 }
 
 :root {
+    --text-on-dark-a: #ffffff;
+    --text-on-dark-b: #f5f5f5;
+    --text-on-dark-c: #fafafa;
+    --text-on-dark-d: #f0ede8;
+    --text-on-dark: var(--text-on-dark-b);
+    --text-muted-on-dark: rgb(255 255 255 / 70%);
+    --text-subtle-on-dark: rgb(255 255 255 / 50%);
+
+    --section-light-l1: #f5f3ef;
+    --section-light-l2: #f8fafc;
+    --section-light-l3: #ffffff;
+    --section-light-l4: #eef1f0;
+    --section-light-bg: var(--section-light-l1);
+
+    --text-primary-on-light: #192630;
+    --text-muted-on-light: rgb(25 38 48 / 65%);
+    --text-accent-on-light: #72887b;
+
     --background: hsl(0 0% 100%);
     --foreground: hsl(0 0% 3.9%);
     --card: hsl(0 0% 100%);
     --card-foreground: hsl(0 0% 3.9%);
     --popover: hsl(0 0% 100%);
     --popover-foreground: hsl(0 0% 3.9%);
-    --primary: hsl(0 0% 9%);
-    --primary-foreground: hsl(0 0% 98%);
+    --primary: #72887b;
+    --primary-foreground: #192630;
     --secondary: hsl(0 0% 92.1%);
     --secondary-foreground: hsl(0 0% 9%);
     --muted: hsl(0 0% 96.1%);
