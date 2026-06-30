@@ -4,26 +4,26 @@ namespace Tests\Unit\Console;
 
 use App\Console\Commands\InstallFeaturesCommand;
 use Tests\TestCase;
+use Tests\Unit\Console\Concerns\ManagesChiselFileForTests;
+use Tests\Unit\Console\Fakes\InstallFeaturesCommandProbe;
+use Tests\Unit\Console\Fakes\TestInstallFeaturesCommand;
 
 class InstallFeaturesCommandTest extends TestCase
 {
-    private ?string $chiselBackupPath = null;
+    use ManagesChiselFileForTests;
 
     protected function tearDown(): void
     {
         $this->restoreChiselFile();
-
-        putenv('LARAVEL_INSTALLER_DEFER_HOOKS');
-        unset($_ENV['LARAVEL_INSTALLER_DEFER_HOOKS'], $_SERVER['LARAVEL_INSTALLER_DEFER_HOOKS']);
+        $this->releaseChiselLock();
+        $this->clearDeferredInstallerHooks();
 
         parent::tearDown();
     }
 
     public function test_skips_execution_when_installer_hooks_are_deferred(): void
     {
-        putenv('LARAVEL_INSTALLER_DEFER_HOOKS=true');
-        $_ENV['LARAVEL_INSTALLER_DEFER_HOOKS'] = 'true';
-        $_SERVER['LARAVEL_INSTALLER_DEFER_HOOKS'] = 'true';
+        $this->deferInstallerHooks();
 
         $this->artisan('install:features')
             ->assertSuccessful();
@@ -31,10 +31,7 @@ class InstallFeaturesCommandTest extends TestCase
 
     public function test_does_not_defer_when_answers_option_is_provided(): void
     {
-        putenv('LARAVEL_INSTALLER_DEFER_HOOKS=true');
-        $_ENV['LARAVEL_INSTALLER_DEFER_HOOKS'] = 'true';
-        $_SERVER['LARAVEL_INSTALLER_DEFER_HOOKS'] = 'true';
-
+        $this->deferInstallerHooks();
         $this->swapChiselWithStub();
         $this->bindTestCommand();
 
@@ -104,77 +101,21 @@ class InstallFeaturesCommandTest extends TestCase
 
     private function bindTestCommand(): void
     {
-        TestInstallFeaturesCommand::$installNodeDependenciesCalls = 0;
-        TestInstallFeaturesCommand::$buildAssetsCalls = 0;
+        TestInstallFeaturesCommand::resetCallCounts();
 
         $this->app->bind(InstallFeaturesCommand::class, TestInstallFeaturesCommand::class);
     }
 
-    private function swapChiselWithStub(): void
+    private function deferInstallerHooks(): void
     {
-        $chiselPath = base_path('chisel.php');
-
-        if ($this->chiselBackupPath === null) {
-            $this->chiselBackupPath = $chiselPath.'.test-backup';
-            rename($chiselPath, $this->chiselBackupPath);
-        }
-
-        copy(base_path('tests/fixtures/chisel-stub.php'), $chiselPath);
+        putenv('LARAVEL_INSTALLER_DEFER_HOOKS=true');
+        $_ENV['LARAVEL_INSTALLER_DEFER_HOOKS'] = 'true';
+        $_SERVER['LARAVEL_INSTALLER_DEFER_HOOKS'] = 'true';
     }
 
-    private function removeChiselFile(): void
+    private function clearDeferredInstallerHooks(): void
     {
-        $chiselPath = base_path('chisel.php');
-
-        if (is_file($chiselPath) && $this->chiselBackupPath === null) {
-            $this->chiselBackupPath = $chiselPath.'.test-backup';
-            rename($chiselPath, $this->chiselBackupPath);
-        }
-    }
-
-    private function restoreChiselFile(): void
-    {
-        if ($this->chiselBackupPath === null) {
-            return;
-        }
-
-        $chiselPath = base_path('chisel.php');
-
-        if (is_file($chiselPath)) {
-            unlink($chiselPath);
-        }
-
-        rename($this->chiselBackupPath, $chiselPath);
-        $this->chiselBackupPath = null;
-    }
-}
-
-class TestInstallFeaturesCommand extends InstallFeaturesCommand
-{
-    public static int $installNodeDependenciesCalls = 0;
-
-    public static int $buildAssetsCalls = 0;
-
-    protected function installNodeDependencies(): void
-    {
-        self::$installNodeDependenciesCalls++;
-    }
-
-    protected function buildAssets(): void
-    {
-        self::$buildAssetsCalls++;
-    }
-}
-
-class InstallFeaturesCommandProbe extends InstallFeaturesCommand
-{
-    public function runInstallNodeDependencies(): void
-    {
-        $this->installNodeDependencies();
-    }
-
-    public function runBuildAssets(): void
-    {
-        $this->buildAssets();
+        putenv('LARAVEL_INSTALLER_DEFER_HOOKS');
+        unset($_ENV['LARAVEL_INSTALLER_DEFER_HOOKS'], $_SERVER['LARAVEL_INSTALLER_DEFER_HOOKS']);
     }
 }
