@@ -20,7 +20,10 @@ trait ManagesChiselFileForTests
 
         if ($this->chiselBackupPath === null) {
             $this->chiselBackupPath = $chiselPath.'.test-backup';
-            rename($chiselPath, $this->chiselBackupPath);
+
+            if (is_file($chiselPath)) {
+                rename($chiselPath, $this->chiselBackupPath);
+            }
         }
 
         copy(base_path('tests/fixtures/chisel-stub.php'), $chiselPath);
@@ -50,7 +53,10 @@ trait ManagesChiselFileForTests
             unlink($chiselPath);
         }
 
-        rename($this->chiselBackupPath, $chiselPath);
+        if (is_file($this->chiselBackupPath)) {
+            rename($this->chiselBackupPath, $chiselPath);
+        }
+
         $this->chiselBackupPath = null;
     }
 
