@@ -7,27 +7,6 @@ import {
 } from '@lucide/vue';
 import IconBadge from '@/layouts/app/IconBadge.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
-
-const icons = [MonitorSmartphone, PhoneIncoming, Puzzle, BarChart3];
-
-const items = [
-    {
-        title: 'An outdated website',
-        description: 'It looked fine years ago, but today it feels slow, hard to read on a phone, or just not you.',
-    },
-    {
-        title: 'Leads that never show up',
-        description: 'You put in the effort, but the phone stays quiet and the inbox never fills.',
-    },
-    {
-        title: 'Too much manual work',
-        description: 'Quotes, follow-ups, and little tasks pile up because nothing is connected.',
-    },
-    {
-        title: 'Tools that do not talk',
-        description: 'A website here, email there, spreadsheets everywhere, and no clear picture.',
-    },
-];
 </script>
 
 <template>
@@ -42,17 +21,40 @@ const items = [
         </template>
 
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article
-                v-for="(item, index) in items"
-                :key="item.title"
-                class="marketing-card-hover flex flex-col items-center rounded-xl border border-border-default bg-surface-raised p-6 text-center"
-            >
-                <IconBadge :icon="icons[index] ?? Puzzle" size="lg" />
+            <article class="marketing-card-hover flex flex-col items-center rounded-xl border border-border-default bg-surface-raised p-6 text-center">
+                <IconBadge :icon="MonitorSmartphone" size="lg" />
                 <h3 class="mt-4 font-semibold text-brand-accent">
-                    {{ item.title }}
+                    An outdated website
                 </h3>
                 <p class="mt-2 line-clamp-3 text-sm text-[var(--text-muted-on-dark)]">
-                    {{ item.description }}
+                    It looked fine years ago, but today it feels slow, hard to read on a phone, or just not you.
+                </p>
+            </article>
+            <article class="marketing-card-hover flex flex-col items-center rounded-xl border border-border-default bg-surface-raised p-6 text-center">
+                <IconBadge :icon="PhoneIncoming" size="lg" />
+                <h3 class="mt-4 font-semibold text-brand-accent">
+                    Leads that never show up
+                </h3>
+                <p class="mt-2 line-clamp-3 text-sm text-[var(--text-muted-on-dark)]">
+                    You put in the effort, but the phone stays quiet and the inbox never fills.
+                </p>
+            </article>
+            <article class="marketing-card-hover flex flex-col items-center rounded-xl border border-border-default bg-surface-raised p-6 text-center">
+                <IconBadge :icon="Puzzle" size="lg" />
+                <h3 class="mt-4 font-semibold text-brand-accent">
+                    Too much manual work
+                </h3>
+                <p class="mt-2 line-clamp-3 text-sm text-[var(--text-muted-on-dark)]">
+                    Quotes, follow-ups, and little tasks pile up because nothing is connected.
+                </p>
+            </article>
+            <article class="marketing-card-hover flex flex-col items-center rounded-xl border border-border-default bg-surface-raised p-6 text-center">
+                <IconBadge :icon="BarChart3" size="lg" />
+                <h3 class="mt-4 font-semibold text-brand-accent">
+                    Tools that do not talk
+                </h3>
+                <p class="mt-2 line-clamp-3 text-sm text-[var(--text-muted-on-dark)]">
+                    A website here, email there, spreadsheets everywhere, and no clear picture.
                 </p>
             </article>
         </div>

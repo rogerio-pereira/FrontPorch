@@ -3,13 +3,6 @@ import { Mail } from '@lucide/vue';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
-
-const contactEmail = 'contact@example.com';
-
-const paragraphs = [
-    'Share a little about your business and what you are hoping to improve. We usually reply within one business day.',
-    'Want to talk live? Book a discovery call and we will walk through your goals together. We will confirm timing and format when you schedule.',
-];
 </script>
 
 <template>
@@ -25,21 +18,20 @@ const paragraphs = [
         </template>
 
         <div class="mx-auto max-w-2xl stack-loose rounded-xl border border-border-default bg-white p-8 text-center lg:p-10">
-            <p
-                v-for="(paragraph, index) in paragraphs"
-                :key="index"
-                class="text-body-lg text-[var(--text-muted-on-light)]"
-            >
-                {{ paragraph }}
+            <p class="text-body-lg text-[var(--text-muted-on-light)]">
+                Share a little about your business and what you are hoping to improve. We usually reply within one business day.
+            </p>
+            <p class="text-body-lg text-[var(--text-muted-on-light)]">
+                Want to talk live? Book a discovery call and we will walk through your goals together. We will confirm timing and format when you schedule.
             </p>
             <div class="flex items-center justify-center gap-3 text-sm text-[var(--text-primary-on-light)]">
                 <Mail class="size-5 text-brand-accent" />
                 <a
-                    :href="`mailto:${contactEmail}`"
+                    href="mailto:contact@example.com"
                     class="font-semibold text-brand-accent hover:underline"
                     data-test="home-contact-email"
                 >
-                    {{ contactEmail }}
+                    contact@example.com
                 </a>
             </div>
             <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -48,7 +40,7 @@ const paragraphs = [
                     test-id="home-contact-schedule"
                 />
                 <a
-                    :href="`mailto:${contactEmail}`"
+                    href="mailto:contact@example.com"
                     class="text-sm font-semibold text-brand-accent hover:underline"
                     data-test="home-contact-email-cta"
                 >
