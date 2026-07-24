@@ -23,10 +23,6 @@ createInertiaApp({
             return CoreLayout;
         }
 
-        if (name === 'Welcome') {
-            return null;
-        }
-
         return AppLayout;
     },
     progress: {
