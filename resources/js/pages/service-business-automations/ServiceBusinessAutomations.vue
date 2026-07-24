@@ -5,74 +5,6 @@ import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
-
-const realityItems = [
-    {
-        title: 'Same info, three places',
-        description: 'Forms, spreadsheets, and inboxes that never stay in sync.',
-    },
-    {
-        title: 'Follow-ups that depend on memory',
-        description: 'Good intentions, busy days, cold leads.',
-    },
-    {
-        title: 'Handoffs that drop',
-        description: 'One person finishes a step; the next person never hears about it.',
-    },
-    {
-        title: '"We\'ll automate later"',
-        description: 'Later never comes, and the pile keeps growing.',
-    },
-];
-
-const benefitItems = [
-    {
-        title: 'Time back for real work',
-        description: 'The tasks you do every week finally run without you.',
-    },
-    {
-        title: 'Faster, kinder follow-up',
-        description: 'Interested people hear from you while interest is still warm.',
-    },
-    {
-        title: 'Fewer mistakes',
-        description: 'Less retyping means fewer wrong numbers, missed emails, and awkward apologies.',
-    },
-    {
-        title: 'Clearer handoffs',
-        description: 'The next person (or the next you) knows exactly what happened.',
-    },
-    {
-        title: 'Start with one win',
-        description: 'We pick a high-pain workflow first so you feel the difference quickly.',
-    },
-];
-
-const processSteps = [
-    {
-        title: 'Map the friction',
-        description: 'Where do hours disappear? Where do leads go quiet?',
-    },
-    {
-        title: 'Design the simplest flow',
-        description: 'Only the steps that matter, no Rube Goldberg machines.',
-    },
-    {
-        title: 'Connect and test',
-        description: 'Wire the tools, try real scenarios, fix the rough edges together.',
-    },
-    {
-        title: 'Hand over with confidence',
-        description: 'You know what runs automatically, and what still needs a human touch.',
-    },
-];
-
-const relatedServices = [
-    { slug: 'lead-generation', label: 'Lead generation' },
-    { slug: 'email-marketing', label: 'Email marketing' },
-    { slug: 'website-design-and-development', label: 'Website design & development' },
-    { slug: 'custom-software-development', label: 'Custom software development' },
-];
 </script>
 
 <template>
@@ -140,19 +72,48 @@ const relatedServices = [
         wide
     >
         <div class="grid gap-4 sm:grid-cols-2">
-            <article
-                v-for="(item, index) in realityItems"
-                :key="item.title"
-                class="rounded-xl border border-border-default bg-white p-5"
-            >
+            <article class="rounded-xl border border-border-default bg-white p-5">
                 <p class="text-overline text-brand-accent">
-                    {{ String(index + 1).padStart(2, '0') }}
+                    01
                 </p>
                 <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
-                    {{ item.title }}
+                    Same info, three places
                 </h3>
                 <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
-                    {{ item.description }}
+                    Forms, spreadsheets, and inboxes that never stay in sync.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-white p-5">
+                <p class="text-overline text-brand-accent">
+                    02
+                </p>
+                <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
+                    Follow-ups that depend on memory
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
+                    Good intentions, busy days, cold leads.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-white p-5">
+                <p class="text-overline text-brand-accent">
+                    03
+                </p>
+                <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
+                    Handoffs that drop
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
+                    One person finishes a step; the next person never hears about it.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-white p-5">
+                <p class="text-overline text-brand-accent">
+                    04
+                </p>
+                <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
+                    "We'll automate later"
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
+                    Later never comes, and the pile keeps growing.
                 </p>
             </article>
         </div>
@@ -165,16 +126,44 @@ const relatedServices = [
         wide
     >
         <div class="mx-auto max-w-3xl space-y-5">
-            <article
-                v-for="item in benefitItems"
-                :key="item.title"
-                class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6"
-            >
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
                 <h3 class="font-semibold text-[var(--text-on-dark)]">
-                    {{ item.title }}
+                    Time back for real work
                 </h3>
                 <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
-                    {{ item.description }}
+                    The tasks you do every week finally run without you.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Faster, kinder follow-up
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Interested people hear from you while interest is still warm.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Fewer mistakes
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Less retyping means fewer wrong numbers, missed emails, and awkward apologies.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Clearer handoffs
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    The next person (or the next you) knows exactly what happened.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Start with one win
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    We pick a high-pain workflow first so you feel the difference quickly.
                 </p>
             </article>
         </div>
@@ -208,19 +197,48 @@ const relatedServices = [
         centered
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article
-                v-for="(step, index) in processSteps"
-                :key="step.title"
-                class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left"
-            >
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
-                    {{ index + 1 }}
+                    1
                 </div>
                 <h3 class="font-semibold">
-                    {{ step.title }}
+                    Map the friction
                 </h3>
                 <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
-                    {{ step.description }}
+                    Where do hours disappear? Where do leads go quiet?
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    2
+                </div>
+                <h3 class="font-semibold">
+                    Design the simplest flow
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Only the steps that matter, no Rube Goldberg machines.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    3
+                </div>
+                <h3 class="font-semibold">
+                    Connect and test
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Wire the tools, try real scenarios, fix the rough edges together.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    4
+                </div>
+                <h3 class="font-semibold">
+                    Hand over with confidence
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    You know what runs automatically, and what still needs a human touch.
                 </p>
             </article>
         </div>
@@ -264,14 +282,48 @@ const relatedServices = [
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Link
-                v-for="service in relatedServices"
-                :key="service.slug"
-                :href="`/services/${service.slug}`"
+                href="/services/lead-generation"
                 class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                :data-test="`service-related-${service.slug}`"
+                data-test="service-related-lead-generation"
             >
                 <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    {{ service.label }}
+                    Lead generation
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/email-marketing"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-email-marketing"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Email marketing
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/website-design-and-development"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-website-design-and-development"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Website design &amp; development
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/custom-software-development"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-custom-software-development"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Custom software development
                 </h3>
                 <p class="mt-2 text-sm text-brand-accent">
                     Learn more →
