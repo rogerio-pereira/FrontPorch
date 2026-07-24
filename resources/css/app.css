@@ -133,6 +133,71 @@
             'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
             'Noto Color Emoji';
     }
+
+    .text-display {
+        font-family: var(--font-display);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+    }
+
+    .text-h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+    }
+
+    .text-h2 {
+        font-size: clamp(1.5rem, 3vw, 2.25rem);
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+    }
+
+    .text-body-lg {
+        font-size: 1.125rem;
+        line-height: 1.7;
+    }
+
+    .text-overline {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .section-y {
+        @apply py-16 lg:py-24;
+    }
+
+    .section-y-tight {
+        @apply py-12 lg:py-16;
+    }
+
+    .stack-default {
+        @apply space-y-6;
+    }
+
+    .stack-loose {
+        @apply space-y-10;
+    }
+
+    .marketing-grid-bg {
+        background-image:
+            linear-gradient(rgb(114 136 123 / 8%) 1px, transparent 1px),
+            linear-gradient(90deg, rgb(114 136 123 / 8%) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: radial-gradient(circle at center, black, transparent 80%);
+    }
+
+    .marketing-card-hover {
+        @apply transition-all duration-300 hover:-translate-y-1 hover:border-brand-accent/50 hover:shadow-[0_12px_40px_rgba(114,136,123,0.15)];
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .marketing-card-hover {
+            @apply transition-none hover:translate-y-0;
+        }
+    }
 }
 
 :root {
