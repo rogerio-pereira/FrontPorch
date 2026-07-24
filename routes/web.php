@@ -2,11 +2,16 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\PortfolioStudyCaseController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
 Route::get('/portfolio', PortfolioController::class)->name('portfolio');
+
+Route::get('/portfolio/study-case/{id}', PortfolioStudyCaseController::class)
+    ->whereNumber('id')
+    ->name('portfolio.study-case');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
