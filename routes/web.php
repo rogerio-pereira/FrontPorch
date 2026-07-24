@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\PortfolioStudyCaseController;
+use App\Http\Controllers\ServiceEmailMarketingController;
 use App\Http\Controllers\ServiceLeadGenerationController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,7 @@ Route::get('/blog/article/{id}', [BlogArticleController::class, 'show'])
 Route::get('/blog/{slug}', [BlogArticleController::class, 'showBySlug'])->name('blog.show');
 
 Route::get('/services/lead-generation', ServiceLeadGenerationController::class)->name('services.lead-generation');
+Route::get('/services/email-marketing', ServiceEmailMarketingController::class)->name('services.email-marketing');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
