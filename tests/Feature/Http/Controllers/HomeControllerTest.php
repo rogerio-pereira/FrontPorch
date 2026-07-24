@@ -2,6 +2,10 @@
 
 use Inertia\Testing\AssertableInertia as Assert;
 
+it('returns a successful response', function () {
+    $this->get(route('home'))->assertOk();
+});
+
 it('renders the home page with backend-driven listing props', function () {
     $this->get('/')
         ->assertOk()
@@ -25,6 +29,12 @@ it('renders the home page with backend-driven listing props', function () {
             )
             ->has('portfolioPreview', 6)
             ->has('portfolioPreview.0', fn (Assert $item) => $item
+                ->has('title')
+                ->has('description')
+                ->has('image')
+            )
+            ->has('blogPreview', 3)
+            ->has('blogPreview.0', fn (Assert $item) => $item
                 ->has('title')
                 ->has('description')
                 ->has('image')
