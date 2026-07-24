@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogArticleController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortfolioController;
@@ -15,6 +16,10 @@ Route::get('/portfolio/study-case/{id}', PortfolioStudyCaseController::class)
     ->name('portfolio.study-case');
 
 Route::get('/blog', BlogController::class)->name('blog');
+Route::get('/blog/article/{id}', [BlogArticleController::class, 'show'])
+    ->whereNumber('id')
+    ->name('blog.article');
+Route::get('/blog/{slug}', [BlogArticleController::class, 'showBySlug'])->name('blog.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
