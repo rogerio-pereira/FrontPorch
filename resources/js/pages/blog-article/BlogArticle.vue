@@ -1,0 +1,159 @@
+<script setup lang="ts">
+import { Head, Link } from '@inertiajs/vue3';
+import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
+import CtaButton from '@/layouts/app/CtaButton.vue';
+
+type ArticleBlock =
+    | { type: 'paragraph' | 'heading'; text: string }
+    | { type: 'image'; src: string; alt: string };
+
+type PublishedArticle = {
+    published: true;
+    title: string;
+    excerpt: string;
+    category: string;
+    publishedAt: string;
+    author: string;
+    coverImage: string;
+    coverAlt: string;
+    body: ArticleBlock[];
+};
+
+type UnpublishedArticle = {
+    published: false;
+    title: string;
+    coverImage: string;
+};
+
+defineProps<{
+    // TODO: remove demo payload in BlogArticleController once Article model exists
+    article: PublishedArticle | UnpublishedArticle;
+}>();
+</script>
+
+<template>
+    <Head :title="`${article.title} | Blog | Front Porch Creative`" />
+
+    <template v-if="article.published">
+        <section class="relative overflow-hidden bg-brand-bg text-[var(--text-on-dark)]">
+            <DecorativeBackground variant="glow" />
+            <div class="section-y relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+                <Link
+                    href="/blog"
+                    class="inline-flex text-sm font-semibold text-brand-accent hover:underline"
+                    data-test="article-back"
+                >
+                    Back to blog
+                </Link>
+
+                <div class="mt-8 stack-default">
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-[var(--text-subtle-on-dark)]">
+                        <span class="rounded-sm border border-brand-accent/40 px-2 py-0.5 text-brand-accent">
+                            {{ article.category }}
+                        </span>
+                        <span>{{ article.publishedAt }}</span>
+                        <span>{{ article.author }}</span>
+                    </div>
+                    <h1 class="text-h1 font-semibold" data-test="article-heading">
+                        {{ article.title }}
+                    </h1>
+                    <p class="text-body-lg text-[var(--text-muted-on-dark)]">
+                        {{ article.excerpt }}
+                    </p>
+                </div>
+
+                <img
+                    :src="article.coverImage"
+                    :alt="article.coverAlt"
+                    class="mt-8 aspect-video w-full rounded-xl border border-brand-accent/25 object-cover"
+                    data-test="article-visual"
+                />
+            </div>
+        </section>
+
+        <article class="bg-[var(--section-light-bg)] text-[var(--text-primary-on-light)]">
+            <div class="section-y mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+                <div class="space-y-6">
+                    <template
+                        v-for="(block, index) in article.body"
+                        :key="index"
+                    >
+                        <h2
+                            v-if="block.type === 'heading'"
+                            class="pt-4 text-h2 font-semibold"
+                        >
+                            {{ block.text }}
+                        </h2>
+                        <p
+                            v-else-if="block.type === 'paragraph'"
+                            class="text-body-lg leading-relaxed text-[var(--text-muted-on-light)]"
+                        >
+                            {{ block.text }}
+                        </p>
+                        <figure
+                            v-else-if="block.type === 'image'"
+                            class="py-4"
+                        >
+                            <img
+                                :src="block.src"
+                                :alt="block.alt"
+                                class="aspect-[4/3] w-full rounded-xl border border-brand-accent/20 object-cover"
+                                loading="lazy"
+                            />
+                        </figure>
+                    </template>
+                </div>
+
+                <div class="mt-12 flex flex-col gap-3 border-t border-brand-accent/20 pt-10 sm:flex-row sm:items-center">
+                    <CtaButton
+                        label="Book a discovery call"
+                        test-id="article-schedule"
+                    />
+                    <Link
+                        href="/blog"
+                        class="inline-flex items-center text-sm font-semibold text-[var(--text-accent-on-light)] hover:underline"
+                    >
+                        More articles
+                    </Link>
+                </div>
+            </div>
+        </article>
+    </template>
+
+    <section
+        v-else
+        class="relative overflow-hidden bg-brand-bg text-[var(--text-on-dark)]"
+    >
+        <DecorativeBackground variant="glow" />
+        <div class="section-y relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <img
+                :src="article.coverImage"
+                :alt="article.title"
+                class="mb-8 aspect-video w-full rounded-xl border border-brand-accent/25 object-cover"
+                data-test="article-visual"
+            />
+            <p class="text-overline text-brand-accent">
+                From the blog
+            </p>
+            <h1 class="text-h1 font-semibold" data-test="article-heading">
+                {{ article.title }}
+            </h1>
+            <p class="mt-4 text-body-lg text-[var(--text-muted-on-dark)]">
+                This article is not published yet. Check back soon, or book a discovery call if you want to talk through the topic now.
+            </p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                <CtaButton
+                    label="Book a discovery call"
+                    test-id="article-schedule"
+                />
+                <Link
+                    href="/blog"
+                    class="inline-flex items-center text-sm font-semibold text-brand-accent hover:underline"
+                    data-test="article-back"
+                >
+                    Back to blog
+                </Link>
+            </div>
+        </div>
+    </section>
+</template>
