@@ -17,12 +17,14 @@ class HomeController extends Controller
          * - services: list<{ slug: string, title: string, teaser: string }>
          * - testimonials: list<{ quote: string, attribution: string }>
          * - portfolioPreview: list<{ title: string, description: string, image: string }>
+         * - blogPreview: list<{ title: string, description: string, image: string }>
          */
         return Inertia::render('home/Home', [
             'faq' => $this->faq(),
             'services' => $this->services(),
             'testimonials' => $this->testimonials(),
             'portfolioPreview' => $this->portfolioPreview(),
+            'blogPreview' => $this->blogPreview(),
         ]);
     }
 
@@ -157,6 +159,30 @@ class HomeController extends Controller
                 'title' => 'Client portal for a firm',
                 'description' => 'One place to share files and updates, with less email back-and-forth.',
                 'image' => '/images/home/portfolio-c.png',
+            ],
+        ];
+    }
+
+    /**
+     * @return list<array{title: string, description: string, image: string}>
+     */
+    private function blogPreview(): array
+    {
+        return [
+            [
+                'title' => 'Your website works when you are not',
+                'description' => 'Most customers look you up before they call. Here is how to make that first impression count.',
+                'image' => '/images/home/blog-website.png',
+            ],
+            [
+                'title' => 'Getting more inquiries from people who are actually interested',
+                'description' => 'A simple way to think about turning online attention into real conversations.',
+                'image' => '/images/home/blog-inquiries.png',
+            ],
+            [
+                'title' => 'Small automations that save big chunks of time',
+                'description' => 'Start with the tasks you do every week, the relief is often immediate.',
+                'image' => '/images/home/blog-automations.png',
             ],
         ];
     }
