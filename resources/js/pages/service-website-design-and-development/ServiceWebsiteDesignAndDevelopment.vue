@@ -5,74 +5,6 @@ import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
-
-const realityItems = [
-    {
-        title: 'Hard to use on a phone',
-        description: 'Most people find you on mobile first. If the site fights them, they leave.',
-    },
-    {
-        title: 'Unclear next step',
-        description: 'Visitors like what they see, then are not sure whether to call, book, or fill a form.',
-    },
-    {
-        title: 'Outdated or slow',
-        description: 'It feels tired, loads slowly, or no longer matches the quality of your work.',
-    },
-    {
-        title: 'Disconnected from the rest',
-        description: 'The site sits alone, while email, ads, and follow-up live somewhere else.',
-    },
-];
-
-const benefitItems = [
-    {
-        title: 'Trust in the first few seconds',
-        description: 'Clean design and clear words that match the care you put into your work.',
-    },
-    {
-        title: 'Easy on every phone',
-        description: 'Readable, tappable, and quick, because that is how most people will meet you.',
-    },
-    {
-        title: 'An obvious next step',
-        description: 'Call, book, or message without hunting for a tiny link.',
-    },
-    {
-        title: 'Room to grow',
-        description: 'Built so you can add pages, offers, or tools later without starting from zero.',
-    },
-    {
-        title: 'Connected to your growth plan',
-        description: 'Designed to work with lead gen, email, and the processes behind the scenes.',
-    },
-];
-
-const processSteps = [
-    {
-        title: 'Discovery',
-        description: 'Goals, audience, and what "success" looks like for your site.',
-    },
-    {
-        title: 'Structure and design',
-        description: 'A layout visitors can scan, with your brand front and center.',
-    },
-    {
-        title: 'Build and refine',
-        description: 'We assemble, polish, and check everything on real devices.',
-    },
-    {
-        title: 'Launch and handoff',
-        description: 'Go live with a clear walkthrough so you know how to update the basics.',
-    },
-];
-
-const relatedServices = [
-    { slug: 'lead-generation', label: 'Lead generation' },
-    { slug: 'email-marketing', label: 'Email marketing' },
-    { slug: 'business-automations', label: 'Business automations' },
-    { slug: 'custom-software-development', label: 'Custom software development' },
-];
 </script>
 
 <template>
@@ -140,19 +72,48 @@ const relatedServices = [
         wide
     >
         <div class="grid gap-4 sm:grid-cols-2">
-            <article
-                v-for="(item, index) in realityItems"
-                :key="item.title"
-                class="rounded-xl border border-border-default bg-white p-5"
-            >
+            <article class="rounded-xl border border-border-default bg-white p-5">
                 <p class="text-overline text-brand-accent">
-                    {{ String(index + 1).padStart(2, '0') }}
+                    01
                 </p>
                 <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
-                    {{ item.title }}
+                    Hard to use on a phone
                 </h3>
                 <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
-                    {{ item.description }}
+                    Most people find you on mobile first. If the site fights them, they leave.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-white p-5">
+                <p class="text-overline text-brand-accent">
+                    02
+                </p>
+                <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
+                    Unclear next step
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
+                    Visitors like what they see, then are not sure whether to call, book, or fill a form.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-white p-5">
+                <p class="text-overline text-brand-accent">
+                    03
+                </p>
+                <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
+                    Outdated or slow
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
+                    It feels tired, loads slowly, or no longer matches the quality of your work.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-white p-5">
+                <p class="text-overline text-brand-accent">
+                    04
+                </p>
+                <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
+                    Disconnected from the rest
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
+                    The site sits alone, while email, ads, and follow-up live somewhere else.
                 </p>
             </article>
         </div>
@@ -165,16 +126,44 @@ const relatedServices = [
         wide
     >
         <div class="mx-auto max-w-3xl space-y-5">
-            <article
-                v-for="item in benefitItems"
-                :key="item.title"
-                class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6"
-            >
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
                 <h3 class="font-semibold text-[var(--text-on-dark)]">
-                    {{ item.title }}
+                    Trust in the first few seconds
                 </h3>
                 <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
-                    {{ item.description }}
+                    Clean design and clear words that match the care you put into your work.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Easy on every phone
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Readable, tappable, and quick, because that is how most people will meet you.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    An obvious next step
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Call, book, or message without hunting for a tiny link.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Room to grow
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Built so you can add pages, offers, or tools later without starting from zero.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Connected to your growth plan
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Designed to work with lead gen, email, and the processes behind the scenes.
                 </p>
             </article>
         </div>
@@ -208,19 +197,48 @@ const relatedServices = [
         centered
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article
-                v-for="(step, index) in processSteps"
-                :key="step.title"
-                class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left"
-            >
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
-                    {{ index + 1 }}
+                    1
                 </div>
                 <h3 class="font-semibold">
-                    {{ step.title }}
+                    Discovery
                 </h3>
                 <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
-                    {{ step.description }}
+                    Goals, audience, and what "success" looks like for your site.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    2
+                </div>
+                <h3 class="font-semibold">
+                    Structure and design
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    A layout visitors can scan, with your brand front and center.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    3
+                </div>
+                <h3 class="font-semibold">
+                    Build and refine
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    We assemble, polish, and check everything on real devices.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    4
+                </div>
+                <h3 class="font-semibold">
+                    Launch and handoff
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Go live with a clear walkthrough so you know how to update the basics.
                 </p>
             </article>
         </div>
@@ -264,14 +282,48 @@ const relatedServices = [
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Link
-                v-for="service in relatedServices"
-                :key="service.slug"
-                :href="`/services/${service.slug}`"
+                href="/services/lead-generation"
                 class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                :data-test="`service-related-${service.slug}`"
+                data-test="service-related-lead-generation"
             >
                 <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    {{ service.label }}
+                    Lead generation
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/email-marketing"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-email-marketing"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Email marketing
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/business-automations"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-business-automations"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Business automations
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/custom-software-development"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-custom-software-development"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Custom software development
                 </h3>
                 <p class="mt-2 text-sm text-brand-accent">
                     Learn more →
