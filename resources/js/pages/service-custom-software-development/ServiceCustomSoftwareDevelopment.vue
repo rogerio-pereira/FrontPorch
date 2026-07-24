@@ -5,55 +5,6 @@ import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
-
-const benefitItems = [
-    {
-        title: 'Fits the way you already work',
-        description: 'Screens and steps that match your real day, not a generic template.',
-    },
-    {
-        title: 'Fewer workarounds',
-        description: 'Less bouncing between apps and patching gaps with spreadsheets.',
-    },
-    {
-        title: 'Clarity for your team',
-        description: 'One place for the job at hand, with less training theater.',
-    },
-    {
-        title: 'Room to evolve',
-        description: 'Start with what matters most; grow the tool as the business grows.',
-    },
-    {
-        title: 'Honest scoping',
-        description: 'We say when a simpler existing tool is enough, custom is not always the answer.',
-    },
-];
-
-const processSteps = [
-    {
-        title: 'Diagnose the real need',
-        description: 'What hurts today, who uses it, and what "better" looks like.',
-    },
-    {
-        title: 'Shape a focused plan',
-        description: 'Scope you can understand: what is in, what is out, and why.',
-    },
-    {
-        title: 'Build in visible slices',
-        description: 'You see progress early and can steer before everything is "done."',
-    },
-    {
-        title: 'Launch and support',
-        description: 'Go live with training that sticks, then refine based on real use.',
-    },
-];
-
-const relatedServices = [
-    { slug: 'lead-generation', label: 'Lead generation' },
-    { slug: 'email-marketing', label: 'Email marketing' },
-    { slug: 'website-design-and-development', label: 'Website design & development' },
-    { slug: 'business-automations', label: 'Business automations' },
-];
 </script>
 
 <template>
@@ -120,16 +71,44 @@ const relatedServices = [
         wide
     >
         <div class="mx-auto max-w-3xl space-y-5">
-            <article
-                v-for="item in benefitItems"
-                :key="item.title"
-                class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6"
-            >
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
                 <h3 class="font-semibold text-[var(--text-on-dark)]">
-                    {{ item.title }}
+                    Fits the way you already work
                 </h3>
                 <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
-                    {{ item.description }}
+                    Screens and steps that match your real day, not a generic template.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Fewer workarounds
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Less bouncing between apps and patching gaps with spreadsheets.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Clarity for your team
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    One place for the job at hand, with less training theater.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Room to evolve
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Start with what matters most; grow the tool as the business grows.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Honest scoping
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    We say when a simpler existing tool is enough, custom is not always the answer.
                 </p>
             </article>
         </div>
@@ -163,19 +142,48 @@ const relatedServices = [
         centered
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article
-                v-for="(step, index) in processSteps"
-                :key="step.title"
-                class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left"
-            >
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
-                    {{ index + 1 }}
+                    1
                 </div>
                 <h3 class="font-semibold">
-                    {{ step.title }}
+                    Diagnose the real need
                 </h3>
                 <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
-                    {{ step.description }}
+                    What hurts today, who uses it, and what "better" looks like.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    2
+                </div>
+                <h3 class="font-semibold">
+                    Shape a focused plan
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Scope you can understand: what is in, what is out, and why.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    3
+                </div>
+                <h3 class="font-semibold">
+                    Build in visible slices
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    You see progress early and can steer before everything is "done."
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    4
+                </div>
+                <h3 class="font-semibold">
+                    Launch and support
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Go live with training that sticks, then refine based on real use.
                 </p>
             </article>
         </div>
@@ -219,14 +227,48 @@ const relatedServices = [
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Link
-                v-for="service in relatedServices"
-                :key="service.slug"
-                :href="`/services/${service.slug}`"
+                href="/services/lead-generation"
                 class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                :data-test="`service-related-${service.slug}`"
+                data-test="service-related-lead-generation"
             >
                 <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    {{ service.label }}
+                    Lead generation
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/email-marketing"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-email-marketing"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Email marketing
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/website-design-and-development"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-website-design-and-development"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Website design &amp; development
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/business-automations"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-business-automations"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Business automations
                 </h3>
                 <p class="mt-2 text-sm text-brand-accent">
                     Learn more →
