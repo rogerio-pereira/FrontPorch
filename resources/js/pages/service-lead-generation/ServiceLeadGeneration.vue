@@ -5,74 +5,6 @@ import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
-
-const realityItems = [
-    {
-        title: 'Ads that get ignored',
-        description: 'Spend goes out, but few people take the next step.',
-    },
-    {
-        title: 'Visitors who leave unsure',
-        description: 'Your site or landing page does not make it obvious why they should call or fill a form.',
-    },
-    {
-        title: 'Leads that go cold',
-        description: 'Someone reaches out, and then waits too long for a reply.',
-    },
-    {
-        title: 'No clear picture',
-        description: 'Hard to tell which channels actually bring paying customers.',
-    },
-];
-
-const benefitItems = [
-    {
-        title: 'Reach people who already need you',
-        description: 'Messages and offers aimed at the customers you actually want, not everyone with a pulse.',
-    },
-    {
-        title: 'A clear reason to respond',
-        description: 'Landing pages and offers that make the next step feel easy and worthwhile.',
-    },
-    {
-        title: 'Follow-up that does not fall through',
-        description: 'Simple paths so interested people hear back before they move on.',
-    },
-    {
-        title: 'Numbers you can understand',
-        description: 'Plain reporting on what is bringing inquiries, without a dashboard lecture.',
-    },
-    {
-        title: 'Room to start small',
-        description: 'Begin with a budget and scope that feel safe, then grow what works.',
-    },
-];
-
-const processSteps = [
-    {
-        title: 'Listen first',
-        description: 'We learn who you serve, what a good lead looks like, and what you can handle.',
-    },
-    {
-        title: 'Shape the offer',
-        description: 'Clarify the message and the path from "interested" to "in touch."',
-    },
-    {
-        title: 'Launch with care',
-        description: 'Put the pieces live (ads, pages, or both) and watch what happens together.',
-    },
-    {
-        title: 'Adjust what matters',
-        description: 'Keep what brings real conversations; change what does not.',
-    },
-];
-
-const relatedServices = [
-    { slug: 'email-marketing', label: 'Email marketing' },
-    { slug: 'website-design-and-development', label: 'Website design & development' },
-    { slug: 'business-automations', label: 'Business automations' },
-    { slug: 'custom-software-development', label: 'Custom software development' },
-];
 </script>
 
 <template>
@@ -140,19 +72,48 @@ const relatedServices = [
         wide
     >
         <div class="grid gap-4 sm:grid-cols-2">
-            <article
-                v-for="(item, index) in realityItems"
-                :key="item.title"
-                class="rounded-xl border border-border-default bg-white p-5"
-            >
+            <article class="rounded-xl border border-border-default bg-white p-5">
                 <p class="text-overline text-brand-accent">
-                    {{ String(index + 1).padStart(2, '0') }}
+                    01
                 </p>
                 <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
-                    {{ item.title }}
+                    Ads that get ignored
                 </h3>
                 <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
-                    {{ item.description }}
+                    Spend goes out, but few people take the next step.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-white p-5">
+                <p class="text-overline text-brand-accent">
+                    02
+                </p>
+                <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
+                    Visitors who leave unsure
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
+                    Your site or landing page does not make it obvious why they should call or fill a form.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-white p-5">
+                <p class="text-overline text-brand-accent">
+                    03
+                </p>
+                <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
+                    Leads that go cold
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
+                    Someone reaches out, and then waits too long for a reply.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-white p-5">
+                <p class="text-overline text-brand-accent">
+                    04
+                </p>
+                <h3 class="mt-2 font-semibold text-[var(--text-primary-on-light)]">
+                    No clear picture
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
+                    Hard to tell which channels actually bring paying customers.
                 </p>
             </article>
         </div>
@@ -165,16 +126,44 @@ const relatedServices = [
         wide
     >
         <div class="mx-auto max-w-3xl space-y-5">
-            <article
-                v-for="item in benefitItems"
-                :key="item.title"
-                class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6"
-            >
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
                 <h3 class="font-semibold text-[var(--text-on-dark)]">
-                    {{ item.title }}
+                    Reach people who already need you
                 </h3>
                 <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
-                    {{ item.description }}
+                    Messages and offers aimed at the customers you actually want, not everyone with a pulse.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    A clear reason to respond
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Landing pages and offers that make the next step feel easy and worthwhile.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Follow-up that does not fall through
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Simple paths so interested people hear back before they move on.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Numbers you can understand
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Plain reporting on what is bringing inquiries, without a dashboard lecture.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Room to start small
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Begin with a budget and scope that feel safe, then grow what works.
                 </p>
             </article>
         </div>
@@ -208,19 +197,48 @@ const relatedServices = [
         centered
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article
-                v-for="(step, index) in processSteps"
-                :key="step.title"
-                class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left"
-            >
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
-                    {{ index + 1 }}
+                    1
                 </div>
                 <h3 class="font-semibold">
-                    {{ step.title }}
+                    Listen first
                 </h3>
                 <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
-                    {{ step.description }}
+                    We learn who you serve, what a good lead looks like, and what you can handle.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    2
+                </div>
+                <h3 class="font-semibold">
+                    Shape the offer
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Clarify the message and the path from "interested" to "in touch."
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    3
+                </div>
+                <h3 class="font-semibold">
+                    Launch with care
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Put the pieces live (ads, pages, or both) and watch what happens together.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    4
+                </div>
+                <h3 class="font-semibold">
+                    Adjust what matters
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Keep what brings real conversations; change what does not.
                 </p>
             </article>
         </div>
@@ -264,14 +282,48 @@ const relatedServices = [
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Link
-                v-for="service in relatedServices"
-                :key="service.slug"
-                :href="`/services/${service.slug}`"
+                href="/services/email-marketing"
                 class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                :data-test="`service-related-${service.slug}`"
+                data-test="service-related-email-marketing"
             >
                 <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    {{ service.label }}
+                    Email marketing
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/website-design-and-development"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-website-design-and-development"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Website design &amp; development
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/business-automations"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-business-automations"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Business automations
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/custom-software-development"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-custom-software-development"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Custom software development
                 </h3>
                 <p class="mt-2 text-sm text-brand-accent">
                     Learn more →
