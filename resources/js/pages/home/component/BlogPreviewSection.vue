@@ -3,23 +3,10 @@ import { Link } from '@inertiajs/vue3';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
 
-const articles = [
-    {
-        title: 'Your website works when you are not',
-        description: 'Most customers look you up before they call. Here is how to make that first impression count.',
-        image: '/images/home/blog-website.png',
-    },
-    {
-        title: 'Getting more inquiries from people who are actually interested',
-        description: 'A simple way to think about turning online attention into real conversations.',
-        image: '/images/home/blog-inquiries.png',
-    },
-    {
-        title: 'Small automations that save big chunks of time',
-        description: 'Start with the tasks you do every week, the relief is often immediate.',
-        image: '/images/home/blog-automations.png',
-    },
-];
+defineProps<{
+    // TODO: remove demo blog preview in HomeController once Article listings exist
+    articles: Array<{ title: string; description: string; image: string }>;
+}>();
 </script>
 
 <template>

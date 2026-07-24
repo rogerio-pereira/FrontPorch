@@ -19,6 +19,7 @@ defineProps<{
     services: Array<{ slug: string; title: string; teaser: string }>;
     testimonials: Array<{ quote: string; attribution: string }>;
     portfolioPreview: Array<{ title: string; description: string; image: string }>;
+    blogPreview: Array<{ title: string; description: string; image: string }>;
 }>();
 </script>
 
@@ -70,5 +71,5 @@ defineProps<{
         button="Get in touch → #contact"
         test-id="home-cta-5"
     />
-    <BlogPreviewSection />
+    <BlogPreviewSection :articles="blogPreview" />
 </template>
