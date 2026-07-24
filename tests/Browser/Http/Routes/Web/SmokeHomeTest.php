@@ -2,5 +2,6 @@
 
 it('smoke tests the home page', function () {
     visit('/')
-        ->assertSee('Log in');
+        ->assertSee('You do great work')
+        ->assertPresent('@home-hero-headline');
 });
