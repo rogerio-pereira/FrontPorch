@@ -5,55 +5,6 @@ import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
-
-const benefitItems = [
-    {
-        title: 'Welcome people the right way',
-        description: 'New customers feel looked after, not sold to, from day one.',
-    },
-    {
-        title: 'Follow up without awkwardness',
-        description: 'Gentle reminders that bring people back before they forget you.',
-    },
-    {
-        title: 'Stay memorable between visits',
-        description: 'Useful notes that keep your name familiar when they need you again.',
-    },
-    {
-        title: 'Own the relationship',
-        description: 'Your list is yours, not rented from an algorithm that can change overnight.',
-    },
-    {
-        title: 'Simple enough to keep going',
-        description: 'Systems you can stick with, not a campaign that dies after week two.',
-    },
-];
-
-const processSteps = [
-    {
-        title: 'Understand your rhythm',
-        description: 'When do customers usually hear from you? What should never feel salesy?',
-    },
-    {
-        title: 'Map the key moments',
-        description: 'Welcome, follow-up, re-engagement: only the messages that earn their place.',
-    },
-    {
-        title: 'Write and set it up',
-        description: 'Friendly copy and a simple system so sends actually happen.',
-    },
-    {
-        title: 'Learn and refine',
-        description: 'Watch what people open and respond to, then improve without reinventing everything.',
-    },
-];
-
-const relatedServices = [
-    { slug: 'lead-generation', label: 'Lead generation' },
-    { slug: 'website-design-and-development', label: 'Website design & development' },
-    { slug: 'business-automations', label: 'Business automations' },
-    { slug: 'custom-software-development', label: 'Custom software development' },
-];
 </script>
 
 <template>
@@ -120,16 +71,44 @@ const relatedServices = [
         wide
     >
         <div class="mx-auto max-w-3xl space-y-5">
-            <article
-                v-for="item in benefitItems"
-                :key="item.title"
-                class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6"
-            >
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
                 <h3 class="font-semibold text-[var(--text-on-dark)]">
-                    {{ item.title }}
+                    Welcome people the right way
                 </h3>
                 <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
-                    {{ item.description }}
+                    New customers feel looked after, not sold to, from day one.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Follow up without awkwardness
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Gentle reminders that bring people back before they forget you.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Stay memorable between visits
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Useful notes that keep your name familiar when they need you again.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Own the relationship
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Your list is yours, not rented from an algorithm that can change overnight.
+                </p>
+            </article>
+            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-on-dark)]">
+                    Simple enough to keep going
+                </h3>
+                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                    Systems you can stick with, not a campaign that dies after week two.
                 </p>
             </article>
         </div>
@@ -163,19 +142,48 @@ const relatedServices = [
         centered
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article
-                v-for="(step, index) in processSteps"
-                :key="step.title"
-                class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left"
-            >
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
-                    {{ index + 1 }}
+                    1
                 </div>
                 <h3 class="font-semibold">
-                    {{ step.title }}
+                    Understand your rhythm
                 </h3>
                 <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
-                    {{ step.description }}
+                    When do customers usually hear from you? What should never feel salesy?
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    2
+                </div>
+                <h3 class="font-semibold">
+                    Map the key moments
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Welcome, follow-up, re-engagement: only the messages that earn their place.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    3
+                </div>
+                <h3 class="font-semibold">
+                    Write and set it up
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Friendly copy and a simple system so sends actually happen.
+                </p>
+            </article>
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+                <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
+                    4
+                </div>
+                <h3 class="font-semibold">
+                    Learn and refine
+                </h3>
+                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                    Watch what people open and respond to, then improve without reinventing everything.
                 </p>
             </article>
         </div>
@@ -219,14 +227,48 @@ const relatedServices = [
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Link
-                v-for="service in relatedServices"
-                :key="service.slug"
-                :href="`/services/${service.slug}`"
+                href="/services/lead-generation"
                 class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                :data-test="`service-related-${service.slug}`"
+                data-test="service-related-lead-generation"
             >
                 <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    {{ service.label }}
+                    Lead generation
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/website-design-and-development"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-website-design-and-development"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Website design &amp; development
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/business-automations"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-business-automations"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Business automations
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/custom-software-development"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-custom-software-development"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Custom software development
                 </h3>
                 <p class="mt-2 text-sm text-brand-accent">
                     Learn more →
