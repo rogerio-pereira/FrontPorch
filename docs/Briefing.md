@@ -704,8 +704,8 @@ These are recommendations for the founders—not website scope items:
 
 ### Immediate (Pre-Development)
 
-- [ ] Register brand fonts from `docs/branding/` in the app (self-hosted webfonts)
-- [ ] Add horizontal and vertical logos from `docs/branding/` to the design system / public assets
+- [x] Register brand fonts from `docs/branding/` in the app (self-hosted webfonts)
+- [x] Add horizontal and vertical logos from `docs/branding/` to the design system / public assets
 - [ ] Confirm canonical domain setup and DNS redirects (`.agency`, `.marketing` → `.io`)
 - [ ] Create Google Analytics, Search Console, and Meta Business/Pixel accounts
 - [ ] Set up Google Calendar scheduling link
@@ -714,11 +714,11 @@ These are recommendations for the founders—not website scope items:
 
 ### Phase 1 — Pages
 
-- [ ] Write home page copy (all 16 sections)
-- [ ] Write 5 service landing page copies
+- [x] Write home page copy (all 16 sections)
+- [x] Write 5 service landing page copies
 - [ ] Draft Privacy Policy and Terms of Service
-- [ ] Design and implement home page (Inertia + Vue)
-- [ ] Implement service landing pages
+- [x] Design and implement home page (Inertia + Vue)
+- [x] Implement service landing pages
 - [ ] Implement lead form with email delivery
 - [ ] Integrate Google Calendar redirect
 - [ ] Add GA and Meta Pixel with cookie consent banner
@@ -726,8 +726,8 @@ These are recommendations for the founders—not website scope items:
 ### Phase 2 — CMS
 
 - [ ] Build internal CMS for portfolio and blog
-- [ ] Implement portfolio page (full) and home portfolio section
-- [ ] Implement blog listing and article pages
+- [ ] Implement portfolio page (full) and home portfolio section _(static demo listing + home preview already exist; CMS wiring remains)_
+- [ ] Implement blog listing and article pages _(static demo listing + article routes already exist; CMS wiring remains)_
 - [ ] Add category support for blog
 
 ### Phase 3 — Content and Marketing
