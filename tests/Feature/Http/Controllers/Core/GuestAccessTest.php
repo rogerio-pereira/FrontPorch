@@ -5,4 +5,6 @@ it('redirects guests from the admin panel to the login page', function (string $
 })->with([
     '/core/services',
     '/core/services/create',
+    '/core/faqs',
+    '/core/faqs/create',
 ]);

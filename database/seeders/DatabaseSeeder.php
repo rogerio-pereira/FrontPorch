@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             ServicesSeeder::class,
+            FaqsSeeder::class,
         ]);
     }
 }

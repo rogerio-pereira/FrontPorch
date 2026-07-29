@@ -33,6 +33,11 @@ const mainNavItems: NavItem[] = [
         href: '/core/services',
         icon: Sparkles,
     },
+    {
+        title: 'FAQs',
+        href: '/core/faqs',
+        icon: BookOpen,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
