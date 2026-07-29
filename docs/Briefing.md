@@ -187,7 +187,7 @@ frontporchcreative.io (canonical)
 ├── /services/{service-slug}   Service landing pages (×5)
 ├── /portfolio                 Full portfolio
 ├── /blog                      Blog listing
-├── /blog/{slug}               Individual articles
+├── /blog/article/{slug}       Individual articles
 ├── /privacy                   Privacy Policy
 └── /terms                     Terms of Service
 
@@ -548,7 +548,7 @@ Apply service × city combinations within the 60-mile radius:
 Built as part of the website project:
 
 - Portfolio management
-- Blog management with categories
+- Blog management (articles with optional free-text category string; no category taxonomy — see `docs/planning/phase-01-backend/blog.md`)
 - Admin file uploads
 - No public-facing upload endpoints
 
@@ -728,7 +728,7 @@ These are recommendations for the founders—not website scope items:
 - [ ] Build internal CMS for portfolio and blog
 - [ ] Implement portfolio page (full) and home portfolio section _(static demo listing + home preview already exist; CMS wiring remains)_
 - [ ] Implement blog listing and article pages _(static demo listing + article routes already exist; CMS wiring remains)_
-- [ ] Add category support for blog
+- [ ] ~~Add category support for blog~~ _(dropped — articles only; see phase-01-backend/blog.md)_
 
 ### Phase 3 — Content and Marketing
 

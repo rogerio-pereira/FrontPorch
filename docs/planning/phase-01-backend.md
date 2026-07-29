@@ -2,9 +2,11 @@
 
 **References:** [Briefing.md](../Briefing.md) (§18 Phase 2 CMS) · [phase-01.md](./phase-01.md) (post–Phase 1 handoff) · existing public shells (home, services, portfolio, blog)
 
+**Domain interview docs (source of truth while planning):** [phase-01-backend/](./phase-01-backend/) — update the relevant domain file after every interview answer; sync contradictions here and in the Briefing.
+
 **Summary:** Plan for a new branch with an admin panel (Inertia + Vue + CoreLayout) that persists and edits services, FAQs, testimonials, portfolio, and blog — normalized entities only. Marketing page copy stays hardcoded in Vue/HTML; site config lives in `.env`.
 
-**Status:** Planning only — not yet implemented.
+**Status:** Domain interviews complete — ready to implement from locked domain docs. Schema and admin depth below should match [phase-01-backend/](./phase-01-backend/).
 
 ---
 
@@ -14,46 +16,69 @@ Today marketing is **100% static**: demo arrays in controllers (`HomeController`
 
 **Branch:** `feat/admin-cms` (from the current branch / aligned `main`).
 
-**Admin stack:** the same Vue 3 + Inertia + Tailwind/reka-ui as the starter (`CoreLayout`, `AppSidebar`). Route prefix `/code/*`, middleware `auth` + `verified`. Controllers live under `App\Http\Controllers\Core`. No RBAC in the MVP (every authenticated user is admin; Fortify registration stays disabled).
+**Admin stack:** the same Vue 3 + Inertia + Tailwind/reka-ui as the starter (`CoreLayout`, `AppSidebar`). Route prefix `/core/*`, middleware **`auth` only** (no ACL; no `verified` required for CMS). Controllers live under `App\Http\Controllers\Core`. Fortify registration stays disabled; users managed via admin Users CRUD.
 
 **Out of scope:** legal pages (Stage 3), contact form (Stage 6), analytics — only what is needed for the CMS to edit dynamic content that already exists as demos.
 
 **Explicitly not in the database:**
-- **Site settings** — email, calendar URL, tagline, location → `.env` / `config` (e.g. `CONTACT_EMAIL`, `CALENDAR_URL`, `FOOTER_TAGLINE`, `LOCATION_LINE`). Header/footer read via `config()` or shared Inertia from env, not a `site_settings` table.
+- **Site settings** — `FOOTER_CONTACT_EMAIL`, `CALENDAR_URL` → `.env` / `config`. Footer tagline and location line stay **hardcoded in Vue**. No `site_settings` table.
 - **Page / landing copy** — home and service landing text stays **hardcoded in Vue/HTML**. Easier to update in code than via CMS. No `pages` / `page_sections` tables.
+- **Blog category taxonomy** — removed (2026-07-29). No `blog_categories` / `BlogCategory` CRUD. Articles may have a free-text `category` string. See [phase-01-backend/blog.md](./phase-01-backend/blog.md).
+
+---
+
+## Domain docs
+
+| Domain | Doc | Interview |
+|--------|-----|-----------|
+| Blog | [blog.md](./phase-01-backend/blog.md) | Complete |
+| Services | [services.md](./phase-01-backend/services.md) | Complete |
+| FAQs | [faqs.md](./phase-01-backend/faqs.md) | Complete |
+| Testimonials | [testimonials.md](./phase-01-backend/testimonials.md) | Complete |
+| Case studies | [case-studies.md](./phase-01-backend/case-studies.md) | Complete |
+| Media | [media.md](./phase-01-backend/media.md) | Complete |
+| Shared (UUID, env, admin shell) | [shared.md](./phase-01-backend/shared.md) | Complete |
+
+When a domain interview finishes, rewrite that domain’s slices in Scopes A–H below to match locked decisions (and delete leftover overengineering).
 
 ---
 
 ## Database decision (normalized entities only)
 
+**Case studies (locked):** see [case-studies.md](./phase-01-backend/case-studies.md). UUID PK; SoftDeletes; `slug` Observer + controller comment; `/portfolio/study-case/{slug}`; cover = first gallery image (skip in carousel); `content` like blog; home **6** random; `/portfolio` **15**/page `created_at` desc; admin nested images + services (`show` → 404); no separate image controller.
+
 ```mermaid
 erDiagram
     Service ||--o{ Faq : "optional (null = home)"
     Service ||--o{ Testimonial : has
-    Service ||--o{ CaseStudy : has
+    Service }o--o{ CaseStudy : "case_study_service"
     CaseStudy ||--o{ CaseStudyImage : has
-    BlogCategory ||--o{ BlogArticle : has
-    BlogArticle }o--|| BlogCategory : belongs
+    BlogArticle
 ```
 
 | Layer | What | Why |
 |--------|--------|---------|
-| **Normalized** | `services`, `faqs`, `testimonials`, `case_studies` (+ images), `blog_categories`, `blog_articles` | Listings, publish, ordering, categories; home previews derived from real queries |
-| **`.env` / config** | contact email, calendar URL, tagline, location | Site-wide config; not CMS-editable in MVP |
+| **Normalized** | `services`, `faqs`, `testimonials`, `case_studies` (+ images), `blog_articles` | Listings, publish, ordering; home previews derived from real queries |
+| **`.env` / config** | `FOOTER_CONTACT_EMAIL`, `CALENDAR_URL` | Site chrome CTAs/email; tagline/location stay hardcoded in footer Vue |
 | **Hardcoded Vue/HTML** | Home + 5 service landing copy/structure | Faster to change in templates than schema + admin editors |
 
 **Service ↔ FAQ ↔ Testimonial:**
-- `faqs.service_id` **nullable FK** → `services`. When `service_id` is set, the FAQ belongs to that service landing. When `null`, the FAQ belongs to the **home** page.
-- `testimonials.service_id` **required FK** → `services`. Every testimonial is tied to a service.
-- **Home testimonials:** query published testimonials across services and pick a **random sample** (optionally diversify so multiple services appear), not a dedicated home-only table.
-- **Service landing:** show FAQs and testimonials scoped to that `service_id`.
+- `faqs.service_id` **nullable FK** → `services`. null = **home**; set = **service landing**. Hide empty FAQ sections on landings.
+- `testimonials.service_id` **required FK** → `services` (locked). Home: **10** random (`inRandomOrder`). Service landing: **5** random for that service. No `sort_order`.
 
-**Golden rule:** portfolio/blog previews on the home page are **not** mirror tables — they come from published `CaseStudy` / `BlogArticle` (`featured` / `published_at` / `limit`). Service cards on home and in nav come from `Service`. Home FAQs = `Faq` where `service_id` is null. Home testimonials = random published testimonials from different services.
+**FAQs (locked):** see [faqs.md](./phase-01-backend/faqs.md). UUID PK, SoftDeletes, no publish flag. Fields: `question`, `answer`, `sort_order`, nullable `service_id`. Admin resource (`show` → 404).
 
-**UUID (UI identifier):** every model — including existing `User` — has a unique `uuid` used as the public/UI route key (`getRouteKeyName()` → `uuid`). Keep uuid as primary key for FKs; expose `uuid` only in admin URLs and APIs.
+**Testimonials (locked):** see [testimonials.md](./phase-01-backend/testimonials.md). UUID PK; SoftDeletes; `person`, `testimonial`, required `service_id`; home **10** / landing **5** via `inRandomOrder()`; hide empty sections on home and landings; admin resource (`show` → 404).
 
-**Uploads:** S3-compatible storage via Sail **MinIO**. Image fields store object keys/URLs (`cover_image`, etc.). Admin upload to default disk (not needed to use Storage::disk()). Briefing: authenticated-only uploads. No Spatie in the MVP.
-Requires to update `.env.example` and `.env`
+**Services (locked):** see [services.md](./phase-01-backend/services.md). UUID PK, SoftDeletes, no publish flag. Catalog: `title`, `description`, `slug` (Observer from title; controller comment), `sort_order`. No `nav_label` (nav uses `title`). Landing copy hardcoded in Vue. Full admin CRUD (`show` → 404). Seeder loads the five current services.
+
+**Golden rule:** portfolio/blog previews on the home page are **not** mirror tables — they come from `CaseStudy` / `BlogArticle` queries (blog: latest **3** by `created_at`; portfolio: **6** random). Service cards on home and in nav come from `Service`. Home FAQs = `Faq` where `service_id` is null. Home testimonials = **10** random across services.
+
+**Blog (locked):** see [blog.md](./phase-01-backend/blog.md). UUID PK, SoftDeletes, no drafts, single `content` format (Markdown preferred; HTML if a dedicated MD parser would be needed only for rendering), required main `image` URL + inline editor uploads via MinIO/S3, `published_by` + `slug` (from title) via Observer, free-text `category`. Public: `/blog` (15/page), `/blog/article/{slug}`, home preview latest 3. Admin resource without Show (`show` → 404). FOSS rich editor (no phone-home).
+
+**UUID:** CMS models + **`User`** use UUID as **primary key** (Shared D2). Admin route binding uses UUID ids.
+
+**Uploads (locked):** see [media.md](./phase-01-backend/media.md). MinIO/S3; uploads on parent form submit only; light validation; paths by domain (`blog/`, `case-studies/`). No dedicated media controller.
 
 ### MinIO (Sail) + `.env`
 
@@ -76,18 +101,18 @@ Document MinIO console URL/ports in `.env.example`. Create the bucket on first b
 
 ## Scope A — Migrations
 
-Suggested order (one migration per concern, small commits).
+Suggested order (one migration per concern, small commits). **Provisional** until domain interviews lock schemas.
 
-**UUID rule:** every table below includes `uuid` (UUID string, unique, indexed). Also migrate `users` to add `uuid`. Auto-generate on create (model boot / `HasUuids`-style helper for the uuid column). Route/model binding uses `uuid`.
+**UUID rule:** every table below includes `uuid` (UUID string, unique, indexed). Also migrate `users` to add `uuid`. Auto-generate on create. Route/model binding uses `uuid`.
 
-1. `add_uuid_to_users_table` — `uuid` unique (backfill existing rows)
-2. `create_services_table` — `uuid`, `slug` unique, `title`, `teaser`, `nav_label`, `sort_order`, `is_published`, timestamps
-3. `create_faqs_table` — `uuid`, `service_id` nullable FK → `services` (null = home FAQ), `question`, `answer`, `sort_order`, `is_published`
-4. `create_testimonials_table` — `uuid`, `service_id` FK → `services` (required), `quote`, `attribution`, `sort_order`, `is_published`
-5. `create_case_studies_table` — `uuid`, fields from current `caseStudy` prop + `slug`, `excerpt`, `is_published`, `is_featured`, `published_at`, `sort_order`, `service_id` nullable
-6. `create_case_study_images_table` — `uuid`, `case_study_id`, `src`, `alt`, `sort_order`
-7. `create_blog_categories_table` — `uuid`, `name`, `slug` unique, `sort_order`
-8. `create_blog_articles_table` — `uuid`, `blog_category_id`, `title`, `slug` unique, `excerpt`, `cover_image`, `cover_alt`, `author`, `body` JSON (paragraph/heading/image blocks), `is_published`, `published_at`
+1. `migrate_users_id_to_uuid` — change `users.id` to UUID PK (backfill existing rows); drop separate “add uuid column” approach
+2. `create_services_table` — `id` UUID PK, `title`, `description`, `slug` unique (Observer from title), `sort_order`, timestamps, `deleted_at`. No `teaser`, no `nav_label`, no `is_published`, no landing body.
+3. `create_faqs_table` — `id` UUID PK, `service_id` nullable FK → `services`, `question`, `answer`, `sort_order`, timestamps, `deleted_at`. No `is_published`.
+4. `create_testimonials_table` — `id` UUID PK, `person` (string), `testimonial` (text), `service_id` FK required → `services`, timestamps, `deleted_at`. No `sort_order`, no `is_published`.
+5. `create_case_studies_table` — `id` UUID PK, `title`, `slug` unique (Observer from title; controller comment), `description`, `client`, `industry`, `challenge`, `content`, timestamps, `deleted_at`.
+6. `create_case_study_service_table` — `case_study_id`, `service_id`, timestamps (unique pair)
+7. `create_case_study_images_table` — `id` UUID PK, `case_study_id` FK, `url`, `alt`, `sort_order`, timestamps, `deleted_at`
+8. `create_blog_articles_table` — `id` UUID PK, `title`, `slug` unique (Observer from title), `description`, `category` (string), `content` (text; single format — Markdown preferred else HTML per blog D2), `image` (required URL), `published_by` (string, Observer), timestamps, `deleted_at` (soft deletes). No drafts / no `format` column.
 
 Indexes: `uuid` unique; `is_published` + `published_at` / `sort_order` on listings; `faqs.service_id`, `testimonials.service_id`.
 
@@ -100,17 +125,16 @@ All models (including `User`) expose `uuid` and use it as the route key.
 | Model | Relations / relevant API |
 |-------|---------------------------|
 | `User` | `uuid` route key (existing auth model) |
-| `Service` | `faqs()`, `testimonials()`, `caseStudies()` hasMany; `scopePublished`, ordered |
-| `Faq` | `service()` belongsTo (nullable); `scopePublished`, `scopeForHome` (`whereNull('service_id')`), `scopeForService($id)`, ordered |
-| `Testimonial` | `service()` belongsTo; `scopePublished`; helper/scope for **random home sample** (e.g. `inRandomOrder()->limit(n)`, optionally one-per-service) |
-| `CaseStudy` | `images()`, `service()`; `scopePublished`, `scopeFeatured` |
-| `CaseStudyImage` | `caseStudy()` |
-| `BlogCategory` | `articles()` |
-| `BlogArticle` | `category()`; body cast array; `scopePublished` |
+| `Service` | SoftDeletes; UUID PK; Observer sets `slug` from `title`; catalog only; landing copy in Vue |
+| `Faq` | SoftDeletes; UUID PK; `service()` nullable; home = `whereNull('service_id')` |
+| `Testimonial` | SoftDeletes; UUID PK; `service()` required; home/service samples via `inRandomOrder()` |
+| `CaseStudy` | SoftDeletes; UUID PK; Observer `slug`; `images()`, `services()` belongsToMany; no publish scopes |
+| `CaseStudyImage` | SoftDeletes; UUID PK; `caseStudy()` |
+| `BlogArticle` | SoftDeletes; UUID PK; Observer sets `published_by` + `slug` from title on create; route key for public = `slug` |
 
-Factories + states: `published`, `unpublished`, `featured` (case study), `withImages`, `withBodyBlocks`, `forHome` / `forService(Service)` (FAQ), `forService(Service)` (testimonial).
+Factories + states: provisional per domain docs.
 
-Policies (optional in MVP): `auth` is enough; if desired, `AdminContentPolicy` viewAny/update for all authenticated users.
+Policies (optional in MVP): `auth` is enough.
 
 ---
 
@@ -118,70 +142,66 @@ Policies (optional in MVP): `auth` is enough; if desired, `AdminContentPolicy` v
 
 ### Admin (`app/Http/Controllers/Core/`)
 
-Every admin entity uses a **full resource controller** (`index`, `create`, `store`, `show`, `edit`, `update`, `destroy`) with dedicated Form Requests:
+**Provisional** — full resource CRUD may be reduced per domain interview.
 
 | Controller | Notes |
 |------------|--------|
-| `ServiceController` | Full resource (catalog CRUD) |
-| `FaqController` | Full resource |
-| `TestimonialController` | Full resource |
-| `CaseStudyController` | Full resource + sync of `images[]` where practical |
-| `CaseStudyImageController` | Full resource (or nested under case studies; still resource actions) |
-| `BlogCategoryController` | Full resource |
-| `BlogArticleController` | Full resource |
-| `MediaUploadController` | Resource focused on `store` (image validation, returns public URL/key on S3/MinIO) |
+| `UserController` | Admin Users CRUD; existing User fields + password confirmation; no SoftDeletes; `show` → 404 |
+| `ServiceController` | Full resource like Blog (`show` → 404); create/update comment that Observer sets `slug`; no landing-copy editor |
+| `FaqController` | |
+| `TestimonialController` | |
+| `CaseStudyController` | Resource (`show` → 404); nested images + service sync; Observer comment for `slug` |
+| ~~`CaseStudyImageController`~~ | **Dropped** — images on CaseStudy forms only |
+| `BlogArticleController` | Admin resource by UUID: index/create/store/edit/update/destroy; **`show` → 404**; `store` comments that Observer sets `published_by` + `slug`; no category controller |
+| ~~`MediaUploadController`~~ | **Dropped** — uploads on parent `store`/`update` only (Media D5) |
 
 ### Public (wiring — same CMS delivery)
 
 Replace demos with Eloquent for **dynamic lists/details**, **keeping landing copy hardcoded** in Vue:
 
-- `HomeController` — home FAQs (`service_id` null), services, **random testimonials from different services**, portfolioPreview, blogPreview via queries (section copy stays in the Vue template)
-- `Service*Controller` (ideally: **one** `ServiceLandingController` by slug) — loads published `Service` + its FAQs + its testimonials; landing body copy remains in Vue
-- `PortfolioController` / `PortfolioStudyCaseController` — `CaseStudy`
-- `BlogController` / `BlogArticleController` — `BlogArticle` (+ 404 if unpublished on public route; admin sees drafts)
+- `HomeController` — home FAQs, services, testimonials sample, portfolioPreview, blogPreview (**latest 3** articles)
+- Service landings — published `Service` + FAQs + testimonials; body copy in Vue
+- `PortfolioController` / study-case — `CaseStudy`
+- `BlogController` — paginate **15**, `created_at` desc; public article by **`slug`** at `/blog/article/{slug}` (soft-deleted → 404; render `content` as Markdown or HTML)
 
-Admin resources resolve models by `uuid` (not numeric id).
+Admin resources resolve models by UUID PK.
 
-Shared Inertia: `HandleInertiaRequests` can share env-backed config (email, calendarUrl) for header/footer — not DB settings.
+Shared Inertia: `FOOTER_CONTACT_EMAIL`, `CALENDAR_URL` for footer/CTAs — not DB settings. Tagline/location stay hardcoded in footer Vue.
 
 ---
 
 ## Scope D — Views (Inertia / Vue)
 
-**Admin** under `resources/js/pages/core/` + `CoreLayout` layout:
+**Admin** under `resources/js/pages/core/` + `CoreLayout` (exact pages TBD per domain):
 
-- `core/Dashboard` (optional) or reuse `Dashboard.vue` with CMS cards
-- `core/services/Index.vue`, `Create.vue`, `Edit.vue`, `Show.vue`
-- `core/faqs/Index.vue`, `Create.vue`, `Edit.vue`, `Show.vue`
-- `core/testimonials/Index.vue`, `Create.vue`, `Edit.vue`, `Show.vue`
-- `core/case-studies/Index.vue`, `Create.vue`, `Edit.vue`, `Show.vue` (repeatable images)
-- `core/case-study-images/*` (if separate resource UI)
-- `core/blog/categories/*`, `core/blog/articles/*` (simple body-block editor; full resource pages)
+- Users, Services, FAQs, Testimonials, Case studies, Blog articles
+- No blog category taxonomy UI (optional free-text `category` on article form)
+- No settings or page-section editors
 
-**Nav:** extend `resources/js/components/AppSidebar.vue` — Services, FAQs, Testimonials, Portfolio, Blog. No settings or page-section editors.
+**Nav:** `AppSidebar` — Users, Services, FAQs, Testimonials, Portfolio, Blog.
 
-**Public:** keep home/service landing copy in Vue/HTML; wire list/detail props from DB. Header/footer read shared env config. Keep existing `data-test` attributes.
+**Public:** keep home/service landing copy in Vue/HTML; wire list/detail props from DB. Blog article page renders Markdown/HTML `content`. Keep existing `data-test` attributes.
 
-Reusable admin components: `ImageUploadField` (S3/MinIO), `BodyBlocksEditor`, `PublishFields` (`is_published` + `published_at`).
+Reusable admin pieces: image upload to MinIO/S3; FOSS rich text editor for blog `content` (bold, italic, link, blockquote, code, image upload, lists, headings; no phone-home).
 
 ---
 
 ## Scope E — Routes
 
-New file `routes/core.php` loaded in `bootstrap/app.php` (or `require` in `web.php`) with prefix `code`, name `code.`, middleware `auth`, `verified`:
+New file `routes/core.php` with prefix `core`, name `core.`, middleware **`auth`**:
 
 ```
-resource   /code/services
-resource   /code/faqs
-resource   /code/testimonials
-resource   /code/case-studies
-resource   /code/case-study-images   # or nested under case-studies
-resource   /code/blog/categories
-resource   /code/blog/articles
-resource   /code/media               # primarily POST store
+resource   /core/users
+resource   /core/services
+resource   /core/faqs
+resource   /core/testimonials
+resource   /core/case-studies
+# no separate case-study-images resource
+resource   /core/blog/articles
+# no dedicated /core/media — uploads on parent form submit (Media D5)
 ```
 
-Public routes **remain** those in `routes/web.php`; only the data source changes for lists/details. Prefer canonical article route by `slug`; keep `/blog/article/{id}` if useful for admin preview.
+Public routes remain in `routes/web.php`; data source changes for lists/details. Blog detail canonical: `/blog/article/{slug}`.
 
 Wayfinder: regenerate after core routes.
 
@@ -189,15 +209,14 @@ Wayfinder: regenerate after core routes.
 
 ## Scope F — Factories (one per model)
 
-| Factory | States / sequences |
-|---------|---------------------|
-| `ServiceFactory` | `published`, sequences for the 5 real slugs; |
-| `FaqFactory` | `published`, `forHome`, `forService(Service)` |
-| `TestimonialFactory` | `published`, `forService(Service)` (required) |
-| `CaseStudyFactory` | `published`, `featured`, `withImages(n)` |
+| Factory | Notes |
+|---------|--------|
+| `ServiceFactory` | |
+| `FaqFactory` | |
+| `TestimonialFactory` | |
+| `CaseStudyFactory` | |
 | `CaseStudyImageFactory` | |
-| `BlogCategoryFactory` | |
-| `BlogArticleFactory` | `published`, `unpublished`, realistic body blocks |
+| `BlogArticleFactory` | Markdown/HTML `content` samples; soft-deleted state |
 
 ---
 
@@ -205,17 +224,14 @@ Wayfinder: regenerate after core routes.
 
 | Seeder | Content |
 |--------|----------|
-| `ServicesSeeder` | 5 services (slug/title/teaser matching `HomeController` + nav) |
-| `FaqsSeeder` | home FAQs (`service_id` null) from `HomeController` + optional per-service FAQs |
-| `TestimonialsSeeder` | placeholders tied to services (`service_id` required); enough variety for home random sample |
-| `CaseStudiesSeeder` | Cypress & Oak demo case study + images |
-| `BlogCategoriesSeeder` | demo article category |
-| `BlogArticlesSeeder` | demo article (+ body blocks) |
-| `DatabaseSeeder` | calls the above (idempotent with `updateOrCreate` by slug/key) |
+| `ServicesSeeder` | **Five current services** (slug/title/description matching today’s demos/nav) |
+| `FaqsSeeder` | home (+ per-service if kept) |
+| `TestimonialsSeeder` | tied to services if that model is kept |
+| `CaseStudiesSeeder` | Cypress & Oak demo + images |
+| `BlogArticlesSeeder` | demo article |
+| `DatabaseSeeder` | calls the above (idempotent) |
 
-Site config values go in `.env` / `.env.example`, not seeders.
-
-Goal: after `migrate --seed`, dynamic public content (services, FAQs, testimonials, portfolio, blog) matches the current demo; landing copy remains as today in Vue.
+Site config in `.env` / `.env.example`, not seeders.
 
 ---
 
@@ -223,69 +239,65 @@ Goal: after `migrate --seed`, dynamic public content (services, FAQs, testimonia
 
 ### Feature (Inertia / HTTP)
 
-- Admin auth: guest redirected on all `/code/*`
-- Happy-path full resource CRUD + validation failure per resource (Service, Faq, Testimonial, CaseStudy+images, Category, Article); routes use `uuid`
-- FAQ: create home FAQ (`service_id` null) vs service-scoped FAQ
-- Testimonial: requires `service_id`; home endpoint returns random sample across services
-- Media upload to S3 disk: invalid type/size; happy path with `Storage::fake('s3')`
-- Public: `assertInertia` on Home/Portfolio/Blog/Service props **from the DB** (factory/seed) for dynamic data
-- Unpublished article → 404 on public route; published → 200
+- Admin auth: guest redirected on all `/core/*`
+- CRUD + validation per resource that survives interviews; routes use `uuid`
+- FAQ / testimonial rules as locked in those domains
+- Media upload tests if Media domain keeps an upload endpoint
+- Public: `assertInertia` props from DB
+- Soft-deleted article → 404; existing article → 200; public page renders content
 - Missing case study → 404
-
-Pattern: mirror `tests/Feature/Http/Controllers/BlogControllerTest.php`.
 
 ### Browser (Pest Browser)
 
-- Admin smoke: login → CMS sidebar → open Case Studies / Articles / Services index under `/code`
-- Flow: create/edit case study and see it reflected on `/portfolio` (1 critical E2E)
-- Flow: publish article and see it on `/blog` + home preview
-- Keep existing public smokes; adjust if props change
-- Stable selectors `data-test="..."`
+- Admin smoke under `/core`
+- Critical E2E: case study → `/portfolio`; create article → `/blog` + home preview
+- Stable `data-test` selectors
 
 ### Coverage
 
-Run the suite on Sail + Pint per `.cursor/rules/starting-environment.mdc`; project target 90%, ideal 100%.
+Sail + Pint per `.cursor/rules/starting-environment.mdc`; target 90%.
 
 ---
 
 ## Suggested implementation order (incremental commits)
 
 1. Branch `feat/admin-cms`
-2. Sail MinIO service + `.env` / `.env.example` S3 config
-3. Migrations (users uuid + domain tables) → Models → Factories (by domain: services → faqs/testimonials → case studies → blog)
-4. Seeders with current demo content
-5. Core routes (`/code`) + resource controllers + views (case studies + articles first — highest ROI from Briefing Phase 2)
-6. Wire public portfolio/blog/home preview controllers
-7. Media upload (S3/MinIO) + sidebar
-8. Feature/Browser tests per domain
-9. Docs: mark Phase 2 items in the Briefing when acceptance is OK (separate `docs` commit)
+2. Finish domain interviews → freeze schemas in domain docs + this file
+3. Sail MinIO (if Media keeps it) + `.env` / `.env.example`
+4. Migrations → Models → Factories by domain
+5. Seeders with current demo content
+6. Core routes (`/core`) + controllers + views (highest ROI first)
+7. Wire public controllers
+8. Media + sidebar
+9. Feature/Browser tests per domain
+10. Docs: Briefing Phase 2 checklist when acceptance is OK (separate `docs` commit)
 
 ---
 
 ## Acceptance criteria
 
-- Authenticated admin CRUD (full resource) for services, FAQs, testimonials, case studies (+ images), categories, and articles under `/core` (bound by `uuid`)
-- Controllers live in `App\Http\Controllers\Core`
-- FAQs: null `service_id` = home; set `service_id` = service landing. Testimonials always belong to a service; home shows a random cross-service sample
-- All models including `User` have a unique `uuid` used as UI/route identifier
+- Authenticated admin CRUD for entities locked by domain interviews under `/core` (bound by `uuid` if Shared keeps that)
+- Controllers in `App\Http\Controllers\Core`
+- No blog category taxonomy; blog articles use locked schema in [blog.md](./phase-01-backend/blog.md)
 - Public list/detail pages read dynamic data from the database (no demo arrays for those entities)
+- Blog: no drafts; SoftDeletes; MinIO/S3 image URLs; `published_by` via Observer
 - Home and service landing **copy** remains hardcoded in Vue/HTML
-- Site config (email, calendar, tagline, location) comes from `.env`, not a settings table
-- Uploads use S3-compatible MinIO via Sail
+- Site config from `.env`, not a settings table
 - Seed reproduces current dynamic demo content
-- Feature + Browser covering admin and public wiring; Pint + green tests on Sail
+- Feature + Browser + Pint green on Sail
 
 ---
 
 ## Implementation checklist
 
+- [ ] Domain interviews complete; parent plan synced to locked decisions
 - [ ] Create branch `feat/admin-cms`
-- [ ] Add Sail `minio` service + configure S3 `.env` / `.env.example`
-- [ ] Migrations + Models + Factories (users uuid + services, faqs, testimonials, case studies, blog; UUID route keys)
-- [ ] Seeders with current dynamic demo (lists/details equivalent after `migrate --seed`)
-- [ ] Put site config keys in `.env.example` (no settings table)
-- [ ] Core routes (`/code`) + resource controllers (`App\Http\Controllers\Core`) + views (`CoreLayout` + `AppSidebar`) + S3 media upload
-- [ ] Replace public demos for services/FAQs/testimonials/portfolio/blog with Eloquent; share env config via Inertia
+- [ ] Media/storage decision implemented (MinIO or simpler)
+- [ ] Migrations + Models + Factories
+- [ ] Seeders with current dynamic demo
+- [ ] Site config keys in `.env.example`
+- [ ] Core routes (`/core`) + controllers + views + sidebar
+- [ ] Replace public demos with Eloquent; share env config via Inertia
 - [ ] Keep home/service landing copy hardcoded in Vue
-- [ ] Feature + Browser (auth on `/code`, full CRUD, publish/404, portfolio/blog E2E, S3 fake uploads)
+- [ ] Feature + Browser tests
 - [ ] Update Briefing Phase 2 checklist in a separate docs commit when done
