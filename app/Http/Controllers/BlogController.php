@@ -2,43 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogArticle;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BlogController extends Controller
 {
+    /**
+     * Articles per page on the public blog.
+     */
+    protected const PER_PAGE = 15;
+
     public function __invoke(): Response
     {
-        /*
-         * TODO: replace with Article::published()->latest()->get() (or equivalent).
-         *
-         * Expected Inertia prop `articles`:
-         * list<{
-         *   id: int,
-         *   title: string,
-         *   excerpt: string,
-         *   category: string,
-         *   publishedAt: string,
-         *   coverImage: string,
-         *   href: string,
-         * }>
-         *
-         * Empty list → Blog page shows the empty state.
-         */
-        $articles = [
-            [
-                'id' => 1,
-                'title' => 'Why your website should feel like a front porch',
-                'excerpt' => 'A calm, clear online presence helps small businesses earn trust before the first phone call.',
-                'category' => 'Website strategy',
-                'publishedAt' => 'June 18, 2026',
-                'coverImage' => '/images/blog/article-cover.png',
-                'href' => '/blog/article/1',
-            ],
-        ];
+        $paginator = BlogArticle::orderByDesc('created_at')->paginate(self::PER_PAGE);
+
+        $articles = [];
+
+        foreach ($paginator as $article) {
+            $articles[] = [
+                'id' => $article->id,
+                'title' => $article->title,
+                'excerpt' => $article->description,
+                'category' => $article->category,
+                'publishedAt' => (string) $article->created_at?->format('F j, Y'),
+                'coverImage' => $article->image,
+                'href' => route('blog.article', $article->slug, false),
+            ];
+        }
 
         return Inertia::render('blog/Blog', [
             'articles' => $articles,
+            'pagination' => [
+                'currentPage' => $paginator->currentPage(),
+                'lastPage' => $paginator->lastPage(),
+                'previousPageUrl' => $paginator->previousPageUrl(),
+                'nextPageUrl' => $paginator->nextPageUrl(),
+            ],
         ]);
     }
 }

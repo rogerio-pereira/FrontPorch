@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
+use App\Http\Controllers\Concerns\RendersServiceLanding;
 use Inertia\Response;
 
 class ServiceEmailMarketingController extends Controller
 {
+    use RendersServiceLanding;
+
     public function __invoke(): Response
     {
-        return Inertia::render('service-email-marketing/ServiceEmailMarketing');
+        return $this->renderServiceLanding(
+            'email-marketing',
+            'service-email-marketing/ServiceEmailMarketing',
+        );
     }
 }

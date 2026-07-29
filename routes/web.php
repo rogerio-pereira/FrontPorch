@@ -16,15 +16,12 @@ Route::get('/', HomeController::class)->name('home');
 
 Route::get('/portfolio', PortfolioController::class)->name('portfolio');
 
-Route::get('/portfolio/study-case/{id}', PortfolioStudyCaseController::class)
-    ->whereNumber('id')
+Route::get('/portfolio/study-case/{caseStudy:slug}', PortfolioStudyCaseController::class)
     ->name('portfolio.study-case');
 
 Route::get('/blog', BlogController::class)->name('blog');
-Route::get('/blog/article/{id}', [BlogArticleController::class, 'show'])
-    ->whereNumber('id')
+Route::get('/blog/article/{article:slug}', [BlogArticleController::class, 'show'])
     ->name('blog.article');
-Route::get('/blog/{slug}', [BlogArticleController::class, 'showBySlug'])->name('blog.show');
 
 Route::get('/services/lead-generation', ServiceLeadGenerationController::class)->name('services.lead-generation');
 Route::get('/services/email-marketing', ServiceEmailMarketingController::class)->name('services.email-marketing');
@@ -37,5 +34,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/settings.php';
-
 require __DIR__.'/core.php';

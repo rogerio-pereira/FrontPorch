@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
+use App\Http\Controllers\Concerns\RendersServiceLanding;
 use Inertia\Response;
 
 class ServiceBusinessAutomationsController extends Controller
 {
+    use RendersServiceLanding;
+
     public function __invoke(): Response
     {
-        return Inertia::render('service-business-automations/ServiceBusinessAutomations');
+        return $this->renderServiceLanding(
+            'business-automations',
+            'service-business-automations/ServiceBusinessAutomations',
+        );
     }
 }

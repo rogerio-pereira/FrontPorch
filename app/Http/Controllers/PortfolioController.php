@@ -2,43 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ResolvesCaseStudyCover;
+use App\Models\CaseStudy;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PortfolioController extends Controller
 {
+    use ResolvesCaseStudyCover;
+
+    /**
+     * Case studies per page on the public portfolio.
+     */
+    protected const PER_PAGE = 15;
+
     public function __invoke(): Response
     {
-        /*
-         * TODO: replace with CaseStudy::published()->latest()->get() (or equivalent).
-         *
-         * Expected Inertia prop `items`:
-         * list<{
-         *   id: int,
-         *   title: string,
-         *   excerpt: string,
-         *   client: string,
-         *   service: string,
-         *   coverImage: string,
-         *   href: string,
-         * }>
-         *
-         * Empty list → Portfolio page shows the empty state.
-         */
-        $items = [
-            [
-                'id' => 1,
-                'title' => 'From missed calls to booked jobs',
-                'excerpt' => 'How a Central Florida home services company turned a quiet website into a reliable source of appointments.',
-                'client' => 'Cypress & Oak Home Services',
-                'service' => 'Website design & lead follow-up',
-                'coverImage' => '/images/portfolio/case-study-cover.png',
-                'href' => '/portfolio/study-case/1',
-            ],
-        ];
+        $caseStudies = CaseStudy::with(['images', 'services'])
+            ->orderByDesc('created_at')
+            ->paginate(self::PER_PAGE);
+
+        $items = [];
+
+        foreach ($caseStudies as $caseStudy) {
+            $items[] = [
+                'id' => $caseStudy->id,
+                'title' => $caseStudy->title,
+                'excerpt' => $caseStudy->description,
+                'client' => $caseStudy->client,
+                'service' => $this->serviceLine($caseStudy),
+                'coverImage' => $this->coverImage($caseStudy),
+                'href' => route('portfolio.study-case', $caseStudy->slug, false),
+            ];
+        }
 
         return Inertia::render('portfolio/Portfolio', [
             'items' => $items,
+            'pagination' => [
+                'currentPage' => $caseStudies->currentPage(),
+                'lastPage' => $caseStudies->lastPage(),
+                'previousPageUrl' => $caseStudies->previousPageUrl(),
+                'nextPageUrl' => $caseStudies->nextPageUrl(),
+            ],
         ]);
     }
 }
