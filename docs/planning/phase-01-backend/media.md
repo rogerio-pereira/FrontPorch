@@ -25,7 +25,7 @@
 - Sail **MinIO** + Laravel `s3` disk (env as in parent plan)
 - Store public URL (or key + URL helper) on models (`image`, `case_study_images.url`, inline URLs in content)
 - Upload during parent resource save; no `MediaUploadController`
-- Tests: `Storage::fake('s3')`
+- Tests: `Storage::fake()`
 - No Spatie in MVP
 
 ---
