@@ -1,5 +1,20 @@
 <?php
 
+use App\Models\Faq;
+use App\Models\Service;
+
+beforeEach(function () {
+    Service::factory()->ordered(1)->create(['title' => 'Lead generation']);
+    Service::factory()->ordered(2)->create(['title' => 'Email marketing']);
+    Service::factory()->ordered(3)->create(['title' => 'Website design and development']);
+
+    Faq::factory()->forHome()->create([
+        'question' => 'You are a new agency, why should I trust you?',
+        'answer' => 'That is a fair question. We would rather earn your trust than make big promises.',
+        'sort_order' => 1,
+    ]);
+});
+
 it('smoke tests the home page hero', function () {
     visit('/')
         ->assertSee('You do great work')
