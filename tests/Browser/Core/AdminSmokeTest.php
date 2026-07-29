@@ -2,6 +2,7 @@
 
 use App\Models\Faq;
 use App\Models\Service;
+use App\Models\Testimonial;
 use App\Models\User;
 
 it('shows the admin indexes to authenticated users', function (string $url, string $heading) {
@@ -13,6 +14,7 @@ it('shows the admin indexes to authenticated users', function (string $url, stri
 })->with([
     ['/core/services', 'Services'],
     ['/core/faqs', 'FAQs'],
+    ['/core/testimonials', 'Testimonials'],
 ]);
 
 it('shows the admin create forms to authenticated users', function (string $url, string $heading, string $submit) {
@@ -27,6 +29,7 @@ it('shows the admin create forms to authenticated users', function (string $url,
 })->with([
     ['/core/services/create', 'New service', '@service-submit'],
     ['/core/faqs/create', 'New FAQ', '@faq-submit'],
+    ['/core/testimonials/create', 'New testimonial', '@testimonial-submit'],
 ]);
 
 it('shows the admin edit forms to authenticated users', function (string $url, string $heading, string $submit) {
@@ -34,10 +37,11 @@ it('shows the admin edit forms to authenticated users', function (string $url, s
 
     $service = Service::factory()->create(['title' => 'Lead generation']);
     $faq = Faq::factory()->forService($service)->create(['question' => 'How soon can we start?']);
+    $testimonial = Testimonial::factory()->forService($service)->create(['person' => 'Jordan Client']);
 
     $resolvedUrl = str_replace(
-        ['{service}', '{faq}'],
-        [$service->id, $faq->id],
+        ['{service}', '{faq}', '{testimonial}'],
+        [$service->id, $faq->id, $testimonial->id],
         $url,
     );
 
@@ -48,4 +52,5 @@ it('shows the admin edit forms to authenticated users', function (string $url, s
 })->with([
     ['/core/services/{service}/edit', 'Edit service', '@service-submit'],
     ['/core/faqs/{faq}/edit', 'Edit FAQ', '@faq-submit'],
+    ['/core/testimonials/{testimonial}/edit', 'Edit testimonial', '@testimonial-submit'],
 ]);

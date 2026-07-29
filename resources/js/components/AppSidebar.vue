@@ -4,6 +4,7 @@ import {
     BookOpen,
     FolderGit2,
     LayoutGrid,
+    MessageSquareQuote,
     Sparkles,
 } from '@lucide/vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -37,6 +38,11 @@ const mainNavItems: NavItem[] = [
         title: 'FAQs',
         href: '/core/faqs',
         icon: BookOpen,
+    },
+    {
+        title: 'Testimonials',
+        href: '/core/testimonials',
+        icon: MessageSquareQuote,
     },
 ];
 
