@@ -14,6 +14,7 @@ it('shows the admin indexes to authenticated users', function (string $url, stri
         ->waitForEvent('networkidle')
         ->assertSee($heading);
 })->with([
+    ['/core/users', 'Users'],
     ['/core/services', 'Services'],
     ['/core/faqs', 'FAQs'],
     ['/core/testimonials', 'Testimonials'],
@@ -31,6 +32,7 @@ it('shows the admin create forms to authenticated users', function (string $url,
         ->assertSee($heading)
         ->assertPresent($submit);
 })->with([
+    ['/core/users/create', 'New user', '@user-submit'],
     ['/core/services/create', 'New service', '@service-submit'],
     ['/core/faqs/create', 'New FAQ', '@faq-submit'],
     ['/core/testimonials/create', 'New testimonial', '@testimonial-submit'],
@@ -41,6 +43,7 @@ it('shows the admin create forms to authenticated users', function (string $url,
 it('shows the admin edit forms to authenticated users', function (string $url, string $heading, string $submit) {
     $this->actingAs(User::factory()->create());
 
+    $user = User::factory()->create(['name' => 'Casey Editor']);
     $service = Service::factory()->create(['title' => 'Lead generation']);
     $faq = Faq::factory()->forService($service)->create(['question' => 'How soon can we start?']);
     $testimonial = Testimonial::factory()->forService($service)->create(['person' => 'Jordan Client']);
@@ -51,8 +54,22 @@ it('shows the admin edit forms to authenticated users', function (string $url, s
     ]);
 
     $resolvedUrl = str_replace(
-        ['{service}', '{faq}', '{testimonial}', '{caseStudy}', '{article}'],
-        [$service->id, $faq->id, $testimonial->id, $caseStudy->id, $article->id],
+        [
+            '{user}',
+            '{service}',
+            '{faq}',
+            '{testimonial}',
+            '{caseStudy}',
+            '{article}',
+        ],
+        [
+            $user->id,
+            $service->id,
+            $faq->id,
+            $testimonial->id,
+            $caseStudy->id,
+            $article->id,
+        ],
         $url,
     );
 
@@ -61,9 +78,27 @@ it('shows the admin edit forms to authenticated users', function (string $url, s
         ->assertSee($heading)
         ->assertPresent($submit);
 })->with([
+    ['/core/users/{user}/edit', 'Edit user', '@user-submit'],
     ['/core/services/{service}/edit', 'Edit service', '@service-submit'],
     ['/core/faqs/{faq}/edit', 'Edit FAQ', '@faq-submit'],
     ['/core/testimonials/{testimonial}/edit', 'Edit testimonial', '@testimonial-submit'],
     ['/core/case-studies/{caseStudy}/edit', 'Edit case study', '@case-study-submit'],
     ['/core/blog/articles/{article}/edit', 'Edit article', '@article-submit'],
+]);
+
+it('redirects guests from the admin panel to login', function (string $url) {
+    visit($url)->assertPathIs('/login');
+})->with([
+    '/core/users',
+    '/core/users/create',
+    '/core/services',
+    '/core/services/create',
+    '/core/faqs',
+    '/core/faqs/create',
+    '/core/testimonials',
+    '/core/testimonials/create',
+    '/core/case-studies',
+    '/core/case-studies/create',
+    '/core/blog/articles',
+    '/core/blog/articles/create',
 ]);
