@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { Button } from '@/components/ui/button';
+
+const page = usePage();
 
 const props = defineProps<{
     label: string;
@@ -11,7 +14,7 @@ const props = defineProps<{
 }>();
 
 const parsed = computed(() => {
-    const calendarUrl = props.calendarUrl ?? '#schedule';
+    const calendarUrl = props.calendarUrl ?? page.props.site?.calendarUrl ?? '#schedule';
     const anchorMatch = props.label.match(/#([\w-]+)/);
     const text = props.label
         .replace(/\s*→\s*`?#([\w-]+)`?/, '')

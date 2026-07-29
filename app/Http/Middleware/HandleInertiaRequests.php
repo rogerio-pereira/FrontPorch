@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -42,6 +43,30 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'site' => [
+                'footerContactEmail' => config('site.footer_contact_email'),
+                'calendarUrl' => config('site.calendar_url'),
+            ],
+            'servicesNav' => $this->servicesNav(),
         ];
+    }
+
+    /**
+     * The service catalog used by the public navigation.
+     *
+     * @return list<array{slug: string, title: string}>
+     */
+    protected function servicesNav(): array
+    {
+        $services = [];
+
+        foreach (Service::orderBy('sort_order')->get(['slug', 'title']) as $service) {
+            $services[] = [
+                'slug' => $service->slug,
+                'title' => $service->title,
+            ];
+        }
+
+        return $services;
     }
 }
