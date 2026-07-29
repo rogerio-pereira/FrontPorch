@@ -3,9 +3,10 @@ import { Head, Link } from '@inertiajs/vue3';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
+import SitePagination, { type SitePaginationState } from '@/layouts/app/SitePagination.vue';
 
 export type PortfolioListItem = {
-    id: number;
+    id: string;
     title: string;
     excerpt: string;
     client: string;
@@ -15,8 +16,8 @@ export type PortfolioListItem = {
 };
 
 defineProps<{
-    // TODO: remove demo payload in PortfolioController once CaseStudy model exists
     items: PortfolioListItem[];
+    pagination: SitePaginationState;
 }>();
 </script>
 
@@ -43,11 +44,11 @@ defineProps<{
                 class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
                 <Link
-                    v-for="item in items"
+                    v-for="(item, index) in items"
                     :key="item.id"
                     :href="item.href"
                     class="marketing-card-hover group overflow-hidden rounded-xl border border-border-default bg-surface-raised text-left"
-                    :data-test="`portfolio-case-${item.id}`"
+                    :data-test="`portfolio-case-${index}`"
                 >
                     <VisualFrame
                         :src="item.coverImage"
@@ -84,6 +85,11 @@ defineProps<{
                     We are putting the finishing touches on our first public case studies. In the meantime, we would love to hear about your project.
                 </p>
             </div>
+
+            <SitePagination
+                :pagination="pagination"
+                test-id="portfolio-pagination"
+            />
 
             <div class="mt-14 flex flex-col items-center gap-4 text-center">
                 <p class="max-w-xl text-body text-[var(--text-muted-on-dark)]">

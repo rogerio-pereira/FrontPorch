@@ -3,9 +3,10 @@ import { Head, Link } from '@inertiajs/vue3';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
+import SitePagination, { type SitePaginationState } from '@/layouts/app/SitePagination.vue';
 
 export type BlogArticleListItem = {
-    id: number;
+    id: string;
     title: string;
     excerpt: string;
     category: string;
@@ -15,8 +16,8 @@ export type BlogArticleListItem = {
 };
 
 defineProps<{
-    // TODO: remove local fallbacks once Article model feeds this prop only
     articles: BlogArticleListItem[];
+    pagination: SitePaginationState;
 }>();
 </script>
 
@@ -50,11 +51,11 @@ defineProps<{
                 class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
                 <Link
-                    v-for="article in articles"
+                    v-for="(article, index) in articles"
                     :key="article.id"
                     :href="article.href"
                     class="marketing-card-hover group overflow-hidden rounded-xl border border-border-default bg-surface-raised text-left"
-                    :data-test="`blog-article-${article.id}`"
+                    :data-test="`blog-article-${index}`"
                 >
                     <VisualFrame
                         :src="article.coverImage"
@@ -91,6 +92,11 @@ defineProps<{
                     We are drafting the first posts. Check back soon, or book a discovery call if you want to talk through a topic now.
                 </p>
             </div>
+
+            <SitePagination
+                :pagination="pagination"
+                test-id="blog-pagination"
+            />
 
             <div class="mt-14 flex flex-col items-center gap-4 text-center">
                 <p class="max-w-xl text-body text-[var(--text-muted-on-dark)]">

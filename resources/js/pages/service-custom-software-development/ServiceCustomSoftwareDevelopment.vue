@@ -4,7 +4,14 @@ import CtaBand from '@/layouts/app/CtaBand.vue';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
+import ServiceFaqSection from '@/layouts/app/ServiceFaqSection.vue';
+import ServiceTestimonialsSection from '@/layouts/app/ServiceTestimonialsSection.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
+
+defineProps<{
+    faqs: Array<{ question: string; answer: string }>;
+    testimonials: Array<{ quote: string; attribution: string }>;
+}>();
 </script>
 
 <template>
@@ -276,6 +283,9 @@ import VisualFrame from '@/layouts/app/VisualFrame.vue';
             </Link>
         </div>
     </SectionShell>
+
+    <ServiceTestimonialsSection :quotes="testimonials" />
+    <ServiceFaqSection :items="faqs" />
 
     <CtaBand
         heading="Ready for tools that finally feel like yours?"
