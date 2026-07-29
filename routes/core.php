@@ -5,9 +5,11 @@ use App\Http\Controllers\Core\CaseStudyController;
 use App\Http\Controllers\Core\FaqController;
 use App\Http\Controllers\Core\ServiceController;
 use App\Http\Controllers\Core\TestimonialController;
+use App\Http\Controllers\Core\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->prefix('core')->name('core.')->group(function (): void {
+    Route::resource('users', UserController::class);
     Route::resource('services', ServiceController::class);
     Route::resource('faqs', FaqController::class);
     Route::resource('testimonials', TestimonialController::class);
