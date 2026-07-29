@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\BlogArticle;
 use App\Models\CaseStudy;
 use App\Models\Faq;
 use App\Models\Service;
@@ -17,6 +18,7 @@ it('shows the admin indexes to authenticated users', function (string $url, stri
     ['/core/faqs', 'FAQs'],
     ['/core/testimonials', 'Testimonials'],
     ['/core/case-studies', 'Case studies'],
+    ['/core/blog/articles', 'Blog articles'],
 ]);
 
 it('shows the admin create forms to authenticated users', function (string $url, string $heading, string $submit) {
@@ -33,6 +35,7 @@ it('shows the admin create forms to authenticated users', function (string $url,
     ['/core/faqs/create', 'New FAQ', '@faq-submit'],
     ['/core/testimonials/create', 'New testimonial', '@testimonial-submit'],
     ['/core/case-studies/create', 'New case study', '@case-study-submit'],
+    ['/core/blog/articles/create', 'New article', '@article-submit'],
 ]);
 
 it('shows the admin edit forms to authenticated users', function (string $url, string $heading, string $submit) {
@@ -42,10 +45,14 @@ it('shows the admin edit forms to authenticated users', function (string $url, s
     $faq = Faq::factory()->forService($service)->create(['question' => 'How soon can we start?']);
     $testimonial = Testimonial::factory()->forService($service)->create(['person' => 'Jordan Client']);
     $caseStudy = CaseStudy::factory()->create(['title' => 'From missed calls to booked jobs']);
+    $article = BlogArticle::factory()->create([
+        'title' => 'Why your website should feel like a front porch',
+        'image' => '/images/blog-article/cover.png',
+    ]);
 
     $resolvedUrl = str_replace(
-        ['{service}', '{faq}', '{testimonial}', '{caseStudy}'],
-        [$service->id, $faq->id, $testimonial->id, $caseStudy->id],
+        ['{service}', '{faq}', '{testimonial}', '{caseStudy}', '{article}'],
+        [$service->id, $faq->id, $testimonial->id, $caseStudy->id, $article->id],
         $url,
     );
 
@@ -58,4 +65,5 @@ it('shows the admin edit forms to authenticated users', function (string $url, s
     ['/core/faqs/{faq}/edit', 'Edit FAQ', '@faq-submit'],
     ['/core/testimonials/{testimonial}/edit', 'Edit testimonial', '@testimonial-submit'],
     ['/core/case-studies/{caseStudy}/edit', 'Edit case study', '@case-study-submit'],
+    ['/core/blog/articles/{article}/edit', 'Edit article', '@article-submit'],
 ]);

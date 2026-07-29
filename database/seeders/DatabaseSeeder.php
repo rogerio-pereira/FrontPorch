@@ -10,8 +10,8 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      *
-     * Model events stay enabled so the observers derive slugs exactly as
-     * they do through the admin panel.
+     * Model events stay enabled so the observers derive slugs and article
+     * authors exactly as they do through the admin panel.
      */
     public function run(): void
     {
@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             FaqsSeeder::class,
             TestimonialsSeeder::class,
             CaseStudiesSeeder::class,
+            BlogArticlesSeeder::class,
         ]);
     }
 }

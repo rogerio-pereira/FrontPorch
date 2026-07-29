@@ -6,6 +6,7 @@ import {
     FolderGit2,
     LayoutGrid,
     MessageSquareQuote,
+    Newspaper,
     Sparkles,
 } from '@lucide/vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -49,6 +50,11 @@ const mainNavItems: NavItem[] = [
         title: 'Case studies',
         href: '/core/case-studies',
         icon: Briefcase,
+    },
+    {
+        title: 'Blog',
+        href: '/core/blog/articles',
+        icon: Newspaper,
     },
 ];
 

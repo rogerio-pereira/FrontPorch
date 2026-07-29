@@ -11,4 +11,6 @@ it('redirects guests from the admin panel to the login page', function (string $
     '/core/testimonials/create',
     '/core/case-studies',
     '/core/case-studies/create',
+    '/core/blog/articles',
+    '/core/blog/articles/create',
 ]);
