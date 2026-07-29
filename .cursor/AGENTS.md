@@ -42,11 +42,16 @@ Typical stack across repositories using this setup:
 
 ---
 
+## Language (mandatory)
+
+- **All repository files** must be written in **English**: source code, documentation under `docs/`, models/comments, examples, tutorials, commit messages, ADRs, FDRs, planning docs, tests descriptions, UI copy in code, and any other in-repo text.
+- Chat with the human may follow the user's preferred language; **files committed to the repo stay English**.
+
 ## Coding standards
 
 ### PHP
 
-- All code in **English**.
+- Follow the Language rule above (English).
 - PSR style: one statement per line.
 - No ternary operators in PHP (`condition ? a : b`); use `if` / `else` or early returns.
 - Fluent chains: one method call per line; consistent indentation (extra indent for `->` or `.` after assignment).
