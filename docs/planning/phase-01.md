@@ -73,7 +73,7 @@ flowchart TB
 
 **Copy tone (confirmed):** Friendly and approachable (Design System §4.3) — not cold or overly technical. **Geo/SEO specifics** (service area, radius, city lists) belong in **meta tags, service landing pages, and FAQ** — not in hero or main section body copy.
 
-**Contact email:** `MARKETING_CONTACT_EMAIL` in `.env` (see `.env.example`). UI still uses placeholder `contact@example.com` until wired.
+**Contact email:** `FOOTER_CONTACT_EMAIL` in `.env` (see `.env.example`; was `MARKETING_CONTACT_EMAIL`). UI still uses placeholder `contact@example.com` until wired.
 
 ---
 
@@ -602,12 +602,13 @@ Document required fields for every service page:
 **Briefing checklist:** “Integrate Google Calendar redirect”  
 **Goal:** All scheduling CTAs open the external Calendar link in a new tab.  
 **Prerequisites:** Step 0.1 Calendar link; Stage 4 header/hero CTAs exist.  
-**Status:** **Partial** — `CtaButton` supports `calendarUrl` + `target="_blank"` for http(s); header/contact still hardcode `#schedule`. `MARKETING_CALENDAR_URL` exists in `.env.example` only.
+**Status:** **Partial** — `CtaButton` supports `calendarUrl` + `target="_blank"` for http(s); header/contact still hardcode `#schedule`. `CALENDAR_URL` exists in `.env.example` only (was `MARKETING_CALENDAR_URL`).
 
 ### Step 7.1 — Config
 
-- [ ] `config/marketing.php` → `'calendar_url' => env('MARKETING_CALENDAR_URL')`
-- [x] Document in `.env.example` (`MARKETING_CALENDAR_URL`)
+- [ ] `config/marketing.php` → `'calendar_url' => env('CALENDAR_URL')`
+- [x] Document in `.env.example` (`CALENDAR_URL`)
+- [x] Document in `.env.example` (`FOOTER_CONTACT_EMAIL`)
 
 ### Step 7.2 — CTA wiring
 
@@ -626,7 +627,7 @@ Document required fields for every service page:
 
 ### Stage 7 — Done when
 
-- [ ] Every “Schedule” / primary booking CTA uses `MARKETING_CALENDAR_URL`
+- [ ] Every “Schedule” / primary booking CTA uses `CALENDAR_URL`
 - [ ] Link opens in new tab
 
 ---
@@ -767,7 +768,7 @@ Document required fields for every service page:
 
 1. **Stage 3** — Privacy + Terms + footer links  
 2. **Stage 6** — Contact form + email  
-3. **Stage 7** — Wire `MARKETING_CALENDAR_URL` through `config/marketing.php` + CTAs  
+3. **Stage 7** — Wire `CALENDAR_URL` through `config/marketing.php` + CTAs  
 4. **Stage 8** — Cookie consent + GA/Meta  
 5. **Stage 9** leftovers — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
 6. **Stage 10** — automated + founder QA  
@@ -787,7 +788,7 @@ Static portfolio/blog UI already exists — Phase 2 focus is **persistence + adm
 Non-code items (overlap with Step 0.1; re-verify before launch):
 
 - [ ] DNS live: `.io` canonical; redirects from `.agency` / `.marketing`
-- [ ] `GOOGLE_ANALYTICS_ID`, `META_PIXEL_ID`, `MARKETING_CALENDAR_URL` set in production
+- [ ] `GOOGLE_ANALYTICS_ID`, `META_PIXEL_ID`, `CALENDAR_URL` set in production
 - [ ] Search Console verified
 - [ ] Google Business Profile (if decided)
 - [ ] Founder review: copy + legal (Stage 10.3)
