@@ -41,7 +41,12 @@ it('renders the home page with content from the database', function () {
         ->create();
 
     $caseStudy = CaseStudy::factory()
-                    ->create();
+                    ->create([
+                        'title' => 'From quiet website to steady leads',
+                    ]);
+
+    $caseStudy->services()
+        ->attach($service);
 
     CaseStudyImage::factory()
         ->for($caseStudy)
@@ -76,10 +81,13 @@ it('renders the home page with content from the database', function () {
         )
         ->has('caseStudies', 1)
         ->has('caseStudies.0', fn (Assert $item) => $item
-            ->has('title')
+            ->where('title', 'From quiet website to steady leads')
+            ->where('slug', 'from-quiet-website-to-steady-leads')
             ->has('description')
             ->has('images', 1)
             ->where('images.0.url', '/images/home/portfolio-b.png')
+            ->has('services', 1)
+            ->where('services.0.title', 'Lead generation')
             ->etc()
         )
         ->has('articles', 2)

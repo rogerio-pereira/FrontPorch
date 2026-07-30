@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\BlogArticle;
+use App\Models\CaseStudy;
+use App\Models\CaseStudyImage;
 use App\Models\Faq;
 use App\Models\Service;
 
@@ -97,6 +99,34 @@ it('links home blog cards to the article page', function () {
         ->click('@home-blog-article-0')
         ->assertPathIs('/blog/article/why-your-website-should-feel-like-a-front-porch')
         ->assertSee('Why your website should feel like a front porch');
+});
+
+it('links home portfolio cards to the case study page', function () {
+    $service = Service::where('title', 'Lead generation')
+                    ->firstOrFail();
+
+    $caseStudy = CaseStudy::factory()
+                    ->create([
+                        'title' => 'From missed calls to booked jobs',
+                    ]);
+
+    $caseStudy->services()
+        ->attach($service);
+
+    CaseStudyImage::factory()
+        ->for($caseStudy)
+        ->cover()
+        ->create([
+            'url' => '/images/home/portfolio-b.png',
+        ]);
+
+    visit('/')
+        ->assertPresent('@home-portfolio-case-0')
+        ->assertSee('Lead generation')
+        ->assertPresent('@home-portfolio-case-services-0')
+        ->click('@home-portfolio-case-0')
+        ->assertPathIs('/portfolio/study-case/from-missed-calls-to-booked-jobs')
+        ->assertSee('From missed calls to booked jobs');
 });
 
 it('exposes the contact anchor for navigation', function () {
