@@ -27,9 +27,9 @@ class ServiceController extends Controller
      */
     public function create(): Response
     {
-        $service = null;
-
-        return Inertia::render('core/services/Form', compact('service'));
+        return Inertia::render('core/services/Form', [
+            'service' => null,
+        ]);
     }
 
     /**
@@ -66,7 +66,9 @@ class ServiceController extends Controller
      */
     public function edit(Service $service): Response
     {
-        return Inertia::render('core/services/Form', compact('service'));
+        return Inertia::render('core/services/Form', [
+            'service' => $service,
+        ]);
     }
 
     /**

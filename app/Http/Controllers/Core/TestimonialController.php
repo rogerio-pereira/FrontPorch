@@ -29,12 +29,13 @@ class TestimonialController extends Controller
      */
     public function create(): Response
     {
-        $testimonial = null;
-
         $services = Service::orderBy('sort_order')
                         ->pluck('title', 'id');
 
-        return Inertia::render('core/testimonials/Form', compact('testimonial', 'services'));
+        return Inertia::render('core/testimonials/Form', [
+            'testimonial' => null,
+            'services' => $services,
+        ]);
     }
 
     /**
@@ -73,7 +74,10 @@ class TestimonialController extends Controller
         $services = Service::orderBy('sort_order')
                         ->pluck('title', 'id');
 
-        return Inertia::render('core/testimonials/Form', compact('testimonial', 'services'));
+        return Inertia::render('core/testimonials/Form', [
+            'testimonial' => $testimonial,
+            'services' => $services,
+        ]);
     }
 
     /**

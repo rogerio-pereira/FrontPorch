@@ -36,12 +36,13 @@ class CaseStudyController extends Controller
      */
     public function create(): Response
     {
-        $caseStudy = null;
-
         $services = Service::orderBy('sort_order')
                         ->pluck('title', 'id');
 
-        return Inertia::render('core/case-studies/Form', compact('caseStudy', 'services'));
+        return Inertia::render('core/case-studies/Form', [
+            'caseStudy' => null,
+            'services' => $services,
+        ]);
     }
 
     /**
@@ -95,7 +96,10 @@ class CaseStudyController extends Controller
         $services = Service::orderBy('sort_order')
                         ->pluck('title', 'id');
 
-        return Inertia::render('core/case-studies/Form', compact('caseStudy', 'services'));
+        return Inertia::render('core/case-studies/Form', [
+            'caseStudy' => $caseStudy,
+            'services' => $services,
+        ]);
     }
 
     /**
