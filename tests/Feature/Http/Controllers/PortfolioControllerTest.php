@@ -26,6 +26,7 @@ it('renders portfolio listing from case studies', function () {
         ->cover()
         ->create([
             'url' => '/images/portfolio-study-case/cover.png',
+            'alt' => 'Homepage overview',
         ]);
 
     $response = $this->get('/portfolio');
@@ -33,40 +34,40 @@ it('renders portfolio listing from case studies', function () {
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
         ->component('portfolio/Portfolio')
-        ->has('items', 1)
-        ->has('items.0', fn (Assert $item) => $item
+        ->has('caseStudies.data', 1)
+        ->has('caseStudies.data.0', fn (Assert $item) => $item
             ->where('id', $caseStudy->id)
             ->where('title', 'From missed calls to booked jobs')
-            ->where('excerpt', 'How a Central Florida home services company booked more jobs.')
+            ->where('description', 'How a Central Florida home services company booked more jobs.')
             ->where('client', 'Cypress & Oak Home Services')
-            ->where('service', 'Website design & development')
-            ->where('coverImage', '/images/portfolio-study-case/cover.png')
-            ->where('href', '/portfolio/study-case/from-missed-calls-to-booked-jobs')
+            ->where('slug', 'from-missed-calls-to-booked-jobs')
+            ->has('images', 1)
+            ->where('images.0.url', '/images/portfolio-study-case/cover.png')
+            ->has('services', 1)
+            ->where('services.0.title', 'Website design & development')
+            ->etc()
         )
-        ->has('pagination', fn (Assert $pagination) => $pagination
-            ->where('currentPage', 1)
-            ->where('lastPage', 1)
-            ->where('previousPageUrl', null)
-            ->where('nextPageUrl', null)
-        )
+        ->where('caseStudies.current_page', 1)
+        ->where('caseStudies.last_page', 1)
+        ->where('caseStudies.prev_page_url', null)
+        ->where('caseStudies.next_page_url', null)
     );
 });
 
 it('paginates the portfolio at fifteen case studies per page', function () {
     CaseStudy::factory(16)
+        ->has(CaseStudyImage::factory()->cover(), 'images')
         ->create();
 
     $response = $this->get('/portfolio');
 
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
-        ->has('items', 15)
-        ->has('pagination', fn (Assert $pagination) => $pagination
-            ->where('currentPage', 1)
-            ->where('lastPage', 2)
-            ->where('previousPageUrl', null)
-            ->has('nextPageUrl')
-        )
+        ->has('caseStudies.data', 15)
+        ->where('caseStudies.current_page', 1)
+        ->where('caseStudies.last_page', 2)
+        ->where('caseStudies.prev_page_url', null)
+        ->has('caseStudies.next_page_url')
     );
 });
 
@@ -79,5 +80,5 @@ it('hides soft deleted case studies from the portfolio', function () {
     $response = $this->get('/portfolio');
 
     $response->assertOk();
-    $response->assertInertia(fn (Assert $page) => $page->has('items', 0));
+    $response->assertInertia(fn (Assert $page) => $page->has('caseStudies.data', 0));
 });

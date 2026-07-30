@@ -47,36 +47,16 @@ it('renders a case study by slug', function () {
             ->where('title', 'From missed calls to booked jobs')
             ->where('client', 'Cypress & Oak Home Services')
             ->where('industry', 'Home services')
-            ->where('service', 'Lead generation')
-            ->where('coverImage', '/images/portfolio-study-case/cover.png')
-            ->where('coverAlt', 'Homepage overview')
             ->where('content', '<p>What we built together.</p>')
             ->has('description')
             ->has('challenge')
-            ->has('galleryImages', 1)
-            ->has('galleryImages.0', fn (Assert $image) => $image
-                ->where('src', '/images/portfolio-study-case/process.png')
-                ->where('alt', 'Service request flow')
-            )
-        )
-    );
-});
-
-it('falls back to the title and placeholder without gallery images', function () {
-    CaseStudy::factory()
-        ->create([
-            'title' => 'A quiet launch',
-        ]);
-
-    $response = $this->get('/portfolio/study-case/a-quiet-launch');
-
-    $response->assertOk();
-    $response->assertInertia(fn (Assert $page) => $page
-        ->has('caseStudy', fn (Assert $props) => $props
-            ->where('coverImage', '/images/home/portfolio-a.png')
-            ->where('coverAlt', 'A quiet launch')
-            ->where('service', '')
-            ->has('galleryImages', 0)
+            ->has('images', 2)
+            ->where('images.0.url', '/images/portfolio-study-case/cover.png')
+            ->where('images.0.alt', 'Homepage overview')
+            ->where('images.1.url', '/images/portfolio-study-case/process.png')
+            ->where('images.1.alt', 'Service request flow')
+            ->has('services', 1)
+            ->where('services.0.title', 'Lead generation')
             ->etc()
         )
     );

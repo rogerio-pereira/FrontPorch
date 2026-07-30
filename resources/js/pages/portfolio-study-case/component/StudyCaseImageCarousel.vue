@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { ChevronLeft, ChevronRight } from '@lucide/vue';
 
 export interface StudyCaseSolutionImage {
-    src: string;
+    url: string;
     alt: string;
 }
 
@@ -55,7 +55,7 @@ function next(): void {
         <div class="relative overflow-hidden rounded-xl border border-brand-accent/25 bg-surface-raised shadow-[0_0_60px_rgba(114,136,123,0.12)]">
             <div class="aspect-video">
                 <img
-                    :src="activeImage.src"
+                    :src="activeImage.url"
                     :alt="activeImage.alt"
                     class="size-full object-cover"
                     data-test="study-case-carousel-image"
@@ -90,7 +90,7 @@ function next(): void {
         >
             <button
                 v-for="(image, index) in images"
-                :key="`${image.src}-${index}`"
+                :key="`${image.url}-${index}`"
                 type="button"
                 class="size-2.5 rounded-full transition"
                 :class="

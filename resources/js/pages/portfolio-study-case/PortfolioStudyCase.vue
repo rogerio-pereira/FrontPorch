@@ -1,24 +1,33 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import StudyCaseImageCarousel from '@/pages/portfolio-study-case/component/StudyCaseImageCarousel.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
 
-defineProps<{
+const props = defineProps<{
     caseStudy: {
         title: string;
         description: string;
         client: string;
         industry: string;
-        service: string;
-        coverImage: string;
-        coverAlt: string;
         challenge: string;
         content: string;
-        galleryImages: Array<{ src: string; alt: string }>;
+        images: Array<{ url: string; alt: string }>;
+        services: Array<{ title: string }>;
     };
 }>();
+
+const cover = computed(() => props.caseStudy.images[0]);
+
+const galleryImages = computed(() => props.caseStudy.images.slice(1));
+
+const serviceTitles = computed(() =>
+    props.caseStudy.services
+        .map((service) => service.title)
+        .join(', '),
+);
 </script>
 
 <template>
@@ -71,14 +80,14 @@ defineProps<{
                                 Services
                             </dt>
                             <dd class="mt-1 font-semibold">
-                                {{ caseStudy.service }}
+                                {{ serviceTitles }}
                             </dd>
                         </div>
                     </dl>
                 </div>
                 <VisualFrame
-                    :src="caseStudy.coverImage"
-                    :alt="caseStudy.coverAlt"
+                    :src="cover.url"
+                    :alt="cover.alt"
                     aspect="video"
                 />
             </div>
@@ -109,10 +118,10 @@ defineProps<{
             </h2>
 
             <div
-                v-if="caseStudy.galleryImages.length > 0"
+                v-if="galleryImages.length > 0"
                 class="mt-8"
             >
-                <StudyCaseImageCarousel :images="caseStudy.galleryImages" />
+                <StudyCaseImageCarousel :images="galleryImages" />
             </div>
 
             <div
