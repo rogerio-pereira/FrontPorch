@@ -26,16 +26,4 @@ class ServiceFactory extends Factory
             'sort_order' => fake()->numberBetween(0, 20),
         ];
     }
-
-    /**
-     * Indicate the position of the service on the home page and navigation.
-     */
-    public function ordered(int $sortOrder): static
-    {
-        return $this->state(function (array $attributes) use ($sortOrder) {
-            return [
-                'sort_order' => $sortOrder,
-            ];
-        });
-    }
 }
