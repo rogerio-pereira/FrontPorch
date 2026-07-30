@@ -81,8 +81,10 @@ it('edits a user from the admin form', function () {
         ->waitForText('Casey Updated')
         ->assertPathIs('/core/users');
 
-    expect($editable->refresh()->name)
-        ->toBe('Casey Updated');
+    $editable->refresh();
+
+    $name = $editable->name;
+    expect($name)->toBe('Casey Updated');
 });
 
 it('deletes a user from the admin index', function () {

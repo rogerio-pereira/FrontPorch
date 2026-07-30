@@ -50,13 +50,11 @@ it('creates a user with a hashed password', function () {
     $user = User::where('email', 'amelia@example.com')
                 ->firstOrFail();
 
-    expect($user->name)
-        ->toBe('Amelia Porch');
+    $name = $user->name;
+    expect($name)->toBe('Amelia Porch');
 
     $passwordMatches = Hash::check('front-porch-secret', $user->password);
-
-    expect($passwordMatches)
-        ->toBeTrue();
+    expect($passwordMatches)->toBeTrue();
 });
 
 it('validates the user payload', function () {
@@ -103,14 +101,14 @@ it('updates a user without changing the password', function () {
 
     $user->refresh();
 
-    expect($user->name)
-        ->toBe('Renamed Person');
+    $name = $user->name;
+    expect($name)->toBe('Renamed Person');
 
-    expect($user->email)
-        ->toBe('renamed@example.com');
+    $email = $user->email;
+    expect($email)->toBe('renamed@example.com');
 
-    expect($user->password)
-        ->toBe($password);
+    $currentPassword = $user->password;
+    expect($currentPassword)->toBe($password);
 });
 
 it('updates the password of a user when one is provided', function () {
@@ -126,10 +124,10 @@ it('updates the password of a user when one is provided', function () {
 
     $response->assertRedirect('/core/users');
 
-    $passwordMatches = Hash::check('another-long-secret', $user->refresh()->password);
+    $user->refresh();
 
-    expect($passwordMatches)
-        ->toBeTrue();
+    $passwordMatches = Hash::check('another-long-secret', $user->password);
+    expect($passwordMatches)->toBeTrue();
 });
 
 it('deletes another user', function () {
@@ -140,8 +138,8 @@ it('deletes another user', function () {
 
     $response->assertRedirect('/core/users');
 
-    expect(User::find($user->id))
-        ->toBeNull();
+    $deleted = User::find($user->id);
+    expect($deleted)->toBeNull();
 });
 
 it('refuses to delete the signed-in user', function () {
@@ -149,9 +147,8 @@ it('refuses to delete the signed-in user', function () {
 
     $response->assertRedirect('/core/users');
 
-    expect(User::find($this->admin->id))
-        ->not
-        ->toBeNull();
+    $admin = User::find($this->admin->id);
+    expect($admin)->not->toBeNull();
 });
 
 it('has no detail page for users', function () {

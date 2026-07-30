@@ -24,9 +24,13 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->userIdToIgnore();
+        $profileRules = $this->profileRules($userId);
+        $passwordRules = $this->passwordRulesForMethod();
+
         return [
-            ...$this->profileRules($this->userIdToIgnore()),
-            'password' => $this->passwordRulesForMethod(),
+            ...$profileRules,
+            'password' => $passwordRules,
         ];
     }
 
