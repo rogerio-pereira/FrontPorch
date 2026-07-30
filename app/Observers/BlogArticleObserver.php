@@ -4,8 +4,9 @@ namespace App\Observers;
 
 use App\Models\BlogArticle;
 use App\Models\User;
-use App\Support\UniqueSlug;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 class BlogArticleObserver
 {
@@ -15,7 +16,7 @@ class BlogArticleObserver
     public function creating(BlogArticle $article): void
     {
         $article->published_by = $this->resolvePublishedBy();
-        $article->slug = UniqueSlug::uniqueSlug($article->title, BlogArticle::class);
+        $article->slug = $this->slugFromTitle($article->title);
     }
 
     /**
@@ -27,7 +28,7 @@ class BlogArticleObserver
             return;
         }
 
-        $article->slug = UniqueSlug::uniqueSlug($article->title, BlogArticle::class, $article->id);
+        $article->slug = $this->slugFromTitle($article->title);
     }
 
     /**
@@ -42,5 +43,19 @@ class BlogArticleObserver
         }
 
         return $user->name;
+    }
+
+    /**
+     * Derive a URL slug from the article title.
+     */
+    protected function slugFromTitle(string $title): string
+    {
+        $slug = Str::slug($title);
+
+        if ($slug === '') {
+            throw new InvalidArgumentException('An article title must produce a non-empty slug.');
+        }
+
+        return $slug;
     }
 }
