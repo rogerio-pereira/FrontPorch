@@ -6,6 +6,8 @@ it('redirects guests from the admin panel to the login page', function (string $
     $this->get($url)
         ->assertRedirect($loginUrl);
 })->with([
+    '/core/users',
+    '/core/users/create',
     '/core/services',
     '/core/services/create',
     '/core/faqs',

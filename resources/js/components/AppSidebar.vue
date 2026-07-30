@@ -8,6 +8,7 @@ import {
     MessageSquareQuote,
     Newspaper,
     Sparkles,
+    Users,
 } from '@lucide/vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -30,6 +31,11 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Users',
+        href: '/core/users',
+        icon: Users,
     },
     {
         title: 'Services',
