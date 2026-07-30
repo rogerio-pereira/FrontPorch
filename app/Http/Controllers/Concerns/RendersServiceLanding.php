@@ -11,7 +11,7 @@ trait RendersServiceLanding
     /**
      * Testimonials sampled on a service landing page.
      */
-    protected const TESTIMONIAL_SAMPLE = 5;
+    protected const TESTIMONIAL_SAMPLE = 10;
 
     /**
      * Render a service landing page; the copy itself lives in the Vue page.
