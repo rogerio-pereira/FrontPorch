@@ -22,7 +22,12 @@ defineProps<{
         description: string;
         images: Array<{ url: string; alt: string }>;
     }>;
-    articles: Array<{ title: string; description: string; image: string }>;
+    articles: Array<{
+        title: string;
+        description: string;
+        image: string;
+        slug: string;
+    }>;
 }>();
 </script>
 
