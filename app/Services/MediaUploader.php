@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class MediaUploader
@@ -13,7 +14,10 @@ class MediaUploader
      */
     public function store(UploadedFile $file, string $directory): string
     {
-        $path = $file->store($directory);
+        $extension = $file->getClientOriginalExtension();
+        $filename = Str::uuid()->toString().'.'.$extension;
+
+        $path = Storage::putFileAs($directory, $file, $filename);
 
         if (! is_string($path)) {
             throw new RuntimeException('Unable to store the uploaded file.');
