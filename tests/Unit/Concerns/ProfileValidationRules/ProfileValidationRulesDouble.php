@@ -19,7 +19,7 @@ class ProfileValidationRulesDouble
     /**
      * @return array<int, mixed>
      */
-    public function exposeEmailRules(?int $userId = null): array
+    public function exposeEmailRules(?string $userId = null): array
     {
         return $this->emailRules($userId);
     }
@@ -27,7 +27,7 @@ class ProfileValidationRulesDouble
     /**
      * @return array<string, array<int, mixed>>
      */
-    public function exposeProfileRules(?int $userId = null): array
+    public function exposeProfileRules(?string $userId = null): array
     {
         return $this->profileRules($userId);
     }

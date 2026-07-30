@@ -32,8 +32,12 @@ Route::get('/services/website-design-and-development', ServiceWebsiteDesignAndDe
 Route::get('/services/business-automations', ServiceBusinessAutomationsController::class)->name('services.business-automations');
 Route::get('/services/custom-software-development', ServiceCustomSoftwareDevelopmentController::class)->name('services.custom-software-development');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
-});
+Route::middleware(['auth', 'verified'])
+    ->group(function (): void {
+        Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    });
 
 require __DIR__.'/settings.php';
+
+// Admin CMS routes (/core/*) — authenticated back-office shell for CMS resources.
+require __DIR__.'/core.php';

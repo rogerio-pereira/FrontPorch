@@ -19,6 +19,10 @@ createInertiaApp({
             return [CoreLayout, SettingsLayout];
         }
 
+        if (name.startsWith('core/')) {
+            return CoreLayout;
+        }
+
         if (name === 'Dashboard') {
             return CoreLayout;
         }

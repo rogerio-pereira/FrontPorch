@@ -157,3 +157,6 @@ Target the repository’s default branch (usually `main`).
 
 - Use `docs/` for product, architecture, feature and setup specifications.
 - Update this guide only when **team-wide** defaults change (stack versions, coverage gates, queue conventions, PR workflow).
+
+# Code Styleguide (**IMPORTANT**)
+- Read `.cursor/rules/style-guide.md`
