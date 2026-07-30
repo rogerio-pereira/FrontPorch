@@ -13,79 +13,125 @@ class TestimonialsSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach ($this->testimonials() as $testimonial) {
-            $service = Service::where('slug', $testimonial['service'])->first();
+        $website = Service::where('slug', 'website-design-and-development')
+                        ->first();
+        $leadGeneration = Service::where('slug', 'lead-generation')
+                        ->first();
+        $emailMarketing = Service::where('slug', 'email-marketing')
+                        ->first();
+        $automations = Service::where('slug', 'business-automations')
+                        ->first();
+        $customSoftware = Service::where('slug', 'custom-software-development')
+                        ->first();
 
-            if ($service === null) {
-                continue;
-            }
-
-            Testimonial::updateOrCreate(
-                ['testimonial' => $testimonial['testimonial']],
-                [
-                    'person' => $testimonial['person'],
-                    'service_id' => $service->id,
-                ],
-            );
+        if ($website === null || $leadGeneration === null || $emailMarketing === null || $automations === null || $customSoftware === null) {
+            return;
         }
-    }
 
-    /**
-     * @return list<array{person: string, testimonial: string, service: string}>
-     */
-    protected function testimonials(): array
-    {
-        return [
+        // Aim statements
+        Testimonial::updateOrCreate(
             [
-                'person' => 'What we aim for',
                 'testimonial' => 'They actually listened, and explained things in a way that made sense.',
-                'service' => 'website-design-and-development',
             ],
             [
                 'person' => 'What we aim for',
+                'service_id' => $website->id,
+            ]
+        );
+
+        Testimonial::updateOrCreate(
+            [
                 'testimonial' => 'We always knew what was happening next. No surprises.',
-                'service' => 'lead-generation',
+            ],
+            [
+                'person' => 'What we aim for',
+                'service_id' => $leadGeneration->id,
+            ]
+        );
+
+        // Lead generation
+        Testimonial::updateOrCreate(
+            [
+                'testimonial' => 'The calls we get now are from people who already know what we do and what it costs.',
             ],
             [
                 'person' => 'Owner, Plant City lawn care',
-                'testimonial' => 'The calls we get now are from people who already know what we do and what it costs.',
-                'service' => 'lead-generation',
+                'service_id' => $leadGeneration->id,
+            ]
+        );
+
+        // Email marketing
+        Testimonial::updateOrCreate(
+            [
+                'testimonial' => 'Our monthly email brings people back into the shop without feeling pushy.',
             ],
             [
                 'person' => 'Owner, Lakeland boutique',
-                'testimonial' => 'Our monthly email brings people back into the shop without feeling pushy.',
-                'service' => 'email-marketing',
-            ],
+                'service_id' => $emailMarketing->id,
+            ]
+        );
+
+        Testimonial::updateOrCreate(
             [
-                'person' => 'Manager, Brandon dental office',
-                'testimonial' => 'New patients say the site made booking feel simple, which is exactly what we wanted.',
-                'service' => 'website-design-and-development',
-            ],
-            [
-                'person' => 'Owner, Tampa roofing crew',
-                'testimonial' => 'Our old site looked fine on a laptop and terrible on a phone. That is fixed now.',
-                'service' => 'website-design-and-development',
-            ],
-            [
-                'person' => 'Owner, Wesley Chapel cleaning service',
-                'testimonial' => 'Quotes and reminders go out on their own, so my evenings are mine again.',
-                'service' => 'business-automations',
-            ],
-            [
-                'person' => 'Office lead, Sarasota HVAC company',
-                'testimonial' => 'We stopped re-typing the same customer details into three different tools.',
-                'service' => 'business-automations',
-            ],
-            [
-                'person' => 'Founder, Central Florida logistics startup',
-                'testimonial' => 'They built the one piece the off-the-shelf software could never handle for us.',
-                'service' => 'custom-software-development',
+                'testimonial' => 'Every follow-up email sounds like us, not like a template someone bought online.',
             ],
             [
                 'person' => 'Owner, Plant City feed store',
-                'testimonial' => 'Every follow-up email sounds like us, not like a template someone bought online.',
-                'service' => 'email-marketing',
+                'service_id' => $emailMarketing->id,
+            ]
+        );
+
+        // Website design & development
+        Testimonial::updateOrCreate(
+            [
+                'testimonial' => 'New patients say the site made booking feel simple, which is exactly what we wanted.',
             ],
-        ];
+            [
+                'person' => 'Manager, Brandon dental office',
+                'service_id' => $website->id,
+            ]
+        );
+
+        Testimonial::updateOrCreate(
+            [
+                'testimonial' => 'Our old site looked fine on a laptop and terrible on a phone. That is fixed now.',
+            ],
+            [
+                'person' => 'Owner, Tampa roofing crew',
+                'service_id' => $website->id,
+            ]
+        );
+
+        // Business automations
+        Testimonial::updateOrCreate(
+            [
+                'testimonial' => 'Quotes and reminders go out on their own, so my evenings are mine again.',
+            ],
+            [
+                'person' => 'Owner, Wesley Chapel cleaning service',
+                'service_id' => $automations->id,
+            ]
+        );
+
+        Testimonial::updateOrCreate(
+            [
+                'testimonial' => 'We stopped re-typing the same customer details into three different tools.',
+            ],
+            [
+                'person' => 'Office lead, Sarasota HVAC company',
+                'service_id' => $automations->id,
+            ]
+        );
+
+        // Custom software
+        Testimonial::updateOrCreate(
+            [
+                'testimonial' => 'They built the one piece the off-the-shelf software could never handle for us.',
+            ],
+            [
+                'person' => 'Founder, Central Florida logistics startup',
+                'service_id' => $customSoftware->id,
+            ]
+        );
     }
 }

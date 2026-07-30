@@ -24,9 +24,8 @@ const props = defineProps<{
         person: string;
         testimonial: string;
         service_id: string;
-        service: string | null;
     } | null;
-    services: Array<{ id: string; title: string }>;
+    services: Record<string, string>;
 }>();
 
 const action = computed(() => {
@@ -101,12 +100,12 @@ const title = computed(() => {
                 >
                     <option value="">Pick a service</option>
                     <option
-                        v-for="service in services"
-                        :key="service.id"
-                        :value="service.id"
-                        :selected="service.id === testimonial?.service_id"
+                        v-for="(serviceTitle, serviceId) in services"
+                        :key="serviceId"
+                        :value="serviceId"
+                        :selected="serviceId === testimonial?.service_id"
                     >
-                        {{ service.title }}
+                        {{ serviceTitle }}
                     </option>
                 </select>
                 <InputError :message="errors.service_id" />

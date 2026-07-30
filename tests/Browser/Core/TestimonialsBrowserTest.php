@@ -4,10 +4,64 @@ use App\Models\Service;
 use App\Models\Testimonial;
 use App\Models\User;
 
-it('creates a testimonial from the admin form', function () {
-    $this->actingAs(User::factory()->create());
+it('shows the testimonials admin screens to authenticated users', function (string $url, string $heading, ?string $submit) {
+    $user = User::factory()
+                ->create();
 
-    $service = Service::factory()->create(['title' => 'Lead generation']);
+    $this->actingAs($user);
+
+    Service::factory()
+        ->create([
+            'title' => 'Lead generation',
+        ]);
+
+    $page = visit($url)
+                ->waitForEvent('networkidle')
+                ->assertSee($heading);
+
+    if ($submit !== null) {
+        $page->assertPresent($submit);
+    }
+})->with([
+    'index' => ['/core/testimonials', 'Testimonials', null],
+    'create' => ['/core/testimonials/create', 'New testimonial', '@testimonial-submit'],
+]);
+
+it('shows the testimonials edit form to authenticated users', function () {
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
+
+    $service = Service::factory()
+                    ->create([
+                        'title' => 'Lead generation',
+                    ]);
+
+    $testimonial = Testimonial::factory()
+                    ->create([
+                        'service_id' => $service->id,
+                        'person' => 'Jordan Client',
+                    ]);
+
+    $url = "/core/testimonials/{$testimonial->id}/edit";
+
+    visit($url)
+        ->waitForEvent('networkidle')
+        ->assertSee('Edit testimonial')
+        ->assertPresent('@testimonial-submit');
+});
+
+it('creates a testimonial from the admin form', function () {
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
+
+    $service = Service::factory()
+                    ->create([
+                        'title' => 'Lead generation',
+                    ]);
 
     visit('/core/testimonials/create')
         ->waitForEvent('networkidle')
@@ -18,17 +72,30 @@ it('creates a testimonial from the admin form', function () {
         ->waitForText('Jordan Client')
         ->assertPathIs('/core/testimonials');
 
-    expect(Testimonial::where('person', 'Jordan Client')->exists())->toBeTrue();
+    $testimonialExists = Testimonial::where('person', 'Jordan Client')
+                        ->exists();
+
+    expect($testimonialExists)
+        ->toBeTrue();
 });
 
 it('edits a testimonial from the admin form', function () {
-    $this->actingAs(User::factory()->create());
+    $user = User::factory()
+                ->create();
 
-    $service = Service::factory()->create(['title' => 'Lead generation']);
-    $testimonial = Testimonial::factory()->forService($service)->create([
-        'person' => 'Original Person',
-        'testimonial' => 'Original quote.',
-    ]);
+    $this->actingAs($user);
+
+    $service = Service::factory()
+                    ->create([
+                        'title' => 'Lead generation',
+                    ]);
+
+    $testimonial = Testimonial::factory()
+                    ->create([
+                        'service_id' => $service->id,
+                        'person' => 'Original Person',
+                        'testimonial' => 'Original quote.',
+                    ]);
 
     visit("/core/testimonials/{$testimonial->id}/edit")
         ->waitForEvent('networkidle')
@@ -37,16 +104,26 @@ it('edits a testimonial from the admin form', function () {
         ->waitForText('Updated Person')
         ->assertPathIs('/core/testimonials');
 
-    expect($testimonial->refresh()->person)->toBe('Updated Person');
+    $person = $testimonial->refresh()
+                    ->person;
+
+    expect($person)->toBe('Updated Person');
 });
 
 it('deletes a testimonial from the admin index', function () {
-    $this->actingAs(User::factory()->create());
+    $user = User::factory()
+                ->create();
 
-    $service = Service::factory()->create();
-    $testimonial = Testimonial::factory()->forService($service)->create([
-        'person' => 'Delete This Person',
-    ]);
+    $this->actingAs($user);
+
+    $service = Service::factory()
+                    ->create();
+
+    $testimonial = Testimonial::factory()
+                    ->create([
+                        'service_id' => $service->id,
+                        'person' => 'Delete This Person',
+                    ]);
 
     visit('/core/testimonials')
         ->waitForEvent('networkidle')
@@ -55,5 +132,7 @@ it('deletes a testimonial from the admin index', function () {
         ->waitForText('No testimonials yet.')
         ->assertDontSee('Delete This Person');
 
-    expect(Testimonial::find($testimonial->id))->toBeNull();
+    $deleted = Testimonial::find($testimonial->id);
+
+    expect($deleted)->toBeNull();
 });

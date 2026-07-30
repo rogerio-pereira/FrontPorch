@@ -4,9 +4,14 @@ use App\Models\Service;
 use App\Models\Testimonial;
 
 it('belongs to a service', function () {
-    $service = Service::factory()->create();
+    $service = Service::factory()
+                    ->create();
 
-    $testimonial = Testimonial::factory()->forService($service)->create();
+    $testimonial = Testimonial::factory()
+                    ->create([
+                        'service_id' => $service->id,
+                    ]);
 
-    expect($testimonial->service->id)->toBe($service->id);
+    $attachedServiceId = $testimonial->service->id;
+    expect($attachedServiceId)->toBe($service->id);
 });
