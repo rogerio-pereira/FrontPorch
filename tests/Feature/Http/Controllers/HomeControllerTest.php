@@ -9,9 +9,7 @@ use App\Models\Testimonial;
 use Inertia\Testing\AssertableInertia as Assert;
 
 it('returns a successful response', function () {
-    $homeUrl = route('home');
-
-    $response = $this->get($homeUrl);
+    $response = $this->get('/');
 
     $response->assertOk();
 });
