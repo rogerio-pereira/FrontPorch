@@ -60,3 +60,20 @@ it('renders the faqs and testimonials of the lead generation service', function 
         )
     );
 });
+
+it('caps testimonials on the lead generation service landing at ten', function () {
+    $service = Service::factory()
+                    ->create([
+                        'title' => 'Lead generation',
+                    ]);
+
+    Testimonial::factory(12)
+        ->create([
+            'service_id' => $service->id,
+        ]);
+
+    $response = $this->get('/services/lead-generation');
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page->has('testimonials', 10));
+});
