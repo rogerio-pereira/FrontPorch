@@ -14,6 +14,7 @@ defineProps<{
 
 <template>
     <SectionShell
+        v-if="faqs.length > 0"
         overline="Questions"
         heading="Good questions, happy to answer"
         light

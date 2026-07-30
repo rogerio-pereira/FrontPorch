@@ -9,18 +9,22 @@ defineProps<{
 
 <template>
     <SectionShell
+        v-if="testimonials.length > 0"
         overline="Client stories"
-        heading="Real stories on the way"
-        intro="We are just getting started collecting client stories. Until then, here is what we aim for in every engagement."
+        heading="What people say about working with us"
         light
         wide
         centered
     >
-        <div class="grid gap-6 md:grid-cols-2">
+        <div
+            class="grid gap-6 md:grid-cols-2"
+            data-test="home-testimonials"
+        >
             <blockquote
                 v-for="(item, index) in testimonials"
                 :key="index"
                 class="relative rounded-xl border border-border-default bg-white p-8 text-left"
+                :data-test="`home-testimonial-${index}`"
             >
                 <Quote class="mb-4 size-8 text-brand-accent/50" />
                 <p class="text-lg leading-relaxed text-[var(--text-primary-on-light)]">
@@ -31,8 +35,5 @@ defineProps<{
                 </footer>
             </blockquote>
         </div>
-        <p class="mt-8 text-center text-sm text-[var(--text-muted-on-light)]">
-            Named testimonials will appear here as projects wrap up.
-        </p>
     </SectionShell>
 </template>

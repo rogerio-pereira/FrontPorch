@@ -14,9 +14,10 @@ defineProps<{
 
 <template>
     <SectionShell
+        v-if="caseStudies.length > 0"
         overline="Our work"
-        heading="Case studies coming soon"
-        intro="We are a new agency, and our public case studies are still taking shape. Until then, here is the kind of work we love doing with small businesses."
+        heading="A few projects we are proud of"
+        intro="Real-feeling stories of how we help small businesses turn quiet websites into reliable growth systems."
         wide
         centered
     >

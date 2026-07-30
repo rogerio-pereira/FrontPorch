@@ -46,6 +46,7 @@ defineProps<{
     <PortfolioPreviewSection :case-studies="caseStudies" />
     <TestimonialsSection :testimonials="testimonials" />
     <CtaBand
+        v-if="caseStudies.length > 0 || testimonials.length > 0"
         heading="A little clarity goes a long way"
         body="Even one good conversation can change how you think about your marketing. We would love to hear what you are working toward."
         button="Schedule a free call"
@@ -54,6 +55,7 @@ defineProps<{
     <ProcessSection />
     <FaqSection :faqs="faqs" />
     <CtaBand
+        v-if="faqs.length > 0"
         heading="You should not need a tech degree to grow your business"
         body="We handle the complicated parts and explain things in plain English, you stay in the loop without getting lost in the details."
         button="Let's talk → #contact"

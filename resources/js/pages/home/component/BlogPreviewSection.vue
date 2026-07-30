@@ -10,6 +10,7 @@ defineProps<{
 
 <template>
     <SectionShell
+        v-if="articles.length > 0"
         overline="From the blog"
         heading="Ideas worth sharing"
         intro="Helpful reads for small business owners, more articles are on the way."
