@@ -23,13 +23,13 @@ class HomeController extends Controller
         $portfolioPreview = $this->portfolioPreview();
         $blogPreview = $this->blogPreview();
 
-        return Inertia::render('home/Home', [
-            'faq' => $faq,
-            'services' => $services,
-            'testimonials' => $testimonials,
-            'portfolioPreview' => $portfolioPreview,
-            'blogPreview' => $blogPreview,
-        ]);
+        return Inertia::render('home/Home', compact(
+            'faq',
+            'services',
+            'testimonials',
+            'portfolioPreview',
+            'blogPreview',
+        ));
     }
 
     /**
@@ -116,12 +116,10 @@ class HomeController extends Controller
                         ->get();
 
         foreach ($caseStudies as $caseStudy) {
-            $coverImage = $this->coverImage($caseStudy);
-
             $preview[] = [
                 'title' => $caseStudy->title,
                 'description' => $caseStudy->description,
-                'image' => $coverImage,
+                'image' => $this->coverImage($caseStudy),
             ];
         }
 
