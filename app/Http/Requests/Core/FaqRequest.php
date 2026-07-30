@@ -19,7 +19,7 @@ class FaqRequest extends FormRequest
         return [
             'question' => ['required', 'string', 'max:255'],
             'answer' => ['required', 'string'],
-            'sort_order' => ['required', 'integer', 'min:0'],
+            'sort_order' => ['required', 'integer', 'min:1'],
             'service_id' => ['nullable', 'uuid', 'exists:services,id'],
         ];
     }

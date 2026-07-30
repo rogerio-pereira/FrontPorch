@@ -24,14 +24,4 @@ class TestimonialFactory extends Factory
             'service_id' => Service::factory(),
         ];
     }
-
-    /**
-     * Indicate that the testimonial refers to the given service.
-     */
-    public function forService(Service $service): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'service_id' => $service->id,
-        ]);
-    }
 }

@@ -20,29 +20,9 @@ class FaqFactory extends Factory
     {
         return [
             'service_id' => Service::factory(),
-            'question' => rtrim(fake()->sentence(8), '.').'?',
+            'question' => fake()->sentence(),
             'answer' => fake()->paragraph(3),
-            'sort_order' => fake()->numberBetween(0, 20),
+            'sort_order' => fake()->numberBetween(1, 20),
         ];
-    }
-
-    /**
-     * Indicate that the FAQ belongs to the home page instead of a service.
-     */
-    public function forHome(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'service_id' => null,
-        ]);
-    }
-
-    /**
-     * Indicate that the FAQ belongs to the given service landing page.
-     */
-    public function forService(Service $service): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'service_id' => $service->id,
-        ]);
     }
 }

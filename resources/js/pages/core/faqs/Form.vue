@@ -25,9 +25,8 @@ const props = defineProps<{
         answer: string;
         sort_order: number;
         service_id: string | null;
-        service: string | null;
     } | null;
-    services: Array<{ id: string; title: string }>;
+    services: Record<string, string>;
 }>();
 
 const action = computed(() => {
@@ -101,12 +100,12 @@ const title = computed(() => {
                 >
                     <option value="">Home page</option>
                     <option
-                        v-for="service in services"
-                        :key="service.id"
-                        :value="service.id"
-                        :selected="service.id === faq?.service_id"
+                        v-for="(serviceTitle, serviceId) in services"
+                        :key="serviceId"
+                        :value="serviceId"
+                        :selected="serviceId === faq?.service_id"
                     >
-                        {{ service.title }}
+                        {{ serviceTitle }}
                     </option>
                 </select>
                 <InputError :message="errors.service_id" />
@@ -118,8 +117,8 @@ const title = computed(() => {
                     id="sort_order"
                     name="sort_order"
                     type="number"
-                    min="0"
-                    :default-value="faq?.sort_order ?? 0"
+                    min="1"
+                    :default-value="faq?.sort_order ?? 1"
                     required
                 />
                 <InputError :message="errors.sort_order" />

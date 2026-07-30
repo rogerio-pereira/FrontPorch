@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,24 +10,35 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      *
      * Model events stay enabled so the observers derive slugs exactly as
-     * they do through the admin panel.
+     * they do through the admin panel (except where a seeder opts out).
      */
     public function run(): void
     {
-        $user = User::where('email', 'test@example.com')->first();
-
-        if ($user === null) {
-            User::factory()->create([
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-            ]);
-        }
-
+        /*
+         * =============================================================================================================
+         * REAL DATA
+         * =============================================================================================================
+         */
         $this->call([
             ServicesSeeder::class,
-            FaqsSeeder::class,
-            TestimonialsSeeder::class,
+            FaqHomeSeeder::class,
             CaseStudiesSeeder::class,
         ]);
+
+        /*
+         * =============================================================================================================
+         * FAKE DATA
+         * =============================================================================================================
+         */
+        $currentEnv = config('app.env');
+        if (
+            $currentEnv === 'local' ||
+            $currentEnv === 'testing'
+        ) {
+            $this->call([
+                UserSeeder::class,
+                TestimonialsSeeder::class,
+            ]);
+        }
     }
 }

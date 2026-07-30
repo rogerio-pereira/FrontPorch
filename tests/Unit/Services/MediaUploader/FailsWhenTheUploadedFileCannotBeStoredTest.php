@@ -1,19 +1,28 @@
 <?php
 
 use App\Services\MediaUploader;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 it('fails when the uploaded file cannot be stored', function () {
-    $disk = Mockery::mock(Filesystem::class);
-    $disk->shouldReceive('putFileAs')->once()->andReturn(false);
+    Storage::shouldReceive('putFileAs')
+        ->once()
+        ->andReturn(false);
 
-    $filesystem = Mockery::mock(FilesystemFactory::class);
-    $filesystem->shouldReceive('disk')->with(null)->andReturn($disk);
+    $fileFactory = UploadedFile::fake();
+    $file = $fileFactory->create('cover.jpg', 12);
+    $uploader = new MediaUploader;
 
-    $this->app->instance(FilesystemFactory::class, $filesystem);
+    try {
+        $uploader->store($file, 'blog');
+        $threw = false;
+    } catch (RuntimeException $exception) {
+        $threw = true;
 
-    expect(fn () => (new MediaUploader)->store(UploadedFile::fake()->create('cover.jpg', 12), 'blog'))
-        ->toThrow(RuntimeException::class, 'Unable to store the uploaded file.');
+        expect($exception->getMessage())
+            ->toBe('Unable to store the uploaded file.');
+    }
+
+    expect($threw)
+        ->toBeTrue();
 });
