@@ -25,7 +25,7 @@ class HomeController extends Controller
                             ->limit(10)
                             ->get();
 
-        $caseStudies = CaseStudy::with('images')
+        $caseStudies = CaseStudy::with(['images', 'services'])
                            ->inRandomOrder()
                            ->limit(6)
                            ->get();
