@@ -12,8 +12,17 @@ it('fails when the uploaded file cannot be stored', function () {
     $fileFactory = UploadedFile::fake();
     $file = $fileFactory->create('cover.jpg', 12);
     $uploader = new MediaUploader;
-    $store = fn () => $uploader->store($file, 'blog');
 
-    expect($store)
-        ->toThrow(RuntimeException::class, 'Unable to store the uploaded file.');
+    try {
+        $uploader->store($file, 'blog');
+        $threw = false;
+    } catch (RuntimeException $exception) {
+        $threw = true;
+
+        expect($exception->getMessage())
+            ->toBe('Unable to store the uploaded file.');
+    }
+
+    expect($threw)
+        ->toBeTrue();
 });
