@@ -39,10 +39,10 @@ it('shows the testimonials edit form to authenticated users', function () {
                     ]);
 
     $testimonial = Testimonial::factory()
-                    ->create([
-                        'service_id' => $service->id,
-                        'person' => 'Jordan Client',
-                    ]);
+                        ->create([
+                            'service_id' => $service->id,
+                            'person' => 'Jordan Client',
+                        ]);
 
     $url = "/core/testimonials/{$testimonial->id}/edit";
 
@@ -91,11 +91,11 @@ it('edits a testimonial from the admin form', function () {
                     ]);
 
     $testimonial = Testimonial::factory()
-                    ->create([
-                        'service_id' => $service->id,
-                        'person' => 'Original Person',
-                        'testimonial' => 'Original quote.',
-                    ]);
+                        ->create([
+                            'service_id' => $service->id,
+                            'person' => 'Original Person',
+                            'testimonial' => 'Original quote.',
+                        ]);
 
     visit("/core/testimonials/{$testimonial->id}/edit")
         ->waitForEvent('networkidle')
@@ -120,10 +120,10 @@ it('deletes a testimonial from the admin index', function () {
                     ->create();
 
     $testimonial = Testimonial::factory()
-                    ->create([
-                        'service_id' => $service->id,
-                        'person' => 'Delete This Person',
-                    ]);
+                        ->create([
+                            'service_id' => $service->id,
+                            'person' => 'Delete This Person',
+                        ]);
 
     visit('/core/testimonials')
         ->waitForEvent('networkidle')

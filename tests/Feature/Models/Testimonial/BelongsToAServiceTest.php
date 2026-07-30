@@ -8,9 +8,9 @@ it('belongs to a service', function () {
                     ->create();
 
     $testimonial = Testimonial::factory()
-                    ->create([
-                        'service_id' => $service->id,
-                    ]);
+                        ->create([
+                            'service_id' => $service->id,
+                        ]);
 
     $attachedServiceId = $testimonial->service->id;
     expect($attachedServiceId)->toBe($service->id);

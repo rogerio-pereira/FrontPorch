@@ -19,11 +19,11 @@ it('lists the testimonials with their service', function () {
                     ]);
 
     $testimonial = Testimonial::factory()
-                    ->create([
-                        'service_id' => $service->id,
-                        'person' => 'Owner, Lakeland boutique',
-                        'testimonial' => 'Our monthly email brings people back into the shop.',
-                    ]);
+                        ->create([
+                            'service_id' => $service->id,
+                            'person' => 'Owner, Lakeland boutique',
+                            'testimonial' => 'Our monthly email brings people back into the shop.',
+                        ]);
 
     $response = $this->get('/core/testimonials');
 
@@ -102,9 +102,9 @@ it('requires a service on a testimonial', function () {
 
 it('shows the form to edit a testimonial', function () {
     $testimonial = Testimonial::factory()
-                    ->create([
-                        'person' => 'Owner, Plant City feed store',
-                    ]);
+                        ->create([
+                            'person' => 'Owner, Plant City feed store',
+                        ]);
 
     $url = "/core/testimonials/{$testimonial->id}/edit";
     $response = $this->get($url);
@@ -123,7 +123,7 @@ it('shows the form to edit a testimonial', function () {
 
 it('updates a testimonial', function () {
     $testimonial = Testimonial::factory()
-                    ->create();
+                        ->create();
 
     $service = Service::factory()
                     ->create();
@@ -150,7 +150,7 @@ it('updates a testimonial', function () {
 
 it('soft deletes a testimonial', function () {
     $testimonial = Testimonial::factory()
-                    ->create();
+                        ->create();
 
     $url = "/core/testimonials/{$testimonial->id}";
     $response = $this->delete($url);
@@ -167,7 +167,7 @@ it('soft deletes a testimonial', function () {
 
 it('has no detail page for testimonials', function () {
     $testimonial = Testimonial::factory()
-                    ->create();
+                        ->create();
 
     $url = "/core/testimonials/{$testimonial->id}";
     $response = $this->get($url);
