@@ -15,7 +15,8 @@ class MediaUploader
     public function store(UploadedFile $file, string $directory): string
     {
         $extension = $file->getClientOriginalExtension();
-        $filename = Str::uuid()->toString().'.'.$extension;
+        $uuid = Str::uuid()->toString();
+        $filename = "{$uuid}.{$extension}";
 
         $path = Storage::putFileAs($directory, $file, $filename);
 
