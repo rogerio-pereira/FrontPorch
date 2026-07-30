@@ -19,15 +19,15 @@ it('lists the faqs with the page they belong to', function () {
                     ]);
 
     Faq::factory()
-        ->forService($service)
         ->create([
+            'service_id' => $service->id,
             'question' => 'How many leads should I expect?',
             'sort_order' => 2,
         ]);
 
     Faq::factory()
-        ->forHome()
         ->create([
+            'service_id' => null,
             'question' => 'How much does this cost?',
             'sort_order' => 1,
         ]);
@@ -45,20 +45,24 @@ it('lists the faqs with the page they belong to', function () {
             ->where('sort_order', 1)
             ->has('id')
             ->has('answer')
+            ->etc()
         )
         ->has('faqs.1', fn (Assert $faq) => $faq
-            ->where('service', 'Lead generation')
             ->where('service_id', $service->id)
+            ->has('service', fn (Assert $attached) => $attached
+                ->where('title', 'Lead generation')
+                ->etc()
+            )
             ->etc()
         )
     );
 });
 
 it('shows the form to create a faq with the service options', function () {
-    Service::factory()
-        ->create([
-            'title' => 'Lead generation',
-        ]);
+    $service = Service::factory()
+                    ->create([
+                        'title' => 'Lead generation',
+                    ]);
 
     $response = $this->get('/core/faqs/create');
 
@@ -67,10 +71,7 @@ it('shows the form to create a faq with the service options', function () {
         ->component('core/faqs/Form')
         ->where('faq', null)
         ->has('services', 1)
-        ->has('services.0', fn (Assert $service) => $service
-            ->where('title', 'Lead generation')
-            ->has('id')
-        )
+        ->where("services.{$service->id}", 'Lead generation')
     );
 });
 
@@ -140,8 +141,8 @@ it('validates the faq payload', function () {
 
 it('shows the form to edit a faq', function () {
     $faq = Faq::factory()
-                ->forHome()
                 ->create([
+                    'service_id' => null,
                     'question' => 'How much does this cost?',
                 ]);
 
@@ -154,7 +155,7 @@ it('shows the form to edit a faq', function () {
         ->has('faq', fn (Assert $props) => $props
             ->where('id', $faq->id)
             ->where('question', 'How much does this cost?')
-            ->where('service', null)
+            ->where('service_id', null)
             ->etc()
         )
         ->has('services')
@@ -163,8 +164,9 @@ it('shows the form to edit a faq', function () {
 
 it('updates a faq', function () {
     $faq = Faq::factory()
-                ->forHome()
-                ->create();
+                ->create([
+                    'service_id' => null,
+                ]);
 
     $response = $this->put(
         "/core/faqs/{$faq->id}",
@@ -188,8 +190,9 @@ it('updates a faq', function () {
 
 it('soft deletes a faq', function () {
     $faq = Faq::factory()
-                ->forHome()
-                ->create();
+                ->create([
+                    'service_id' => null,
+                ]);
 
     $url = "/core/faqs/{$faq->id}";
     $response = $this->delete($url);
@@ -206,8 +209,9 @@ it('soft deletes a faq', function () {
 
 it('has no detail page for faqs', function () {
     $faq = Faq::factory()
-                ->forHome()
-                ->create();
+                ->create([
+                    'service_id' => null,
+                ]);
 
     $url = "/core/faqs/{$faq->id}";
     $response = $this->get($url);

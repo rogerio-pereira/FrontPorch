@@ -19,15 +19,7 @@ class ServiceController extends Controller
         $services = Service::orderBy('sort_order')
                         ->get();
 
-        $props = [];
-
-        foreach ($services as $service) {
-            $props[] = $this->props($service);
-        }
-
-        return Inertia::render('core/services/Index', [
-            'services' => $props,
-        ]);
+        return Inertia::render('core/services/Index', compact('services'));
     }
 
     /**
@@ -75,7 +67,7 @@ class ServiceController extends Controller
     public function edit(Service $service): Response
     {
         return Inertia::render('core/services/Form', [
-            'service' => $this->props($service),
+            'service' => $service,
         ]);
     }
 
@@ -116,21 +108,5 @@ class ServiceController extends Controller
         );
 
         return to_route('core.services.index');
-    }
-
-    /**
-     * Shape a service for the admin pages.
-     *
-     * @return array{id: string, title: string, description: string, slug: string, sort_order: int}
-     */
-    protected function props(Service $service): array
-    {
-        return [
-            'id' => $service->id,
-            'title' => $service->title,
-            'description' => $service->description,
-            'slug' => $service->slug,
-            'sort_order' => $service->sort_order,
-        ];
     }
 }

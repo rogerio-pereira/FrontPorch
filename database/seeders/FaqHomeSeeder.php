@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Faq;
 use Illuminate\Database\Seeder;
 
-class FaqsSeeder extends Seeder
+class FaqHomeSeeder extends Seeder
 {
     /**
      * Seed the FAQs shown on the home page (no service attached).

@@ -18,35 +18,11 @@ class FaqFactory extends Factory
      */
     public function definition(): array
     {
-        $sentence = fake()->sentence(8);
-        $question = rtrim($sentence, '.');
-        $question = $question.'?';
-
         return [
             'service_id' => Service::factory(),
-            'question' => $question,
+            'question' => fake()->sentence(),
             'answer' => fake()->paragraph(3),
-            'sort_order' => fake()->numberBetween(0, 20),
+            'sort_order' => fake()->numberBetween(1, 20),
         ];
-    }
-
-    /**
-     * Indicate that the FAQ belongs to the home page instead of a service.
-     */
-    public function forHome(): static
-    {
-        return $this->state([
-            'service_id' => null,
-        ]);
-    }
-
-    /**
-     * Indicate that the FAQ belongs to the given service landing page.
-     */
-    public function forService(Service $service): static
-    {
-        return $this->state([
-            'service_id' => $service->id,
-        ]);
     }
 }

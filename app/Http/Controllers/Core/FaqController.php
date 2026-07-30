@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Core\Concerns\ProvidesServiceOptions;
 use App\Http\Requests\Core\FaqRequest;
 use App\Models\Faq;
+use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class FaqController extends Controller
 {
-    use ProvidesServiceOptions;
-
     /**
      * List the FAQs of the home page and of every service landing.
      */
@@ -23,15 +21,7 @@ class FaqController extends Controller
                     ->orderBy('sort_order')
                     ->get();
 
-        $props = [];
-
-        foreach ($faqs as $faq) {
-            $props[] = $this->props($faq);
-        }
-
-        return Inertia::render('core/faqs/Index', [
-            'faqs' => $props,
-        ]);
+        return Inertia::render('core/faqs/Index', compact('faqs'));
     }
 
     /**
@@ -39,9 +29,12 @@ class FaqController extends Controller
      */
     public function create(): Response
     {
+        $services = Service::orderBy('sort_order')
+                        ->pluck('title', 'id');
+
         return Inertia::render('core/faqs/Form', [
             'faq' => null,
-            'services' => $this->serviceOptions(),
+            'services' => $services,
         ]);
     }
 
@@ -78,9 +71,12 @@ class FaqController extends Controller
      */
     public function edit(Faq $faq): Response
     {
+        $services = Service::orderBy('sort_order')
+                        ->pluck('title', 'id');
+
         return Inertia::render('core/faqs/Form', [
-            'faq' => $this->props($faq),
-            'services' => $this->serviceOptions(),
+            'faq' => $faq,
+            'services' => $services,
         ]);
     }
 
@@ -120,28 +116,5 @@ class FaqController extends Controller
         );
 
         return to_route('core.faqs.index');
-    }
-
-    /**
-     * Shape a FAQ for the admin pages.
-     *
-     * @return array{id: string, question: string, answer: string, sort_order: int, service_id: string|null, service: string|null}
-     */
-    protected function props(Faq $faq): array
-    {
-        $service = null;
-
-        if ($faq->service !== null) {
-            $service = $faq->service->title;
-        }
-
-        return [
-            'id' => $faq->id,
-            'question' => $faq->question,
-            'answer' => $faq->answer,
-            'sort_order' => $faq->sort_order,
-            'service_id' => $faq->service_id,
-            'service' => $service,
-        ];
     }
 }

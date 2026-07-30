@@ -8,14 +8,15 @@ it('belongs to a service or the home page', function () {
                     ->create();
 
     $serviceFaq = Faq::factory()
-                    ->forService($service)
                     ->create([
+                        'service_id' => $service->id,
                         'sort_order' => '5',
                     ]);
 
     $homeFaq = Faq::factory()
-                    ->forHome()
-                    ->create();
+                    ->create([
+                        'service_id' => null,
+                    ]);
 
     $sortOrder = $serviceFaq->sort_order;
     expect($sortOrder)->toBe(5);

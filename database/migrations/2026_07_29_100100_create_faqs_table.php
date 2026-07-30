@@ -16,10 +16,10 @@ return new class extends Migration
             $table->foreignUuid('service_id')
                 ->nullable()
                 ->constrained('services')
-                ->nullOnDelete();
+                ->cascadeOnDelete();
             $table->string('question');
             $table->text('answer');
-            $table->integer('sort_order')->default(0);
+            $table->integer('sort_order')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

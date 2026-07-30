@@ -10,8 +10,8 @@ it('shows the services admin screens to authenticated users', function (string $
     $this->actingAs($user);
 
     $page = visit($url)
-        ->waitForEvent('networkidle')
-        ->assertSee($heading);
+                ->waitForEvent('networkidle')
+                ->assertSee($heading);
 
     if ($submit !== null) {
         $page->assertPresent($submit);

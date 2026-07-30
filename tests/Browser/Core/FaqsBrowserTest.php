@@ -10,8 +10,8 @@ it('shows the faqs admin screens to authenticated users', function (string $url,
     $this->actingAs($user);
 
     $page = visit($url)
-        ->waitForEvent('networkidle')
-        ->assertSee($heading);
+                ->waitForEvent('networkidle')
+                ->assertSee($heading);
 
     if ($submit !== null) {
         $page->assertPresent($submit);
@@ -28,8 +28,8 @@ it('shows the faqs edit form to authenticated users', function () {
     $this->actingAs($user);
 
     $faq = Faq::factory()
-                ->forHome()
                 ->create([
+                    'service_id' => null,
                     'question' => 'How soon can we start?',
                 ]);
 
@@ -69,8 +69,8 @@ it('edits a faq from the admin form', function () {
     $this->actingAs($user);
 
     $faq = Faq::factory()
-                ->forHome()
                 ->create([
+                    'service_id' => null,
                     'question' => 'Original question?',
                     'answer' => 'Original answer.',
                     'sort_order' => 1,
@@ -96,8 +96,8 @@ it('deletes a faq from the admin index', function () {
     $this->actingAs($user);
 
     $faq = Faq::factory()
-                ->forHome()
                 ->create([
+                    'service_id' => null,
                     'question' => 'Delete this FAQ?',
                 ]);
 
