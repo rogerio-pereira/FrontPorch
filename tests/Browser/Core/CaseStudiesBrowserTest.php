@@ -46,6 +46,25 @@ it('shows the case studies edit form to authenticated users', function () {
         ->assertPresent('@case-study-submit');
 });
 
+it('shows the case studies create form with the rich text editor', function () {
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
+
+    Service::factory()
+        ->create([
+            'title' => 'Lead generation',
+        ]);
+
+    visit('/core/case-studies/create')
+        ->waitForEvent('networkidle')
+        ->assertSee('New case study')
+        ->assertPresent('@rich-text-editor')
+        ->assertPresent('@rich-text-toolbar')
+        ->assertPresent('@case-study-submit');
+});
+
 it('creates a case study from the admin form', function () {
     $user = User::factory()
                 ->create();
@@ -57,15 +76,26 @@ it('creates a case study from the admin form', function () {
                         'title' => 'Lead generation',
                     ]);
 
-    visit('/core/case-studies/create')
-        ->waitForEvent('networkidle')
-        ->type('title', 'From missed calls to booked jobs')
-        ->type('description', 'Together we rebuilt their digital front porch.')
-        ->type('client', 'Cypress & Oak Home Services')
-        ->type('industry', 'Home services')
-        ->type('challenge', 'Good leads cooled off before anyone could reply.')
-        ->type('content', '<p>We started with a discovery conversation.</p>')
-        ->check("@case-study-service-{$service->id}")
+    $page = visit('/core/case-studies/create')
+                ->waitForEvent('networkidle')
+                ->type('title', 'From missed calls to booked jobs')
+                ->type('description', 'Together we rebuilt their digital front porch.')
+                ->type('client', 'Cypress & Oak Home Services')
+                ->type('industry', 'Home services')
+                ->type('challenge', 'Good leads cooled off before anyone could reply.')
+                ->assertPresent('@rich-text-editor');
+
+    $page->script(<<<'JS'
+        (() => {
+            const input = document.querySelector('[data-test="rich-text-content-input"]');
+            if (input === null) {
+                throw new Error('Rich text content input was not found.');
+            }
+            input.value = '<p>We started with a discovery conversation.</p>';
+        })()
+    JS);
+
+    $page->check("@case-study-service-{$service->id}")
         ->click('@case-study-submit')
         ->waitForText('From missed calls to booked jobs')
         ->assertPathIs('/core/case-studies');

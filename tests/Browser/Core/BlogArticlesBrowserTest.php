@@ -35,6 +35,8 @@ it('shows the article create form with the image field', function () {
         ->assertSee('Category')
         ->assertSee('Content')
         ->assertSee('Image')
+        ->assertPresent('@rich-text-editor')
+        ->assertPresent('@rich-text-toolbar')
         ->assertPresent('@article-image')
         ->assertPresent('@article-submit');
 });
