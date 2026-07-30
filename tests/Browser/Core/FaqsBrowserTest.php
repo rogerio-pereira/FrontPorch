@@ -3,8 +3,49 @@
 use App\Models\Faq;
 use App\Models\User;
 
+it('shows the faqs admin screens to authenticated users', function (string $url, string $heading, ?string $submit) {
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
+
+    $page = visit($url)
+        ->waitForEvent('networkidle')
+        ->assertSee($heading);
+
+    if ($submit !== null) {
+        $page->assertPresent($submit);
+    }
+})->with([
+    'index' => ['/core/faqs', 'FAQs', null],
+    'create' => ['/core/faqs/create', 'New FAQ', '@faq-submit'],
+]);
+
+it('shows the faqs edit form to authenticated users', function () {
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
+
+    $faq = Faq::factory()
+                ->forHome()
+                ->create([
+                    'question' => 'How soon can we start?',
+                ]);
+
+    $url = "/core/faqs/{$faq->id}/edit";
+
+    visit($url)
+        ->waitForEvent('networkidle')
+        ->assertSee('Edit FAQ')
+        ->assertPresent('@faq-submit');
+});
+
 it('creates a faq from the admin form', function () {
-    $this->actingAs(User::factory()->create());
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
 
     visit('/core/faqs/create')
         ->waitForEvent('networkidle')
@@ -14,17 +55,26 @@ it('creates a faq from the admin form', function () {
         ->waitForText('How soon can we start?')
         ->assertPathIs('/core/faqs');
 
-    expect(Faq::where('question', 'How soon can we start?')->exists())->toBeTrue();
+    $faqExists = Faq::where('question', 'How soon can we start?')
+                    ->exists();
+
+    expect($faqExists)
+        ->toBeTrue();
 });
 
 it('edits a faq from the admin form', function () {
-    $this->actingAs(User::factory()->create());
+    $user = User::factory()
+                ->create();
 
-    $faq = Faq::factory()->forHome()->create([
-        'question' => 'Original question?',
-        'answer' => 'Original answer.',
-        'sort_order' => 1,
-    ]);
+    $this->actingAs($user);
+
+    $faq = Faq::factory()
+                ->forHome()
+                ->create([
+                    'question' => 'Original question?',
+                    'answer' => 'Original answer.',
+                    'sort_order' => 1,
+                ]);
 
     visit("/core/faqs/{$faq->id}/edit")
         ->waitForEvent('networkidle')
@@ -33,13 +83,23 @@ it('edits a faq from the admin form', function () {
         ->waitForText('Updated question?')
         ->assertPathIs('/core/faqs');
 
-    expect($faq->refresh()->question)->toBe('Updated question?');
+    $question = $faq->refresh()
+                    ->question;
+
+    expect($question)->toBe('Updated question?');
 });
 
 it('deletes a faq from the admin index', function () {
-    $this->actingAs(User::factory()->create());
+    $user = User::factory()
+                ->create();
 
-    $faq = Faq::factory()->forHome()->create(['question' => 'Delete this FAQ?']);
+    $this->actingAs($user);
+
+    $faq = Faq::factory()
+                ->forHome()
+                ->create([
+                    'question' => 'Delete this FAQ?',
+                ]);
 
     visit('/core/faqs')
         ->waitForEvent('networkidle')
@@ -48,5 +108,7 @@ it('deletes a faq from the admin index', function () {
         ->waitForText('No FAQs yet.')
         ->assertDontSee('Delete this FAQ?');
 
-    expect(Faq::find($faq->id))->toBeNull();
+    $deleted = Faq::find($faq->id);
+
+    expect($deleted)->toBeNull();
 });
