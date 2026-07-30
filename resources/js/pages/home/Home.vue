@@ -20,7 +20,9 @@ defineProps<{
     caseStudies: Array<{
         title: string;
         description: string;
+        slug: string;
         images: Array<{ url: string; alt: string }>;
+        services: Array<{ title: string }>;
     }>;
     articles: Array<{
         title: string;

@@ -3,13 +3,23 @@ import { Link } from '@inertiajs/vue3';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
 
+export type HomeCaseStudy = {
+    title: string;
+    description: string;
+    slug: string;
+    images: Array<{ url: string; alt: string }>;
+    services: Array<{ title: string }>;
+};
+
 defineProps<{
-    caseStudies: Array<{
-        title: string;
-        description: string;
-        images: Array<{ url: string; alt: string }>;
-    }>;
+    caseStudies: Array<HomeCaseStudy>;
 }>();
+
+function serviceTitles(caseStudy: HomeCaseStudy): string {
+    return caseStudy.services
+        .map((service) => service.title)
+        .join(', ');
+}
 </script>
 
 <template>
@@ -26,10 +36,12 @@ defineProps<{
         </template>
 
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <article
-                v-for="caseStudy in caseStudies"
-                :key="caseStudy.title"
-                class="marketing-card-hover overflow-hidden rounded-xl border border-border-default bg-surface-raised"
+            <Link
+                v-for="(caseStudy, index) in caseStudies"
+                :key="caseStudy.slug"
+                :href="`/portfolio/study-case/${caseStudy.slug}`"
+                class="marketing-card-hover group overflow-hidden rounded-xl border border-border-default bg-surface-raised text-left"
+                :data-test="`home-portfolio-case-${index}`"
             >
                 <VisualFrame
                     :src="caseStudy.images[0].url"
@@ -38,14 +50,21 @@ defineProps<{
                     class="rounded-none border-0 shadow-none"
                 />
                 <div class="p-4">
-                    <h3 class="font-semibold">
+                    <p
+                        v-if="caseStudy.services.length > 0"
+                        class="text-overline text-brand-accent"
+                        :data-test="`home-portfolio-case-services-${index}`"
+                    >
+                        {{ serviceTitles(caseStudy) }}
+                    </p>
+                    <h3 class="mt-2 font-semibold group-hover:text-brand-accent">
                         {{ caseStudy.title }}
                     </h3>
                     <p class="mt-1 line-clamp-2 text-sm text-[var(--text-muted-on-dark)]">
                         {{ caseStudy.description }}
                     </p>
                 </div>
-            </article>
+            </Link>
         </div>
 
         <div class="mt-8 text-center">
