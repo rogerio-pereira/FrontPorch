@@ -16,14 +16,17 @@ class ServiceController extends Controller
      */
     public function index(): Response
     {
-        $services = [];
+        $services = Service::orderBy('sort_order')
+            ->get();
 
-        foreach (Service::orderBy('sort_order')->get() as $service) {
-            $services[] = $this->props($service);
+        $props = [];
+
+        foreach ($services as $service) {
+            $props[] = $this->props($service);
         }
 
         return Inertia::render('core/services/Index', [
-            'services' => $services,
+            'services' => $props,
         ]);
     }
 
@@ -43,9 +46,14 @@ class ServiceController extends Controller
     public function store(ServiceRequest $request): RedirectResponse
     {
         // The ServiceObserver sets the slug from the title.
-        Service::create($request->validated());
+        $data = $request->validated();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Service created.')]);
+        Service::create($data);
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Service created.'),
+        ]);
 
         return to_route('core.services.index');
     }
@@ -74,9 +82,14 @@ class ServiceController extends Controller
     public function update(ServiceRequest $request, Service $service): RedirectResponse
     {
         // The ServiceObserver regenerates the slug when the title changes.
-        $service->update($request->validated());
+        $data = $request->validated();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Service updated.')]);
+        $service->update($data);
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Service updated.'),
+        ]);
 
         return to_route('core.services.index');
     }
@@ -88,7 +101,10 @@ class ServiceController extends Controller
     {
         $service->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Service deleted.')]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Service deleted.'),
+        ]);
 
         return to_route('core.services.index');
     }

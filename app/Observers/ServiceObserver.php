@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Service;
-use App\Support\UniqueSlug;
+use Illuminate\Support\Str;
 
 class ServiceObserver
 {
@@ -12,7 +12,7 @@ class ServiceObserver
      */
     public function creating(Service $service): void
     {
-        $service->slug = UniqueSlug::uniqueSlug($service->title, Service::class);
+        $service->slug = $this->slugFromTitle($service->title);
     }
 
     /**
@@ -24,6 +24,20 @@ class ServiceObserver
             return;
         }
 
-        $service->slug = UniqueSlug::uniqueSlug($service->title, Service::class, $service->id);
+        $service->slug = $this->slugFromTitle($service->title);
+    }
+
+    /**
+     * Derive a URL slug from the service title.
+     */
+    protected function slugFromTitle(string $title): string
+    {
+        $slug = Str::slug($title);
+
+        if ($slug === '') {
+            return 'item';
+        }
+
+        return $slug;
     }
 }

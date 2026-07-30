@@ -24,7 +24,8 @@ class ServicesSeeder extends Seeder
      */
     protected function persist(array $attributes): void
     {
-        $service = Service::where('slug', $attributes['slug'])->first();
+        $service = Service::where('slug', $attributes['slug'])
+            ->first();
 
         $values = [
             'title' => $attributes['title'],
@@ -41,7 +42,11 @@ class ServicesSeeder extends Seeder
         // The ServiceObserver derives the slug from the title, which does not
         // always match the slug the public routes and navigation rely on.
         if ($service->slug !== $attributes['slug']) {
-            $service->forceFill(['slug' => $attributes['slug']])->saveQuietly();
+            $service->forceFill([
+                'slug' => $attributes['slug'],
+            ]);
+
+            $service->saveQuietly();
         }
     }
 

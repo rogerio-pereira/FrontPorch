@@ -32,8 +32,10 @@ class ServiceFactory extends Factory
      */
     public function ordered(int $sortOrder): static
     {
-        return $this->state(fn (array $attributes) => [
-            'sort_order' => $sortOrder,
-        ]);
+        return $this->state(function (array $attributes) use ($sortOrder) {
+            return [
+                'sort_order' => $sortOrder,
+            ];
+        });
     }
 }

@@ -38,7 +38,8 @@ class Service extends Model
      */
     public function faqs(): HasMany
     {
-        return $this->hasMany(Faq::class)->orderBy('sort_order');
+        return $this->hasMany(Faq::class)
+            ->orderBy('sort_order');
     }
 
     /**
@@ -58,7 +59,8 @@ class Service extends Model
      */
     public function caseStudies(): BelongsToMany
     {
-        return $this->belongsToMany(CaseStudy::class, 'case_study_service')->withTimestamps();
+        return $this->belongsToMany(CaseStudy::class, 'case_study_service')
+            ->withTimestamps();
     }
 
     /**

@@ -76,6 +76,7 @@ const title = computed(() => {
                     required
                 />
                 <InputError :message="errors.title" />
+                <InputError :message="errors.slug" />
             </div>
 
             <div class="grid gap-2">
