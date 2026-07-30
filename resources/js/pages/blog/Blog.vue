@@ -24,30 +24,23 @@ defineProps<{
     <Head title="Blog | Front Porch Creative" />
 
     <section class="relative overflow-hidden bg-brand-bg text-[var(--text-on-dark)]">
-        <DecorativeBackground variant="both" />
+        <DecorativeBackground variant="glow" />
         <div class="section-y relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="grid items-center gap-10 lg:grid-cols-2">
-                <VisualFrame
-                    src="/images/blog/listing.png"
-                    alt="Abstract preview for the Front Porch Creative blog"
-                    aspect="video"
-                />
-                <div class="stack-loose">
-                    <p class="text-overline text-brand-accent">
-                        From the blog
-                    </p>
-                    <h1 class="text-h1 font-semibold" data-test="blog-heading">
-                        Practical ideas for growing without the noise
-                    </h1>
-                    <p class="text-body-lg text-[var(--text-muted-on-dark)]">
-                        Short reads for small business owners who want clearer websites, better follow-up, and less busywork.
-                    </p>
-                </div>
+            <div class="mx-auto max-w-3xl text-center stack-default">
+                <p class="text-overline text-brand-accent">
+                    From the blog
+                </p>
+                <h1 class="text-h1 font-semibold" data-test="blog-heading">
+                    Practical ideas for growing without the noise
+                </h1>
+                <p class="text-body-lg text-[var(--text-muted-on-dark)]">
+                    Short reads for small business owners who want clearer websites, better follow-up, and less busywork.
+                </p>
             </div>
 
             <div
                 v-if="articles.data.length > 0"
-                class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+                class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
                 <Link
                     v-for="(article, index) in articles.data"
@@ -81,7 +74,7 @@ defineProps<{
 
             <div
                 v-else
-                class="mt-14 rounded-xl border border-border-default bg-surface-raised p-10 text-center"
+                class="mt-12 rounded-xl border border-border-default bg-surface-raised p-10 text-center"
                 data-test="blog-empty"
             >
                 <h2 class="text-h3 font-semibold">
