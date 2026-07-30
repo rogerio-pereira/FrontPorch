@@ -36,7 +36,8 @@ Table: `services`
 
 **Explicitly not in schema:** `teaser`, `nav_label`, `is_published`, CMS-managed landing body/copy.
 
-**Observer:** set `slug` from `title` (unique; handle collisions).  
+**Observer:** set `slug` from `title` via `Str::slug`.  
+**Uniqueness:** Form Request `Rule::unique` on the derived slug + DB unique index (no collision suffixes).  
 **Controller:** comment on create/update that the Observer runs.  
 **Admin:** full resource like Blog (`show` → 404).  
 **Seeder:** five current services.  
