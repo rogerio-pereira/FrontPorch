@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Service;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 class ServiceObserver
 {
@@ -35,7 +36,7 @@ class ServiceObserver
         $slug = Str::slug($title);
 
         if ($slug === '') {
-            return 'item';
+            throw new InvalidArgumentException('A service title must produce a non-empty slug.');
         }
 
         return $slug;

@@ -17,7 +17,7 @@ class ServiceController extends Controller
     public function index(): Response
     {
         $services = Service::orderBy('sort_order')
-            ->get();
+                        ->get();
 
         $props = [];
 
@@ -50,10 +50,13 @@ class ServiceController extends Controller
 
         Service::create($data);
 
-        Inertia::flash('toast', [
-            'type' => 'success',
-            'message' => __('Service created.'),
-        ]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Service created.'),
+            ]
+        );
 
         return to_route('core.services.index');
     }
@@ -86,10 +89,13 @@ class ServiceController extends Controller
 
         $service->update($data);
 
-        Inertia::flash('toast', [
-            'type' => 'success',
-            'message' => __('Service updated.'),
-        ]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Service updated.'),
+            ]
+        );
 
         return to_route('core.services.index');
     }
@@ -101,10 +107,13 @@ class ServiceController extends Controller
     {
         $service->delete();
 
-        Inertia::flash('toast', [
-            'type' => 'success',
-            'message' => __('Service deleted.'),
-        ]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Service deleted.'),
+            ]
+        );
 
         return to_route('core.services.index');
     }
