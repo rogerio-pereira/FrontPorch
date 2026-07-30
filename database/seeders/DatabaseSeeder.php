@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ServicesSeeder::class,
             FaqHomeSeeder::class,
-            BlogArticlesSeeder::class,
         ]);
 
         /*
@@ -40,6 +39,7 @@ class DatabaseSeeder extends Seeder
                 UserSeeder::class,
                 TestimonialsSeeder::class,
                 CaseStudiesSeeder::class,
+                BlogArticlesSeeder::class,
             ]);
         }
     }

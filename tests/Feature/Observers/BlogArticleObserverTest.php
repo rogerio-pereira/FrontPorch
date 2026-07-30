@@ -70,11 +70,12 @@ it('credits the authenticated user on create', function () {
     expect($publishedBy)->toBe('Dana Porch');
 });
 
-it('credits the system without an authenticated user', function () {
+it('credits the app name without an authenticated user', function () {
     $article = BlogArticle::factory()
                     ->create();
 
     $publishedBy = $article->published_by;
+    $appName = config('app.name');
 
-    expect($publishedBy)->toBe('System');
+    expect($publishedBy)->toBe($appName);
 });

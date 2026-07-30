@@ -100,6 +100,9 @@ class BlogArticleController extends Controller
         $image = $request->file('image');
 
         if ($image instanceof UploadedFile) {
+            // Previous cover object is left in storage for now: MediaUploader
+            // only returns URLs, not keys. Cleanup is tracked in
+            // docs/planning/phase-01.md (object storage image cleanup).
             $data['image'] = $uploader->store($image, self::DIRECTORY);
         }
 
@@ -118,6 +121,10 @@ class BlogArticleController extends Controller
 
     /**
      * Soft delete an article so it disappears from the blog.
+     *
+     * The cover object stays in storage for now: MediaUploader only returns
+     * URLs, not keys. Cleanup is tracked in docs/planning/phase-01.md
+     * (object storage image cleanup).
      */
     public function destroy(BlogArticle $article): RedirectResponse
     {

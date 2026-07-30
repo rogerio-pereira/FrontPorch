@@ -39,7 +39,7 @@ class BlogArticleObserver
         $user = Auth::user();
 
         if (! $user instanceof User) {
-            return 'System';
+            return (string) config('app.name');
         }
 
         return $user->name;
