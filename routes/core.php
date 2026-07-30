@@ -3,6 +3,7 @@
 use App\Http\Controllers\Core\BlogArticleController;
 use App\Http\Controllers\Core\CaseStudyController;
 use App\Http\Controllers\Core\FaqController;
+use App\Http\Controllers\Core\MediaUploadController;
 use App\Http\Controllers\Core\ServiceController;
 use App\Http\Controllers\Core\TestimonialController;
 use App\Http\Controllers\Core\UserController;
@@ -25,6 +26,9 @@ Route::middleware(['auth'])
         Route::resource('faqs', FaqController::class);
         Route::resource('testimonials', TestimonialController::class);
         Route::resource('case-studies', CaseStudyController::class);
+
+        Route::post('media', [MediaUploadController::class, 'store'])
+            ->name('media.store');
 
         Route::prefix('blog')
             ->name('blog.')
