@@ -9,10 +9,11 @@ it('smoke tests the appearance settings page for authenticated users', function 
 
     visit('/settings/appearance')
         ->waitForEvent('networkidle')
-        ->assertSee('Update the appearance settings for your account')
-        ->assertPresent('@appearance-light')
-        ->assertPresent('@appearance-dark')
-        ->assertPresent('@appearance-system');
+        ->assertSee('The admin panel uses the Front Porch dark brand theme')
+        ->assertPresent('@appearance-dark-only')
+        ->assertMissing('@appearance-light')
+        ->assertMissing('@appearance-dark')
+        ->assertMissing('@appearance-system');
 });
 
 it('redirects guests from appearance settings to login', function () {

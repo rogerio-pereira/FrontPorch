@@ -74,7 +74,7 @@ it('smoke tests authenticated app routes', function (string $url, string $text) 
     ['/dashboard', 'Dashboard'],
     ['/settings/profile', 'Update your name and email address'],
     ['/settings/security', 'Update password'],
-    ['/settings/appearance', 'Update the appearance settings for your account'],
+    ['/settings/appearance', 'The admin panel uses the Front Porch dark brand theme'],
     ['/core/users', 'Users'],
     ['/core/services', 'Services'],
     ['/core/faqs', 'FAQs'],
