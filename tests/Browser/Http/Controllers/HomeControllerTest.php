@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\BlogArticle;
 use App\Models\Faq;
 use App\Models\Service;
 
@@ -83,6 +84,19 @@ it('expands a faq item on the home page', function () {
     visit('/')
         ->click('@home-faq-trigger-0')
         ->assertSee('That is a fair question.');
+});
+
+it('links home blog cards to the article page', function () {
+    BlogArticle::factory()
+        ->create([
+            'title' => 'Why your website should feel like a front porch',
+        ]);
+
+    visit('/')
+        ->assertPresent('@home-blog-article-0')
+        ->click('@home-blog-article-0')
+        ->assertPathIs('/blog/article/why-your-website-should-feel-like-a-front-porch')
+        ->assertSee('Why your website should feel like a front porch');
 });
 
 it('exposes the contact anchor for navigation', function () {

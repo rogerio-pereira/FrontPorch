@@ -87,6 +87,7 @@ it('renders the home page with content from the database', function () {
             ->has('title')
             ->has('description')
             ->has('image')
+            ->has('slug')
             ->etc()
         )
     );
