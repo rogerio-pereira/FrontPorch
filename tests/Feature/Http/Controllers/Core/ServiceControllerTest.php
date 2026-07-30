@@ -36,7 +36,7 @@ it('lists the services in display order', function () {
             ->where('sort_order', 1)
             ->has('id')
             ->has('description')
-            ->etc()
+            ->etc() // allows extra props (timestamps, etc.) without asserting each one.
         )
     );
 });
@@ -149,7 +149,7 @@ it('shows the form to edit a service', function () {
             ->where('slug', 'lead-generation')
             ->has('description')
             ->has('sort_order')
-            ->etc()
+            ->etc() // allows extra props (timestamps, etc.) without asserting each one.
         )
     );
 });

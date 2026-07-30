@@ -45,7 +45,7 @@ it('lists the faqs with the page they belong to', function () {
             ->where('sort_order', 1)
             ->has('id')
             ->has('answer')
-            ->etc()
+            ->etc() // allows extra props (timestamps, etc.) without asserting each one.
         )
         ->has('faqs.1', fn (Assert $faq) => $faq
             ->where('service_id', $service->id)
@@ -156,7 +156,7 @@ it('shows the form to edit a faq', function () {
             ->where('id', $faq->id)
             ->where('question', 'How much does this cost?')
             ->where('service_id', null)
-            ->etc()
+            ->etc() // allows extra props (timestamps, etc.) without asserting each one.
         )
         ->has('services')
     );
