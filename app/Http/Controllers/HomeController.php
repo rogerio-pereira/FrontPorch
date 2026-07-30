@@ -26,9 +26,9 @@ class HomeController extends Controller
                             ->get();
 
         $caseStudies = CaseStudy::with('images')
-                            ->inRandomOrder()
-                            ->limit(6)
-                            ->get();
+                           ->inRandomOrder()
+                           ->limit(6)
+                           ->get();
 
         $articles = BlogArticle::orderByDesc('created_at')
                         ->limit(3)
