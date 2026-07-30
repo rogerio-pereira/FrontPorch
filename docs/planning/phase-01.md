@@ -783,7 +783,7 @@ Static portfolio/blog UI already exists — Phase 2 focus is **persistence + adm
 
 ### Open follow-up — object storage image cleanup
 
-Admin CMS uploads (case study gallery, blog main/inline images) go through `MediaUploader::store()` and persist a **public URL** on the model. Soft-deleting a gallery row or replacing a blog image **does not** delete the object from MinIO/S3 today.
+Admin CMS uploads (case study gallery, blog main/inline images) go through `MediaUploader::store()` and persist a **public URL** on the model. Soft-deleting a gallery row, soft-deleting a blog article, or replacing a blog image **does not** delete the object from MinIO/S3 today.
 
 **Why deferred:** the uploader returns only a URL, not a durable storage key. Deleting by parsing the URL is fragile across disks (local vs S3/MinIO).
 
@@ -793,7 +793,8 @@ Admin CMS uploads (case study gallery, blog main/inline images) go through `Medi
 - [ ] Add `MediaUploader::delete()` (or equivalent) and call it when:
   - [ ] A case study gallery image is removed on update
   - [ ] A case study is hard-deleted / permanently purged (if ever)
-  - [ ] A blog main image is replaced
+  - [ ] A blog main image is replaced on update (`BlogArticleController::update`)
+  - [ ] A blog article is soft-deleted (`BlogArticleController::destroy`) and its cover image is cleaned up
   - [ ] Orphaned inline content images are cleaned up (optional; harder)
 - [ ] Cover with `Storage::fake()` feature tests
 - [ ] Record the locked approach in [phase-01-backend/media.md](./phase-01-backend/media.md)

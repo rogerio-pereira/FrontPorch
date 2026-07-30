@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Core\BlogArticleController;
 use App\Http\Controllers\Core\CaseStudyController;
 use App\Http\Controllers\Core\FaqController;
 use App\Http\Controllers\Core\ServiceController;
@@ -11,8 +12,7 @@ use Illuminate\Support\Facades\Route;
 | Core (admin CMS) routes
 |--------------------------------------------------------------------------
 |
-| Authenticated back-office under /core. Domain resources (services,
-| case studies, blog, etc.) are registered in subsequent CMS PRs.
+| Authenticated back-office under /core.
 |
 */
 Route::middleware(['auth'])
@@ -23,4 +23,10 @@ Route::middleware(['auth'])
         Route::resource('faqs', FaqController::class);
         Route::resource('testimonials', TestimonialController::class);
         Route::resource('case-studies', CaseStudyController::class);
+
+        Route::prefix('blog')
+            ->name('blog.')
+            ->group(function (): void {
+                Route::resource('articles', BlogArticleController::class);
+            });
     });
