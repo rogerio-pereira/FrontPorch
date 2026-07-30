@@ -159,4 +159,4 @@ Target the repository’s default branch (usually `main`).
 - Update this guide only when **team-wide** defaults change (stack versions, coverage gates, queue conventions, PR workflow).
 
 # Code Styleguide (**IMPORTANT**)
-- Read `.cursor/rules/style-guide.md`
+- Read **AND FOLLOW** `.cursor/rules/style-guide.md`
