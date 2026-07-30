@@ -12,8 +12,8 @@ class ServiceLeadGenerationController extends Controller
     public function __invoke(): Response
     {
         return $this->renderServiceLanding(
-            'lead-generation',
-            'service-lead-generation/ServiceLeadGeneration',
+            'lead-generation',                               // slug
+            'service-lead-generation/ServiceLeadGeneration', // view
         );
     }
 }

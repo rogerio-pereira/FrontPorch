@@ -12,8 +12,8 @@ class ServiceCustomSoftwareDevelopmentController extends Controller
     public function __invoke(): Response
     {
         return $this->renderServiceLanding(
-            'custom-software-development',
-            'service-custom-software-development/ServiceCustomSoftwareDevelopment',
+            'custom-software-development',                                          // slug
+            'service-custom-software-development/ServiceCustomSoftwareDevelopment', // view
         );
     }
 }

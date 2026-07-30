@@ -12,8 +12,8 @@ class ServiceWebsiteDesignAndDevelopmentController extends Controller
     public function __invoke(): Response
     {
         return $this->renderServiceLanding(
-            'website-design-and-development',
-            'service-website-design-and-development/ServiceWebsiteDesignAndDevelopment',
+            'website-design-and-development',                                               // slug
+            'service-website-design-and-development/ServiceWebsiteDesignAndDevelopment',    // view
         );
     }
 }

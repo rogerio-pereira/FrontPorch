@@ -12,8 +12,8 @@ class ServiceEmailMarketingController extends Controller
     public function __invoke(): Response
     {
         return $this->renderServiceLanding(
-            'email-marketing',
-            'service-email-marketing/ServiceEmailMarketing',
+            'email-marketing',                               // slug
+            'service-email-marketing/ServiceEmailMarketing', // view
         );
     }
 }

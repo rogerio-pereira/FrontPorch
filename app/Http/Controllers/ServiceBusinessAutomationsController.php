@@ -12,8 +12,8 @@ class ServiceBusinessAutomationsController extends Controller
     public function __invoke(): Response
     {
         return $this->renderServiceLanding(
-            'business-automations',
-            'service-business-automations/ServiceBusinessAutomations',
+            'business-automations',                                    // slug
+            'service-business-automations/ServiceBusinessAutomations', // view
         );
     }
 }
