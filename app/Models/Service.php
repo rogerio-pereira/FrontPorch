@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -28,6 +30,38 @@ class Service extends Model
 {
     /** @use HasFactory<ServiceFactory> */
     use HasFactory, HasUuids, SoftDeletes;
+
+    /**
+     * The FAQs shown on this service landing page.
+     *
+     * @return HasMany<Faq, $this>
+     */
+    public function faqs(): HasMany
+    {
+        return $this->hasMany(Faq::class)
+                    ->orderBy('sort_order');
+    }
+
+    /**
+     * The testimonials attached to this service.
+     *
+     * @return HasMany<Testimonial, $this>
+     */
+    public function testimonials(): HasMany
+    {
+        return $this->hasMany(Testimonial::class);
+    }
+
+    /**
+     * The case studies this service was delivered on.
+     *
+     * @return BelongsToMany<CaseStudy, $this>
+     */
+    public function caseStudies(): BelongsToMany
+    {
+        return $this->belongsToMany(CaseStudy::class, 'case_study_service')
+                    ->withTimestamps();
+    }
 
     /**
      * Get the attributes that should be cast.
