@@ -9,7 +9,8 @@ use App\Models\User;
 it('smoke tests public web routes', function (string $url, string $text) {
     visit($url)
         ->assertSee($text);
-})->with([
+})
+->with([
     ['/', 'You do great work'],
     ['/portfolio', 'Case studies that show the path'],
     ['/blog', 'Practical ideas for growing'],
@@ -68,7 +69,8 @@ it('smoke tests authenticated app routes', function (string $url, string $text) 
     visit($url)
         ->waitForEvent('networkidle')
         ->assertSee($text);
-})->with([
+})
+->with([
     ['/dashboard', 'Dashboard'],
     ['/settings/profile', 'Update your name and email address'],
     ['/settings/security', 'Update password'],

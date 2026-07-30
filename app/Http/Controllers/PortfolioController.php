@@ -16,8 +16,8 @@ class PortfolioController extends Controller
     public function __invoke(): Response
     {
         $caseStudies = CaseStudy::with(['images', 'services'])
-                        ->orderByDesc('created_at')
-                        ->paginate(self::PER_PAGE);
+                            ->orderByDesc('created_at')
+                            ->paginate(self::PER_PAGE);
 
         return Inertia::render('portfolio/Portfolio', compact('caseStudies'));
     }
