@@ -21,14 +21,21 @@ beforeEach(function () {
             'title' => 'Website design and development',
             'sort_order' => 3,
         ]);
+});
 
-    Faq::factory()
-        ->create([
-            'service_id' => null,
-            'question' => 'You are a new agency, why should I trust you?',
-            'answer' => 'That is a fair question. We would rather earn your trust than make big promises.',
-            'sort_order' => 1,
-        ]);
+it('hides faq, testimonials, and blog sections when the database is empty', function () {
+    visit('/')
+        ->assertDontSee('Good questions, happy to answer')
+        ->assertNotPresent('@home-faq')
+        ->assertDontSee('Client stories')
+        ->assertDontSee('What people say about working with us')
+        ->assertDontSee('From the blog')
+        ->assertDontSee('Ideas worth sharing')
+        ->assertNotPresent('@home-cta-2')
+        ->assertNotPresent('@home-cta-3')
+        ->assertDontSee('A little clarity goes a long way')
+        ->assertDontSee('You should not need a tech degree to grow your business')
+        ->assertPresent('@home-hero-headline');
 });
 
 it('smoke tests the home page hero', function () {
@@ -38,6 +45,14 @@ it('smoke tests the home page hero', function () {
 });
 
 it('renders the home page hero and main sections', function () {
+    Faq::factory()
+        ->create([
+            'service_id' => null,
+            'question' => 'You are a new agency, why should I trust you?',
+            'answer' => 'That is a fair question. We would rather earn your trust than make big promises.',
+            'sort_order' => 1,
+        ]);
+
     visit('/')
         ->assertSee('You do great work. Let\'s help more people find you.')
         ->assertPresent('@home-hero-headline')
@@ -57,6 +72,14 @@ it('exposes service card links on the home page', function () {
 });
 
 it('expands a faq item on the home page', function () {
+    Faq::factory()
+        ->create([
+            'service_id' => null,
+            'question' => 'You are a new agency, why should I trust you?',
+            'answer' => 'That is a fair question. We would rather earn your trust than make big promises.',
+            'sort_order' => 1,
+        ]);
+
     visit('/')
         ->click('@home-faq-trigger-0')
         ->assertSee('That is a fair question.');
