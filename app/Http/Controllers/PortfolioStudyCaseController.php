@@ -18,19 +18,26 @@ class PortfolioStudyCaseController extends Controller
     {
         $caseStudy->load(['images', 'services']);
 
+        $serviceLine = $this->serviceLine($caseStudy);
+        $coverImage = $this->coverImage($caseStudy);
+        $coverAlt = $this->coverAlt($caseStudy);
+        $galleryImages = $this->galleryImages($caseStudy);
+
+        $payload = [
+            'title' => $caseStudy->title,
+            'description' => $caseStudy->description,
+            'client' => $caseStudy->client,
+            'industry' => $caseStudy->industry,
+            'service' => $serviceLine,
+            'coverImage' => $coverImage,
+            'coverAlt' => $coverAlt,
+            'challenge' => $caseStudy->challenge,
+            'content' => $caseStudy->content,
+            'galleryImages' => $galleryImages,
+        ];
+
         return Inertia::render('portfolio-study-case/PortfolioStudyCase', [
-            'caseStudy' => [
-                'title' => $caseStudy->title,
-                'description' => $caseStudy->description,
-                'client' => $caseStudy->client,
-                'industry' => $caseStudy->industry,
-                'service' => $this->serviceLine($caseStudy),
-                'coverImage' => $this->coverImage($caseStudy),
-                'coverAlt' => $this->coverAlt($caseStudy),
-                'challenge' => $caseStudy->challenge,
-                'content' => $caseStudy->content,
-                'galleryImages' => $this->galleryImages($caseStudy),
-            ],
+            'caseStudy' => $payload,
         ]);
     }
 
@@ -43,7 +50,10 @@ class PortfolioStudyCaseController extends Controller
     {
         $images = [];
 
-        foreach ($caseStudy->images->skip(1) as $image) {
+        $gallery = $caseStudy->images
+                        ->skip(1);
+
+        foreach ($gallery as $image) {
             $images[] = [
                 'src' => $image->url,
                 'alt' => $image->alt,

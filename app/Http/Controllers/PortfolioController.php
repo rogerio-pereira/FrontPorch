@@ -19,31 +19,37 @@ class PortfolioController extends Controller
     public function __invoke(): Response
     {
         $caseStudies = CaseStudy::with(['images', 'services'])
-            ->orderByDesc('created_at')
-            ->paginate(self::PER_PAGE);
+                        ->orderByDesc('created_at')
+                        ->paginate(self::PER_PAGE);
 
         $items = [];
 
         foreach ($caseStudies as $caseStudy) {
+            $serviceLine = $this->serviceLine($caseStudy);
+            $coverImage = $this->coverImage($caseStudy);
+            $href = route('portfolio.study-case', $caseStudy->slug, false);
+
             $items[] = [
                 'id' => $caseStudy->id,
                 'title' => $caseStudy->title,
                 'excerpt' => $caseStudy->description,
                 'client' => $caseStudy->client,
-                'service' => $this->serviceLine($caseStudy),
-                'coverImage' => $this->coverImage($caseStudy),
-                'href' => route('portfolio.study-case', $caseStudy->slug, false),
+                'service' => $serviceLine,
+                'coverImage' => $coverImage,
+                'href' => $href,
             ];
         }
 
+        $pagination = [
+            'currentPage' => $caseStudies->currentPage(),
+            'lastPage' => $caseStudies->lastPage(),
+            'previousPageUrl' => $caseStudies->previousPageUrl(),
+            'nextPageUrl' => $caseStudies->nextPageUrl(),
+        ];
+
         return Inertia::render('portfolio/Portfolio', [
             'items' => $items,
-            'pagination' => [
-                'currentPage' => $caseStudies->currentPage(),
-                'lastPage' => $caseStudies->lastPage(),
-                'previousPageUrl' => $caseStudies->previousPageUrl(),
-                'nextPageUrl' => $caseStudies->nextPageUrl(),
-            ],
+            'pagination' => $pagination,
         ]);
     }
 }

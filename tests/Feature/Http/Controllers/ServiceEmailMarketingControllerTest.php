@@ -6,25 +6,39 @@ use App\Models\Testimonial;
 use Inertia\Testing\AssertableInertia as Assert;
 
 it('renders the email marketing service landing page', function () {
-    $this->get('/services/email-marketing')
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('service-email-marketing/ServiceEmailMarketing')
-            ->has('faqs', 0)
-            ->has('testimonials', 0)
-        );
+    $response = $this->get('/services/email-marketing');
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('service-email-marketing/ServiceEmailMarketing')
+        ->has('faqs', 0)
+        ->has('testimonials', 0)
+    );
 });
 
 it('renders the faqs and testimonials of the email marketing service', function () {
-    $service = Service::factory()->create(['title' => 'Email marketing']);
+    $service = Service::factory()
+                    ->create([
+                        'title' => 'Email marketing',
+                    ]);
 
-    Faq::factory()->forService($service)->create(['question' => 'How often should we email customers?']);
-    Testimonial::factory()->forService($service)->create(['person' => 'Owner, Lakeland boutique']);
+    Faq::factory()
+        ->create([
+            'service_id' => $service->id,
+            'question' => 'How often should we email customers?',
+        ]);
 
-    $this->get('/services/email-marketing')
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->has('faqs', 1)
-            ->has('testimonials', 1)
-        );
+    Testimonial::factory()
+        ->create([
+            'service_id' => $service->id,
+            'person' => 'Owner, Lakeland boutique',
+        ]);
+
+    $response = $this->get('/services/email-marketing');
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('faqs', 1)
+        ->has('testimonials', 1)
+    );
 });

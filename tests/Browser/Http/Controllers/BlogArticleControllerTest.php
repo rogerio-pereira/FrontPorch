@@ -3,11 +3,12 @@
 use App\Models\BlogArticle;
 
 it('smoke tests a published blog article page', function () {
-    BlogArticle::factory()->create([
-        'title' => 'Why your website should feel like a front porch',
-        'content' => '<p>Most people meet your business online.</p>',
-        'image' => '/images/blog-article/cover.png',
-    ]);
+    BlogArticle::factory()
+        ->create([
+            'title' => 'Why your website should feel like a front porch',
+            'content' => '<p>Most people meet your business online.</p>',
+            'image' => '/images/blog-article/cover.png',
+        ]);
 
     visit('/blog/article/why-your-website-should-feel-like-a-front-porch')
         ->assertSee('Why your website should feel like a front porch')

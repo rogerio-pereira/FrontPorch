@@ -20,7 +20,8 @@ trait RendersServiceLanding
      */
     protected function renderServiceLanding(string $slug, string $component): Response
     {
-        $service = Service::where('slug', $slug)->first();
+        $service = Service::where('slug', $slug)
+                        ->first();
 
         if ($service === null) {
             return Inertia::render($component, [
@@ -29,9 +30,12 @@ trait RendersServiceLanding
             ]);
         }
 
+        $faqs = $this->serviceFaqs($service);
+        $testimonials = $this->serviceTestimonials($service);
+
         return Inertia::render($component, [
-            'faqs' => $this->serviceFaqs($service),
-            'testimonials' => $this->serviceTestimonials($service),
+            'faqs' => $faqs,
+            'testimonials' => $testimonials,
         ]);
     }
 
@@ -44,7 +48,11 @@ trait RendersServiceLanding
     {
         $faqs = [];
 
-        foreach (Faq::where('service_id', $service->id)->orderBy('sort_order')->get() as $faq) {
+        $items = Faq::where('service_id', $service->id)
+                    ->orderBy('sort_order')
+                    ->get();
+
+        foreach ($items as $faq) {
             $faqs[] = [
                 'question' => $faq->question,
                 'answer' => $faq->answer,
@@ -64,9 +72,9 @@ trait RendersServiceLanding
         $testimonials = [];
 
         $sample = Testimonial::where('service_id', $service->id)
-            ->inRandomOrder()
-            ->limit(self::TESTIMONIAL_SAMPLE)
-            ->get();
+                    ->inRandomOrder()
+                    ->limit(self::TESTIMONIAL_SAMPLE)
+                    ->get();
 
         foreach ($sample as $testimonial) {
             $testimonials[] = [

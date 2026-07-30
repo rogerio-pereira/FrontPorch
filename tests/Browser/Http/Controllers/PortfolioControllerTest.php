@@ -4,11 +4,17 @@ use App\Models\CaseStudy;
 use App\Models\CaseStudyImage;
 
 it('smoke tests the portfolio page', function () {
-    $caseStudy = CaseStudy::factory()->create(['title' => 'From missed calls to booked jobs']);
+    $caseStudy = CaseStudy::factory()
+                    ->create([
+                        'title' => 'From missed calls to booked jobs',
+                    ]);
 
-    CaseStudyImage::factory()->for($caseStudy)->cover()->create([
-        'url' => '/images/portfolio-study-case/cover.png',
-    ]);
+    CaseStudyImage::factory()
+        ->for($caseStudy)
+        ->cover()
+        ->create([
+            'url' => '/images/portfolio-study-case/cover.png',
+        ]);
 
     visit('/portfolio')
         ->assertSee('Case studies that show the path')

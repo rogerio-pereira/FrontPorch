@@ -36,18 +36,27 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $parentShare = parent::share($request);
+        $servicesNav = $this->servicesNav();
+
+        $sidebarOpen = true;
+
+        if ($request->hasCookie('sidebar_state')) {
+            $sidebarOpen = $request->cookie('sidebar_state') === 'true';
+        }
+
         return [
-            ...parent::share($request),
+            ...$parentShare,
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'sidebarOpen' => $sidebarOpen,
             'site' => [
                 'footerContactEmail' => config('site.footer_contact_email'),
                 'calendarUrl' => config('site.calendar_url'),
             ],
-            'servicesNav' => $this->servicesNav(),
+            'servicesNav' => $servicesNav,
         ];
     }
 
@@ -60,7 +69,10 @@ class HandleInertiaRequests extends Middleware
     {
         $services = [];
 
-        foreach (Service::orderBy('sort_order')->get(['slug', 'title']) as $service) {
+        $items = Service::orderBy('sort_order')
+                        ->get(['slug', 'title']);
+
+        foreach ($items as $service) {
             $services[] = [
                 'slug' => $service->slug,
                 'title' => $service->title,

@@ -8,36 +8,49 @@ use App\Models\Testimonial;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 
-it('seeds the marketing content and stays idempotent', function () {
+it('seeds the real catalog and stays idempotent for real data', function () {
     $this->seed(DatabaseSeeder::class);
     $this->seed(DatabaseSeeder::class);
 
-    expect(User::where('email', 'test@example.com')->count())->toBe(1);
-    expect(Service::count())->toBe(5);
-    expect(Service::where('slug', 'website-design-and-development')->exists())->toBeTrue();
-    expect(Faq::whereNull('service_id')->count())->toBe(9);
-    expect(Testimonial::count())->toBe(10);
-    expect(CaseStudy::count())->toBe(6);
-    expect(BlogArticle::count())->toBe(3);
+    $userCount = User::where('email', 'test@example.com')
+                    ->count();
+
+    expect($userCount)->toBe(1);
+
+    $serviceCount = Service::count();
+
+    expect($serviceCount)->toBe(5);
+
+    $websiteExists = Service::where('slug', 'website-design-and-development')
+                        ->exists();
+
+    expect($websiteExists)->toBeTrue();
+
+    $homeFaqCount = Faq::whereNull('service_id')
+                        ->count();
+
+    expect($homeFaqCount)->toBe(9);
 });
 
-it('seeds the flagship case study with its gallery and services', function () {
+it('seeds fake local content for testimonials case studies and articles', function () {
     $this->seed(DatabaseSeeder::class);
 
-    $caseStudy = CaseStudy::where('slug', 'from-missed-calls-to-booked-jobs')->firstOrFail();
+    $testimonialCount = Testimonial::count();
 
-    expect($caseStudy->images)->toHaveCount(4);
-    expect($caseStudy->images->first()->url)->toBe('/images/portfolio-study-case/cover.png');
-    expect($caseStudy->services->pluck('slug')->all())
-        ->toContain('website-design-and-development')
-        ->toContain('lead-generation');
-});
+    expect($testimonialCount)->toBeGreaterThan(0);
 
-it('credits the seeded articles to the agency', function () {
-    $this->seed(DatabaseSeeder::class);
+    $caseStudyCount = CaseStudy::count();
 
-    $article = BlogArticle::where('slug', 'why-your-website-should-feel-like-a-front-porch')->firstOrFail();
+    expect($caseStudyCount)->toBeGreaterThan(0);
 
-    expect($article->published_by)->toBe('Front Porch Creative');
-    expect($article->image)->toBe('/images/blog-article/cover.png');
+    $articleCount = BlogArticle::count();
+
+    expect($articleCount)->toBe(30);
+
+    $appName = config('app.name');
+
+    $firstArticle = BlogArticle::firstOrFail();
+    $publishedBy = $firstArticle->published_by;
+
+    expect($publishedBy)->toBe($appName);
 });

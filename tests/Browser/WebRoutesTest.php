@@ -23,35 +23,46 @@ it('smoke tests public web routes', function (string $url, string $text) {
 ]);
 
 it('smoke tests a published blog article route', function () {
-    BlogArticle::factory()->create([
-        'title' => 'Why your website should feel like a front porch',
-        'image' => '/images/blog-article/cover.png',
-    ]);
+    BlogArticle::factory()
+        ->create([
+            'title' => 'Why your website should feel like a front porch',
+            'image' => '/images/blog-article/cover.png',
+        ]);
 
     visit('/blog/article/why-your-website-should-feel-like-a-front-porch')
         ->assertSee('Why your website should feel like a front porch');
 });
 
 it('smoke tests a portfolio study case route', function () {
-    $service = Service::factory()->create(['title' => 'Lead generation']);
+    $service = Service::factory()
+                    ->create([
+                        'title' => 'Lead generation',
+                    ]);
 
-    $caseStudy = CaseStudy::factory()->create([
-        'title' => 'From missed calls to booked jobs',
-    ]);
+    $caseStudy = CaseStudy::factory()
+                    ->create([
+                        'title' => 'From missed calls to booked jobs',
+                    ]);
 
-    $caseStudy->services()->attach($service);
+    $caseStudy->services()
+        ->attach($service);
 
-    CaseStudyImage::factory()->for($caseStudy)->create([
-        'sort_order' => 0,
-        'url' => '/images/portfolio-study-case/cover.png',
-    ]);
+    CaseStudyImage::factory()
+        ->for($caseStudy)
+        ->create([
+            'sort_order' => 0,
+            'url' => '/images/portfolio-study-case/cover.png',
+        ]);
 
     visit('/portfolio/study-case/from-missed-calls-to-booked-jobs')
         ->assertSee('From missed calls to booked jobs');
 });
 
 it('smoke tests authenticated app routes', function (string $url, string $text) {
-    $this->actingAs(User::factory()->create());
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
     $this->withSession(['auth.password_confirmed_at' => time()]);
 
     visit($url)

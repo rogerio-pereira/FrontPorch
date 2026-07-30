@@ -15,30 +15,50 @@ class BlogController extends Controller
 
     public function __invoke(): Response
     {
-        $paginator = BlogArticle::orderByDesc('created_at')->paginate(self::PER_PAGE);
+        $paginator = BlogArticle::orderByDesc('created_at')
+                        ->paginate(self::PER_PAGE);
 
         $articles = [];
 
         foreach ($paginator as $article) {
+            $publishedAt = $this->formatPublishedAt($article);
+            $href = route('blog.article', $article->slug, false);
+
             $articles[] = [
                 'id' => $article->id,
                 'title' => $article->title,
                 'excerpt' => $article->description,
                 'category' => $article->category,
-                'publishedAt' => (string) $article->created_at?->format('F j, Y'),
+                'publishedAt' => $publishedAt,
                 'coverImage' => $article->image,
-                'href' => route('blog.article', $article->slug, false),
+                'href' => $href,
             ];
         }
 
+        $pagination = [
+            'currentPage' => $paginator->currentPage(),
+            'lastPage' => $paginator->lastPage(),
+            'previousPageUrl' => $paginator->previousPageUrl(),
+            'nextPageUrl' => $paginator->nextPageUrl(),
+        ];
+
         return Inertia::render('blog/Blog', [
             'articles' => $articles,
-            'pagination' => [
-                'currentPage' => $paginator->currentPage(),
-                'lastPage' => $paginator->lastPage(),
-                'previousPageUrl' => $paginator->previousPageUrl(),
-                'nextPageUrl' => $paginator->nextPageUrl(),
-            ],
+            'pagination' => $pagination,
         ]);
+    }
+
+    /**
+     * Format the article creation date for the public listing.
+     */
+    private function formatPublishedAt(BlogArticle $article): string
+    {
+        $createdAt = $article->created_at;
+
+        if ($createdAt === null) {
+            return '';
+        }
+
+        return $createdAt->format('F j, Y');
     }
 }

@@ -17,12 +17,18 @@ class HomeController extends Controller
 
     public function __invoke(): Response
     {
+        $faq = $this->faq();
+        $services = $this->services();
+        $testimonials = $this->testimonials();
+        $portfolioPreview = $this->portfolioPreview();
+        $blogPreview = $this->blogPreview();
+
         return Inertia::render('home/Home', [
-            'faq' => $this->faq(),
-            'services' => $this->services(),
-            'testimonials' => $this->testimonials(),
-            'portfolioPreview' => $this->portfolioPreview(),
-            'blogPreview' => $this->blogPreview(),
+            'faq' => $faq,
+            'services' => $services,
+            'testimonials' => $testimonials,
+            'portfolioPreview' => $portfolioPreview,
+            'blogPreview' => $blogPreview,
         ]);
     }
 
@@ -35,7 +41,11 @@ class HomeController extends Controller
     {
         $faq = [];
 
-        foreach (Faq::whereNull('service_id')->orderBy('sort_order')->get() as $item) {
+        $items = Faq::whereNull('service_id')
+                    ->orderBy('sort_order')
+                    ->get();
+
+        foreach ($items as $item) {
             $faq[] = [
                 'question' => $item->question,
                 'answer' => $item->answer,
@@ -54,7 +64,10 @@ class HomeController extends Controller
     {
         $services = [];
 
-        foreach (Service::orderBy('sort_order')->get() as $service) {
+        $items = Service::orderBy('sort_order')
+                        ->get();
+
+        foreach ($items as $service) {
             $services[] = [
                 'slug' => $service->slug,
                 'title' => $service->title,
@@ -74,7 +87,11 @@ class HomeController extends Controller
     {
         $testimonials = [];
 
-        foreach (Testimonial::inRandomOrder()->limit(10)->get() as $testimonial) {
+        $sample = Testimonial::inRandomOrder()
+                        ->limit(10)
+                        ->get();
+
+        foreach ($sample as $testimonial) {
             $testimonials[] = [
                 'quote' => $testimonial->testimonial,
                 'attribution' => $testimonial->person,
@@ -94,15 +111,17 @@ class HomeController extends Controller
         $preview = [];
 
         $caseStudies = CaseStudy::with('images')
-            ->inRandomOrder()
-            ->limit(6)
-            ->get();
+                        ->inRandomOrder()
+                        ->limit(6)
+                        ->get();
 
         foreach ($caseStudies as $caseStudy) {
+            $coverImage = $this->coverImage($caseStudy);
+
             $preview[] = [
                 'title' => $caseStudy->title,
                 'description' => $caseStudy->description,
-                'image' => $this->coverImage($caseStudy),
+                'image' => $coverImage,
             ];
         }
 
@@ -118,7 +137,11 @@ class HomeController extends Controller
     {
         $preview = [];
 
-        foreach (BlogArticle::orderByDesc('created_at')->limit(3)->get() as $article) {
+        $articles = BlogArticle::orderByDesc('created_at')
+                        ->limit(3)
+                        ->get();
+
+        foreach ($articles as $article) {
             $preview[] = [
                 'title' => $article->title,
                 'description' => $article->description,
