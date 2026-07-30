@@ -1,7 +1,10 @@
 <?php
 
 it('redirects guests from the admin panel to the login page', function (string $url) {
-    $this->get($url)->assertRedirect(route('login'));
+    $loginUrl = route('login');
+
+    $this->get($url)
+        ->assertRedirect($loginUrl);
 })->with([
     '/core/services',
     '/core/services/create',

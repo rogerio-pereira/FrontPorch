@@ -24,7 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  */
-#[Fillable(['title', 'description', 'sort_order'])]
+#[Fillable(['title', 'description', 'slug', 'sort_order'])]
 #[ObservedBy(ServiceObserver::class)]
 class Service extends Model
 {
@@ -38,7 +38,8 @@ class Service extends Model
      */
     public function faqs(): HasMany
     {
-        return $this->hasMany(Faq::class)->orderBy('sort_order');
+        return $this->hasMany(Faq::class)
+                    ->orderBy('sort_order');
     }
 
     /**
@@ -58,7 +59,8 @@ class Service extends Model
      */
     public function caseStudies(): BelongsToMany
     {
-        return $this->belongsToMany(CaseStudy::class, 'case_study_service')->withTimestamps();
+        return $this->belongsToMany(CaseStudy::class, 'case_study_service')
+                    ->withTimestamps();
     }
 
     /**
