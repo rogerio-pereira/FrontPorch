@@ -30,7 +30,6 @@ class DatabaseSeeder extends Seeder
          * =============================================================================================================
          */
         $currentEnv = config('app.env');
-
         if (
             $currentEnv === 'local' ||
             $currentEnv === 'testing'
