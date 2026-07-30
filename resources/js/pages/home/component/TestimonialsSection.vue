@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Quote } from '@lucide/vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
+
 defineProps<{
-    // TODO: remove demo testimonials in HomeController once real quotes are stored
-    quotes: Array<{ quote: string; attribution: string }>;
+    testimonials: Array<{ testimonial: string; person: string }>;
 }>();
 </script>
 
@@ -18,16 +18,16 @@ defineProps<{
     >
         <div class="grid gap-6 md:grid-cols-2">
             <blockquote
-                v-for="(item, index) in quotes"
+                v-for="(item, index) in testimonials"
                 :key="index"
                 class="relative rounded-xl border border-border-default bg-white p-8 text-left"
             >
                 <Quote class="mb-4 size-8 text-brand-accent/50" />
                 <p class="text-lg leading-relaxed text-[var(--text-primary-on-light)]">
-                    "{{ item.quote }}"
+                    "{{ item.testimonial }}"
                 </p>
                 <footer class="mt-4 text-sm text-[var(--text-muted-on-light)]">
-                    - {{ item.attribution }}
+                    - {{ item.person }}
                 </footer>
             </blockquote>
         </div>

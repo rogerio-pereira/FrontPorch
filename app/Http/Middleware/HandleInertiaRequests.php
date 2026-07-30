@@ -37,7 +37,9 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $parentShare = parent::share($request);
-        $servicesNav = $this->servicesNav();
+
+        $servicesNav = Service::orderBy('sort_order')
+                        ->get(['slug', 'title']);
 
         return [
             ...$parentShare,
@@ -52,27 +54,5 @@ class HandleInertiaRequests extends Middleware
             ],
             'servicesNav' => $servicesNav,
         ];
-    }
-
-    /**
-     * The service catalog used by the public navigation.
-     *
-     * @return list<array{slug: string, title: string}>
-     */
-    protected function servicesNav(): array
-    {
-        $services = [];
-
-        $items = Service::orderBy('sort_order')
-                        ->get(['slug', 'title']);
-
-        foreach ($items as $service) {
-            $services[] = [
-                'slug' => $service->slug,
-                'title' => $service->title,
-            ];
-        }
-
-        return $services;
     }
 }

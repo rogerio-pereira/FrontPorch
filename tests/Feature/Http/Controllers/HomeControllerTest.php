@@ -55,33 +55,39 @@ it('renders the home page with content from the database', function () {
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
         ->component('home/Home')
-        ->has('faq', 4)
-        ->has('faq.0', fn (Assert $item) => $item
+        ->has('faqs', 4)
+        ->has('faqs.0', fn (Assert $item) => $item
             ->has('question')
             ->has('answer')
+            ->etc()
         )
         ->has('services', 1)
         ->has('services.0', fn (Assert $item) => $item
             ->where('slug', 'lead-generation')
             ->where('title', 'Lead generation')
-            ->where('teaser', 'Reach the right people with a clear reason to reach out.')
+            ->where('description', 'Reach the right people with a clear reason to reach out.')
+            ->etc()
         )
         ->has('testimonials', 2)
         ->has('testimonials.0', fn (Assert $item) => $item
-            ->has('quote')
-            ->has('attribution')
+            ->has('testimonial')
+            ->has('person')
+            ->etc()
         )
-        ->has('portfolioPreview', 1)
-        ->has('portfolioPreview.0', fn (Assert $item) => $item
+        ->has('caseStudies', 1)
+        ->has('caseStudies.0', fn (Assert $item) => $item
             ->has('title')
             ->has('description')
-            ->where('image', '/images/home/portfolio-b.png')
+            ->has('images', 1)
+            ->where('images.0.url', '/images/home/portfolio-b.png')
+            ->etc()
         )
-        ->has('blogPreview', 2)
-        ->has('blogPreview.0', fn (Assert $item) => $item
+        ->has('articles', 2)
+        ->has('articles.0', fn (Assert $item) => $item
             ->has('title')
             ->has('description')
             ->has('image')
+            ->etc()
         )
     );
 });
@@ -92,11 +98,11 @@ it('renders empty listings when there is no content yet', function () {
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
         ->component('home/Home')
-        ->has('faq', 0)
+        ->has('faqs', 0)
         ->has('services', 0)
         ->has('testimonials', 0)
-        ->has('portfolioPreview', 0)
-        ->has('blogPreview', 0)
+        ->has('caseStudies', 0)
+        ->has('articles', 0)
     );
 });
 
@@ -105,6 +111,7 @@ it('caps the previews shown on the home page', function () {
         ->create();
 
     CaseStudy::factory(8)
+        ->has(CaseStudyImage::factory()->cover(), 'images')
         ->create();
 
     BlogArticle::factory(5)
@@ -115,23 +122,7 @@ it('caps the previews shown on the home page', function () {
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
         ->has('testimonials', 10)
-        ->has('portfolioPreview', 6)
-        ->has('blogPreview', 3)
-    );
-});
-
-it('falls back to a placeholder when a case study has no image', function () {
-    CaseStudy::factory()
-        ->create();
-
-    $response = $this->get('/');
-
-    $response->assertOk();
-    $response->assertInertia(fn (Assert $page) => $page
-        ->has('portfolioPreview.0', fn (Assert $item) => $item
-            ->has('title')
-            ->has('description')
-            ->where('image', '/images/home/portfolio-a.png')
-        )
+        ->has('caseStudies', 6)
+        ->has('articles', 3)
     );
 });

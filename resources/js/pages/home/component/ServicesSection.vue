@@ -3,9 +3,9 @@ import { Link } from '@inertiajs/vue3';
 import { Code2, Cog, Layout, Mail, Target } from '@lucide/vue';
 import type { Component } from 'vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
+
 defineProps<{
-    // TODO: remove demo services in HomeController once service catalog is managed elsewhere
-    services: Array<{ slug: string; title: string; teaser: string }>;
+    services: Array<{ slug: string; title: string; description: string }>;
 }>();
 
 const iconBySlug: Record<string, Component> = {
@@ -41,7 +41,7 @@ const iconBySlug: Record<string, Component> = {
                     {{ service.title }}
                 </h3>
                 <p class="mt-2 line-clamp-2 text-sm text-[var(--text-muted-on-light)]">
-                    {{ service.teaser }}
+                    {{ service.description }}
                 </p>
                 <span class="mt-4 inline-flex text-sm font-semibold text-brand-accent group-hover:underline">
                     Learn more →

@@ -4,7 +4,6 @@ import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
 
 defineProps<{
-    // TODO: remove demo blog preview in HomeController once Article listings exist
     articles: Array<{ title: string; description: string; image: string }>;
 }>();
 </script>

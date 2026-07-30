@@ -14,12 +14,15 @@ import TestimonialsSection from '@/pages/home/component/TestimonialsSection.vue'
 import WhySection from '@/pages/home/component/WhySection.vue';
 
 defineProps<{
-    // TODO: remove demo arrays in HomeController once these come from real models/CMS
-    faq: Array<{ question: string; answer: string }>;
-    services: Array<{ slug: string; title: string; teaser: string }>;
-    testimonials: Array<{ quote: string; attribution: string }>;
-    portfolioPreview: Array<{ title: string; description: string; image: string }>;
-    blogPreview: Array<{ title: string; description: string; image: string }>;
+    faqs: Array<{ question: string; answer: string }>;
+    services: Array<{ slug: string; title: string; description: string }>;
+    testimonials: Array<{ testimonial: string; person: string }>;
+    caseStudies: Array<{
+        title: string;
+        description: string;
+        images: Array<{ url: string; alt: string }>;
+    }>;
+    articles: Array<{ title: string; description: string; image: string }>;
 }>();
 </script>
 
@@ -40,8 +43,8 @@ defineProps<{
         button="Book a discovery call"
         test-id="home-cta-1"
     />
-    <PortfolioPreviewSection :items="portfolioPreview" />
-    <TestimonialsSection :quotes="testimonials" />
+    <PortfolioPreviewSection :case-studies="caseStudies" />
+    <TestimonialsSection :testimonials="testimonials" />
     <CtaBand
         heading="A little clarity goes a long way"
         body="Even one good conversation can change how you think about your marketing. We would love to hear what you are working toward."
@@ -49,7 +52,7 @@ defineProps<{
         test-id="home-cta-2"
     />
     <ProcessSection />
-    <FaqSection :items="faq" />
+    <FaqSection :faqs="faqs" />
     <CtaBand
         heading="You should not need a tech degree to grow your business"
         body="We handle the complicated parts and explain things in plain English, you stay in the loop without getting lost in the details."
@@ -71,5 +74,5 @@ defineProps<{
         button="Get in touch → #contact"
         test-id="home-cta-5"
     />
-    <BlogPreviewSection :articles="blogPreview" />
+    <BlogPreviewSection :articles="articles" />
 </template>

@@ -6,9 +6,9 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion';
+
 defineProps<{
-    // TODO: remove demo FAQ in HomeController once FAQ content is managed elsewhere
-    items: Array<{ question: string; answer: string }>;
+    faqs: Array<{ question: string; answer: string }>;
 }>();
 </script>
 
@@ -27,8 +27,8 @@ defineProps<{
             data-test="home-faq"
         >
             <AccordionItem
-                v-for="(item, index) in items"
-                :key="item.question"
+                v-for="(faq, index) in faqs"
+                :key="faq.question"
                 :value="`faq-${index}`"
                 class="border-border-default px-4"
             >
@@ -36,13 +36,13 @@ defineProps<{
                     class="text-left text-base font-semibold text-[var(--text-primary-on-light)]"
                     :data-test="`home-faq-trigger-${index}`"
                 >
-                    {{ item.question }}
+                    {{ faq.question }}
                 </AccordionTrigger>
                 <AccordionContent
                     class="text-[var(--text-muted-on-light)]"
                     :data-test="`home-faq-content-${index}`"
                 >
-                    {{ item.answer }}
+                    {{ faq.answer }}
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

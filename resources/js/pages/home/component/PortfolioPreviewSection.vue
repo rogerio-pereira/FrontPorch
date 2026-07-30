@@ -2,9 +2,13 @@
 import { Link } from '@inertiajs/vue3';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
+
 defineProps<{
-    // TODO: remove demo portfolio preview in HomeController once CaseStudy listings exist
-    items: Array<{ title: string; description: string; image: string }>;
+    caseStudies: Array<{
+        title: string;
+        description: string;
+        images: Array<{ url: string; alt: string }>;
+    }>;
 }>();
 </script>
 
@@ -22,22 +26,22 @@ defineProps<{
 
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <article
-                v-for="item in items"
-                :key="item.title"
+                v-for="caseStudy in caseStudies"
+                :key="caseStudy.title"
                 class="marketing-card-hover overflow-hidden rounded-xl border border-border-default bg-surface-raised"
             >
                 <VisualFrame
-                    :src="item.image"
-                    :alt="item.title"
+                    :src="caseStudy.images[0].url"
+                    :alt="caseStudy.images[0].alt"
                     aspect="video"
                     class="rounded-none border-0 shadow-none"
                 />
                 <div class="p-4">
                     <h3 class="font-semibold">
-                        {{ item.title }}
+                        {{ caseStudy.title }}
                     </h3>
                     <p class="mt-1 line-clamp-2 text-sm text-[var(--text-muted-on-dark)]">
-                        {{ item.description }}
+                        {{ caseStudy.description }}
                     </p>
                 </div>
             </article>
