@@ -21,15 +21,14 @@ it('renders a published article by slug', function () {
     $response->assertInertia(fn (Assert $page) => $page
         ->component('blog-article/BlogArticle')
         ->has('article', fn (Assert $article) => $article
-            ->where('published', true)
             ->where('title', 'Why your website should feel like a front porch')
-            ->where('excerpt', 'A calm, clear online presence helps small businesses earn trust.')
+            ->where('description', 'A calm, clear online presence helps small businesses earn trust.')
             ->where('category', 'Website strategy')
             ->where('content', '<p>Most people meet your business online.</p>')
-            ->where('coverImage', '/images/blog-article/cover.png')
-            ->where('coverAlt', 'Why your website should feel like a front porch')
-            ->where('author', $appName)
-            ->has('publishedAt')
+            ->where('image', '/images/blog-article/cover.png')
+            ->where('published_by', $appName)
+            ->has('created_at')
+            ->etc()
         )
     );
 });

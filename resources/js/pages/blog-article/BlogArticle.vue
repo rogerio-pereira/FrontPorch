@@ -5,14 +5,12 @@ import CtaButton from '@/layouts/app/CtaButton.vue';
 
 defineProps<{
     article: {
-        published: true;
         title: string;
-        excerpt: string;
+        description: string;
         category: string;
-        publishedAt: string;
-        author: string;
-        coverImage: string;
-        coverAlt: string;
+        created_at: string;
+        published_by: string;
+        image: string;
         content: string;
     };
 }>();
@@ -37,20 +35,20 @@ defineProps<{
                     <span class="rounded-sm border border-brand-accent/40 px-2 py-0.5 text-brand-accent">
                         {{ article.category }}
                     </span>
-                    <span>{{ article.publishedAt }}</span>
-                    <span>{{ article.author }}</span>
+                    <span>{{ article.created_at }}</span>
+                    <span>{{ article.published_by }}</span>
                 </div>
                 <h1 class="text-h1 font-semibold" data-test="article-heading">
                     {{ article.title }}
                 </h1>
                 <p class="text-body-lg text-[var(--text-muted-on-dark)]">
-                    {{ article.excerpt }}
+                    {{ article.description }}
                 </p>
             </div>
 
             <img
-                :src="article.coverImage"
-                :alt="article.coverAlt"
+                :src="article.image"
+                :alt="article.title"
                 class="mt-8 aspect-video w-full rounded-xl border border-brand-accent/25 object-cover"
                 data-test="article-visual"
             />

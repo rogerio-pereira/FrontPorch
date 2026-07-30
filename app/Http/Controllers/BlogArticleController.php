@@ -13,25 +13,6 @@ class BlogArticleController extends Controller
      */
     public function show(BlogArticle $article): Response
     {
-        $publishedAt = '';
-        $createdAt = $article->created_at;
-
-        if ($createdAt !== null) {
-            $publishedAt = $createdAt->format('F j, Y');
-        }
-
-        return Inertia::render('blog-article/BlogArticle', [
-            'article' => [
-                'published' => true,
-                'title' => $article->title,
-                'excerpt' => $article->description,
-                'category' => $article->category,
-                'publishedAt' => $publishedAt,
-                'author' => $article->published_by,
-                'coverImage' => $article->image,
-                'coverAlt' => $article->title,
-                'content' => $article->content,
-            ],
-        ]);
+        return Inertia::render('blog-article/BlogArticle', compact('article'));
     }
 }
