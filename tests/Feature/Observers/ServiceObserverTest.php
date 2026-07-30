@@ -48,4 +48,4 @@ it('rejects a title that cannot produce a slug', function () {
         ->create([
             'title' => '###',
         ]);
-})->throws(\InvalidArgumentException::class);
+})->throws(InvalidArgumentException::class);
