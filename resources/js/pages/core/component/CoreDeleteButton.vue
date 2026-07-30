@@ -19,7 +19,7 @@ defineProps<{
             type="submit"
             variant="ghost"
             size="sm"
-            class="text-red-600 hover:text-red-700 dark:text-red-500"
+            class="text-destructive hover:text-destructive/80"
             :disabled="processing"
             :data-test="testId"
         >
