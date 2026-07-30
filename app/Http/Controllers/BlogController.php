@@ -21,7 +21,13 @@ class BlogController extends Controller
         $articles = [];
 
         foreach ($paginator as $article) {
-            $publishedAt = $this->formatPublishedAt($article);
+            $publishedAt = '';
+            $createdAt = $article->created_at;
+
+            if ($createdAt !== null) {
+                $publishedAt = $createdAt->format('F j, Y');
+            }
+
             $href = route('blog.article', $article->slug, false);
 
             $articles[] = [
@@ -46,19 +52,5 @@ class BlogController extends Controller
             'articles' => $articles,
             'pagination' => $pagination,
         ]);
-    }
-
-    /**
-     * Format the article creation date for the public listing.
-     */
-    private function formatPublishedAt(BlogArticle $article): string
-    {
-        $createdAt = $article->created_at;
-
-        if ($createdAt === null) {
-            return '';
-        }
-
-        return $createdAt->format('F j, Y');
     }
 }
