@@ -92,7 +92,6 @@ it('creates a case study with services and gallery images', function () {
                 UploadedFile::fake()->create('cover.jpg', 12),
                 UploadedFile::fake()->create('process.jpg', 12),
             ],
-            'image_alts' => ['Homepage overview', ''],
         ]
     );
 
@@ -110,7 +109,7 @@ it('creates a case study with services and gallery images', function () {
 
     expect($servicesCount)->toBe(1);
     expect($imagesCount)->toBe(2);
-    expect($firstAlt)->toBe('Homepage overview');
+    expect($firstAlt)->toBe('From missed calls to booked jobs');
     expect($lastAlt)->toBe('From missed calls to booked jobs');
     expect($firstSortOrder)->toBe(0);
     expect($storedFiles)->toHaveCount(2);
@@ -233,13 +232,18 @@ it('updates a case study, appending and removing images', function () {
 
     $response->assertRedirect('/core/case-studies');
 
-    $caseStudy->refresh()->load(['images', 'services']);
+    $caseStudy->refresh();
+    $caseStudy->load(['images', 'services']);
 
     $slug = $caseStudy->slug;
     $servicesCount = $caseStudy->services->count();
-    $imageIds = $caseStudy->images->pluck('id')->all();
+    $imageIds = $caseStudy->images
+                    ->pluck('id')
+                    ->all();
     $imagesCount = $caseStudy->images->count();
-    $lastSortOrder = $caseStudy->images->last()->sort_order;
+    $lastSortOrder = $caseStudy->images
+                        ->last()
+                        ->sort_order;
 
     expect($slug)->toBe('from-missed-calls-to-booked-weeks');
     expect($servicesCount)->toBe(1);
@@ -263,7 +267,9 @@ it('leaves gallery images when remove_images is omitted', function () {
 
     $response->assertRedirect('/core/case-studies');
 
-    $imagesCount = $caseStudy->refresh()->images->count();
+    $caseStudy->refresh();
+
+    $imagesCount = $caseStudy->images->count();
 
     expect($imagesCount)->toBe(1);
 });
@@ -279,9 +285,6 @@ it('skips gallery entries that are not uploaded files', function () {
             'not-a-file',
             UploadedFile::fake()->create('cover.jpg', 12),
         ]);
-    $request->shouldReceive('validated')
-        ->with('image_alts')
-        ->andReturn(null);
 
     $method = new ReflectionMethod(CaseStudyController::class, 'storeImages');
     $method->invoke(

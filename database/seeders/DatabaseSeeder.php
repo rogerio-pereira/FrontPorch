@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ServicesSeeder::class,
             FaqHomeSeeder::class,
-            CaseStudiesSeeder::class,
         ]);
 
         /*
@@ -38,6 +37,7 @@ class DatabaseSeeder extends Seeder
             $this->call([
                 UserSeeder::class,
                 TestimonialsSeeder::class,
+                CaseStudiesSeeder::class,
             ]);
         }
     }

@@ -29,13 +29,12 @@ class FaqController extends Controller
      */
     public function create(): Response
     {
+        $faq = null;
+
         $services = Service::orderBy('sort_order')
                         ->pluck('title', 'id');
 
-        return Inertia::render('core/faqs/Form', [
-            'faq' => null,
-            'services' => $services,
-        ]);
+        return Inertia::render('core/faqs/Form', compact('faq', 'services'));
     }
 
     /**
@@ -74,10 +73,7 @@ class FaqController extends Controller
         $services = Service::orderBy('sort_order')
                         ->pluck('title', 'id');
 
-        return Inertia::render('core/faqs/Form', [
-            'faq' => $faq,
-            'services' => $services,
-        ]);
+        return Inertia::render('core/faqs/Form', compact('faq', 'services'));
     }
 
     /**

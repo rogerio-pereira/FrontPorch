@@ -18,11 +18,9 @@ class CaseStudyImageFactory extends Factory
      */
     public function definition(): array
     {
-        $uuid = fake()->uuid();
-
         return [
             'case_study_id' => CaseStudy::factory(),
-            'url' => "https://images.example.com/case-studies/{$uuid}.jpg",
+            'url' => fake()->imageUrl(),
             'alt' => fake()->sentence(4),
             'sort_order' => fake()->numberBetween(0, 20),
         ];

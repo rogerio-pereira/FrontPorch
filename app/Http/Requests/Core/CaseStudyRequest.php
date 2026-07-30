@@ -35,8 +35,6 @@ class CaseStudyRequest extends FormRequest
             'services.*' => ['uuid', 'exists:services,id'],
             'images' => ['nullable', 'array'],
             'images.*' => $this->imageFileRules(),
-            'image_alts' => ['nullable', 'array'],
-            'image_alts.*' => ['nullable', 'string', 'max:255'],
             'remove_images' => ['nullable', 'array'],
             'remove_images.*' => ['uuid', 'exists:case_study_images,id'],
         ];

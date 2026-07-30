@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('case_study_images', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('case_study_id')->constrained('case_studies')->cascadeOnDelete();
+            $table->foreignUuid('case_study_id')
+                ->constrained('case_studies')
+                ->cascadeOnDelete();
             $table->string('url');
             $table->string('alt');
             $table->integer('sort_order')->default(0);

@@ -36,13 +36,12 @@ class CaseStudyController extends Controller
      */
     public function create(): Response
     {
+        $caseStudy = null;
+
         $services = Service::orderBy('sort_order')
                         ->pluck('title', 'id');
 
-        return Inertia::render('core/case-studies/Form', [
-            'caseStudy' => null,
-            'services' => $services,
-        ]);
+        return Inertia::render('core/case-studies/Form', compact('caseStudy', 'services'));
     }
 
     /**
@@ -51,12 +50,19 @@ class CaseStudyController extends Controller
     public function store(CaseStudyRequest $request, MediaUploader $uploader): RedirectResponse
     {
         // The CaseStudyObserver sets the slug from the title.
-        $attributes = $this->attributes($request);
-        $serviceIds = $this->serviceIds($request);
+        $data = $request->validated();
 
-        $caseStudy = CaseStudy::create($attributes);
+        $caseStudy = CaseStudy::create([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'client' => $data['client'],
+            'industry' => $data['industry'],
+            'challenge' => $data['challenge'],
+            'content' => $data['content'],
+        ]);
 
-        $caseStudy->services()->sync($serviceIds);
+        $services = $data['services'] ?? [];
+        $caseStudy->services()->sync($services);
 
         $this->storeImages($request, $caseStudy, $uploader);
 
@@ -89,10 +95,7 @@ class CaseStudyController extends Controller
         $services = Service::orderBy('sort_order')
                         ->pluck('title', 'id');
 
-        return Inertia::render('core/case-studies/Form', [
-            'caseStudy' => $caseStudy,
-            'services' => $services,
-        ]);
+        return Inertia::render('core/case-studies/Form', compact('caseStudy', 'services'));
     }
 
     /**
@@ -101,12 +104,19 @@ class CaseStudyController extends Controller
     public function update(CaseStudyRequest $request, CaseStudy $caseStudy, MediaUploader $uploader): RedirectResponse
     {
         // The CaseStudyObserver regenerates the slug when the title changes.
-        $attributes = $this->attributes($request);
-        $serviceIds = $this->serviceIds($request);
+        $data = $request->validated();
 
-        $caseStudy->update($attributes);
+        $caseStudy->update([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'client' => $data['client'],
+            'industry' => $data['industry'],
+            'challenge' => $data['challenge'],
+            'content' => $data['content'],
+        ]);
 
-        $caseStudy->services()->sync($serviceIds);
+        $services = $data['services'] ?? [];
+        $caseStudy->services()->sync($services);
 
         $this->removeImages($request, $caseStudy);
         $this->storeImages($request, $caseStudy, $uploader);
@@ -141,44 +151,6 @@ class CaseStudyController extends Controller
     }
 
     /**
-     * Text attributes for create and update.
-     *
-     * Inline images are uploaded through the media helper and inserted as
-     * URLs in the editor; content is stored as submitted.
-     *
-     * @return array<string, string>
-     */
-    protected function attributes(CaseStudyRequest $request): array
-    {
-        $data = $request->validated();
-
-        return [
-            'title' => $data['title'],
-            'description' => $data['description'],
-            'client' => $data['client'],
-            'industry' => $data['industry'],
-            'challenge' => $data['challenge'],
-            'content' => $data['content'],
-        ];
-    }
-
-    /**
-     * The services delivered on the case study.
-     *
-     * @return list<string>
-     */
-    protected function serviceIds(CaseStudyRequest $request): array
-    {
-        $services = $request->validated('services');
-
-        if (! is_array($services)) {
-            return [];
-        }
-
-        return array_values($services);
-    }
-
-    /**
      * Upload the submitted gallery images and append them to the case study.
      */
     protected function storeImages(CaseStudyRequest $request, CaseStudy $caseStudy, MediaUploader $uploader): void
@@ -189,20 +161,24 @@ class CaseStudyController extends Controller
             return;
         }
 
-        $alts = $request->validated('image_alts');
-        $sortOrder = $this->nextSortOrder($caseStudy);
+        $sortOrder = $caseStudy->images()->max('sort_order');
 
-        foreach ($files as $index => $file) {
+        if ($sortOrder === null) {
+            $sortOrder = 0;
+        } else {
+            $sortOrder = ((int) $sortOrder) + 1;
+        }
+
+        foreach ($files as $file) {
             if (! $file instanceof UploadedFile) {
                 continue;
             }
 
             $url = $uploader->store($file, self::DIRECTORY);
-            $alt = $this->alt($alts, $index, $caseStudy);
 
             $caseStudy->images()->create([
                 'url' => $url,
-                'alt' => $alt,
+                'alt' => $caseStudy->title,
                 'sort_order' => $sortOrder,
             ]);
 
@@ -212,6 +188,9 @@ class CaseStudyController extends Controller
 
     /**
      * Delete the gallery images the editor unchecked.
+     *
+     * Storage objects are left in place for now: MediaUploader only returns
+     * URLs, not storage keys, so file cleanup stays a follow-up.
      */
     protected function removeImages(CaseStudyRequest $request, CaseStudy $caseStudy): void
     {
@@ -228,36 +207,5 @@ class CaseStudyController extends Controller
         foreach ($images as $image) {
             $image->delete();
         }
-    }
-
-    /**
-     * The alt text submitted for an image, falling back to the title.
-     */
-    protected function alt(mixed $alts, int|string $index, CaseStudy $caseStudy): string
-    {
-        if (
-            is_array($alts) &&
-            isset($alts[$index]) &&
-            is_string($alts[$index]) &&
-            filled($alts[$index])
-        ) {
-            return $alts[$index];
-        }
-
-        return $caseStudy->title;
-    }
-
-    /**
-     * The position for the next appended gallery image.
-     */
-    protected function nextSortOrder(CaseStudy $caseStudy): int
-    {
-        $current = $caseStudy->images()->max('sort_order');
-
-        if ($current === null) {
-            return 0;
-        }
-
-        return ((int) $current) + 1;
     }
 }
