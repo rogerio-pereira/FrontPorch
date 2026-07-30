@@ -22,7 +22,10 @@ defineProps<{
         answer: string;
         sort_order: number;
         service_id: string | null;
-        service: string | null;
+        service: {
+            id: string;
+            title: string;
+        } | null;
     }>;
 }>();
 </script>
@@ -54,7 +57,7 @@ defineProps<{
                 >
                     <td class="px-4 py-3 text-muted-foreground">{{ faq.sort_order }}</td>
                     <td class="px-4 py-3 font-medium">{{ faq.question }}</td>
-                    <td class="px-4 py-3 text-muted-foreground">{{ faq.service ?? 'Home' }}</td>
+                    <td class="px-4 py-3 text-muted-foreground">{{ faq.service?.title ?? 'Home' }}</td>
                     <td class="px-4 py-3 text-right whitespace-nowrap">
                         <Button as-child variant="ghost" size="sm">
                             <Link

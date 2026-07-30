@@ -21,7 +21,10 @@ defineProps<{
         person: string;
         testimonial: string;
         service_id: string;
-        service: string | null;
+        service: {
+            id: string;
+            title: string;
+        } | null;
     }>;
 }>();
 </script>
@@ -53,7 +56,7 @@ defineProps<{
                 >
                     <td class="px-4 py-3 font-medium">{{ testimonial.person }}</td>
                     <td class="px-4 py-3 text-muted-foreground">{{ testimonial.testimonial }}</td>
-                    <td class="px-4 py-3 text-muted-foreground">{{ testimonial.service }}</td>
+                    <td class="px-4 py-3 text-muted-foreground">{{ testimonial.service?.title }}</td>
                     <td class="px-4 py-3 text-right whitespace-nowrap">
                         <Button as-child variant="ghost" size="sm">
                             <Link

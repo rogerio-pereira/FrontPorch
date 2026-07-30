@@ -7,8 +7,14 @@ use Illuminate\Support\Facades\Storage;
 it('stores uploaded files and returns the public url', function () {
     Storage::fake();
 
-    $url = (new MediaUploader)->store(UploadedFile::fake()->create('cover.jpg', 12), 'blog');
+    $fileFactory = UploadedFile::fake();
+    $file = $fileFactory->create('cover.jpg', 12);
+    $uploader = new MediaUploader;
+    $url = $uploader->store($file, 'blog');
+    $storedFiles = Storage::allFiles('blog');
 
-    expect($url)->toContain('blog/');
-    expect(Storage::allFiles('blog'))->toHaveCount(1);
+    expect($url)
+        ->toContain('blog/');
+    expect($storedFiles)
+        ->toHaveCount(1);
 });

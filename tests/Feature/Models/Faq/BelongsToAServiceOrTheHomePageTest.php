@@ -4,13 +4,29 @@ use App\Models\Faq;
 use App\Models\Service;
 
 it('belongs to a service or the home page', function () {
-    $service = Service::factory()->create();
+    $service = Service::factory()
+                    ->create();
 
-    $serviceFaq = Faq::factory()->forService($service)->create(['sort_order' => '5']);
-    $homeFaq = Faq::factory()->forHome()->create();
+    $serviceFaq = Faq::factory()
+                    ->create([
+                        'service_id' => $service->id,
+                        'sort_order' => '5',
+                    ]);
 
-    expect($serviceFaq->sort_order)->toBe(5);
-    expect($serviceFaq->service->id)->toBe($service->id);
-    expect($homeFaq->service_id)->toBeNull();
-    expect($homeFaq->service)->toBeNull();
+    $homeFaq = Faq::factory()
+                    ->create([
+                        'service_id' => null,
+                    ]);
+
+    $sortOrder = $serviceFaq->sort_order;
+    expect($sortOrder)->toBe(5);
+
+    $attachedServiceId = $serviceFaq->service->id;
+    expect($attachedServiceId)->toBe($service->id);
+
+    $homeServiceId = $homeFaq->service_id;
+    expect($homeServiceId)->toBeNull();
+
+    $homeService = $homeFaq->service;
+    expect($homeService)->toBeNull();
 });

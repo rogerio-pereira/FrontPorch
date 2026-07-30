@@ -25,17 +25,7 @@ class BlogArticleFactory extends Factory
             'description' => fake()->sentence(15),
             'category' => fake()->randomElement(['Branding', 'Marketing', 'Web Design', 'Strategy', 'Content']),
             'content' => '<p>'.fake()->paragraph(8).'</p>',
-            'image' => 'https://images.example.com/blog/'.fake()->uuid().'.jpg',
+            'image' => fake()->imageUrl(),
         ];
-    }
-
-    /**
-     * Indicate that the article has been soft deleted.
-     */
-    public function softDeleted(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'deleted_at' => now(),
-        ]);
     }
 }

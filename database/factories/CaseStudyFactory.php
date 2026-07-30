@@ -40,18 +40,10 @@ class CaseStudyFactory extends Factory
             for ($sortOrder = 0; $sortOrder < $count; $sortOrder++) {
                 CaseStudyImage::factory()
                     ->for($caseStudy)
-                    ->create(['sort_order' => $sortOrder]);
+                    ->create([
+                        'sort_order' => $sortOrder,
+                    ]);
             }
         });
-    }
-
-    /**
-     * Indicate that the case study has been soft deleted.
-     */
-    public function softDeleted(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'deleted_at' => now(),
-        ]);
     }
 }
