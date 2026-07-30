@@ -41,7 +41,8 @@ class CaseStudy extends Model
      */
     public function images(): HasMany
     {
-        return $this->hasMany(CaseStudyImage::class)->orderBy('sort_order');
+        return $this->hasMany(CaseStudyImage::class)
+                    ->orderBy('sort_order');
     }
 
     /**
@@ -51,7 +52,8 @@ class CaseStudy extends Model
      */
     public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class, 'case_study_service')->withTimestamps();
+        return $this->belongsToMany(Service::class, 'case_study_service')
+                    ->withTimestamps();
     }
 
     /**

@@ -28,10 +28,10 @@ const props = defineProps<{
         industry: string;
         challenge: string;
         content: string;
-        services: string[];
+        services: Array<{ id: string }>;
         images: Array<{ id: string; url: string; alt: string }>;
     } | null;
-    services: Array<{ id: string; title: string }>;
+    services: Record<string, string>;
 }>();
 
 const action = computed(() => {
@@ -63,7 +63,7 @@ function isSelected(serviceId: string): boolean {
         return false;
     }
 
-    return props.caseStudy.services.includes(serviceId);
+    return props.caseStudy.services.some((service) => service.id === serviceId);
 }
 </script>
 
@@ -157,18 +157,18 @@ function isSelected(serviceId: string): boolean {
             <fieldset class="grid gap-2">
                 <legend class="mb-2 text-sm font-medium">Services</legend>
                 <label
-                    v-for="service in services"
-                    :key="service.id"
+                    v-for="(serviceTitle, serviceId) in services"
+                    :key="serviceId"
                     class="flex items-center gap-2 text-sm"
                 >
                     <input
                         type="checkbox"
                         name="services[]"
-                        :value="service.id"
-                        :checked="isSelected(service.id)"
-                        :data-test="`case-study-service-${service.id}`"
+                        :value="serviceId"
+                        :checked="isSelected(String(serviceId))"
+                        :data-test="`case-study-service-${serviceId}`"
                     />
-                    {{ service.title }}
+                    {{ serviceTitle }}
                 </label>
                 <InputError :message="errors.services" />
             </fieldset>

@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Core\BlogArticleStoreRequest;
-use App\Http\Requests\Core\BlogArticleUpdateRequest;
+use App\Http\Requests\Core\BlogArticleRequest;
 use App\Models\BlogArticle;
 use App\Services\MediaUploader;
 use Illuminate\Http\RedirectResponse;
@@ -24,15 +23,10 @@ class BlogArticleController extends Controller
      */
     public function index(): Response
     {
-        $articles = [];
+        $articles = BlogArticle::orderByDesc('created_at')
+                        ->get();
 
-        foreach (BlogArticle::orderByDesc('created_at')->get() as $article) {
-            $articles[] = $this->props($article);
-        }
-
-        return Inertia::render('core/blog-articles/Index', [
-            'articles' => $articles,
-        ]);
+        return Inertia::render('core/blog-articles/Index', compact('articles'));
     }
 
     /**
@@ -48,21 +42,29 @@ class BlogArticleController extends Controller
     /**
      * Store a new article with its cover image.
      */
-    public function store(BlogArticleStoreRequest $request, MediaUploader $uploader): RedirectResponse
+    public function store(BlogArticleRequest $request, MediaUploader $uploader): RedirectResponse
     {
         // The BlogArticleObserver sets the slug from the title and credits the
         // signed-in user as the author.
-        $attributes = $this->attributes($request->safe()->only(['title', 'description', 'category', 'content']), $uploader);
+        $data = $request->validated();
 
         $image = $request->file('image');
 
-        if ($image instanceof UploadedFile) {
-            $attributes['image'] = $uploader->store($image, self::DIRECTORY);
+        if (! $image instanceof UploadedFile) {
+            abort(422);
         }
 
-        BlogArticle::create($attributes);
+        $data['image'] = $uploader->store($image, self::DIRECTORY);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Article created.')]);
+        BlogArticle::create($data);
+
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Article created.'),
+            ]
+        );
 
         return to_route('core.blog.articles.index');
     }
@@ -81,72 +83,61 @@ class BlogArticleController extends Controller
     public function edit(BlogArticle $article): Response
     {
         return Inertia::render('core/blog-articles/Form', [
-            'article' => $this->props($article),
+            'article' => $article,
         ]);
     }
 
     /**
      * Update an article, keeping the current cover image when none is sent.
      */
-    public function update(BlogArticleUpdateRequest $request, BlogArticle $article, MediaUploader $uploader): RedirectResponse
+    public function update(BlogArticleRequest $request, BlogArticle $article, MediaUploader $uploader): RedirectResponse
     {
         // The BlogArticleObserver regenerates the slug when the title changes.
-        $attributes = $this->attributes($request->safe()->only(['title', 'description', 'category', 'content']), $uploader);
+        $data = $request->validated();
+
+        unset($data['image']);
 
         $image = $request->file('image');
 
         if ($image instanceof UploadedFile) {
-            $attributes['image'] = $uploader->store($image, self::DIRECTORY);
+            // Previous cover object is left in storage for now: MediaUploader
+            // only returns URLs, not keys. Cleanup is tracked in
+            // docs/planning/phase-01.md (object storage image cleanup).
+            $data['image'] = $uploader->store($image, self::DIRECTORY);
         }
 
-        $article->update($attributes);
+        $article->update($data);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Article updated.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Article updated.'),
+            ]
+        );
 
         return to_route('core.blog.articles.index');
     }
 
     /**
      * Soft delete an article so it disappears from the blog.
+     *
+     * The cover object stays in storage for now: MediaUploader only returns
+     * URLs, not keys. Cleanup is tracked in docs/planning/phase-01.md
+     * (object storage image cleanup).
      */
     public function destroy(BlogArticle $article): RedirectResponse
     {
         $article->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Article deleted.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Article deleted.'),
+            ]
+        );
 
         return to_route('core.blog.articles.index');
-    }
-
-    /**
-     * Move inline editor images to object storage before saving the content.
-     *
-     * @param  array<string, string>  $attributes
-     * @return array<string, string>
-     */
-    protected function attributes(array $attributes, MediaUploader $uploader): array
-    {
-        $attributes['content'] = $uploader->storeInlineImages($attributes['content'], self::DIRECTORY);
-
-        return $attributes;
-    }
-
-    /**
-     * Shape an article for the admin pages.
-     *
-     * @return array{id: string, title: string, slug: string, description: string, category: string, content: string, image: string, published_by: string}
-     */
-    protected function props(BlogArticle $article): array
-    {
-        return [
-            'id' => $article->id,
-            'title' => $article->title,
-            'slug' => $article->slug,
-            'description' => $article->description,
-            'category' => $article->category,
-            'content' => $article->content,
-            'image' => $article->image,
-            'published_by' => $article->published_by,
-        ];
     }
 }

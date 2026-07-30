@@ -15,7 +15,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('person');
             $table->text('testimonial');
-            $table->foreignUuid('service_id')->constrained('services')->cascadeOnDelete();
+            $table->foreignUuid('service_id')
+                ->constrained('services')
+                ->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Core\Concerns\ProvidesServiceOptions;
 use App\Http\Requests\Core\CaseStudyRequest;
 use App\Models\CaseStudy;
+use App\Models\Service;
 use App\Services\MediaUploader;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
@@ -14,8 +14,6 @@ use Inertia\Response;
 
 class CaseStudyController extends Controller
 {
-    use ProvidesServiceOptions;
-
     /**
      * Object storage directory for case study media.
      */
@@ -26,15 +24,11 @@ class CaseStudyController extends Controller
      */
     public function index(): Response
     {
-        $caseStudies = [];
+        $caseStudies = CaseStudy::with(['images', 'services'])
+                        ->orderByDesc('created_at')
+                        ->get();
 
-        foreach (CaseStudy::with(['images', 'services'])->orderByDesc('created_at')->get() as $caseStudy) {
-            $caseStudies[] = $this->props($caseStudy);
-        }
-
-        return Inertia::render('core/case-studies/Index', [
-            'caseStudies' => $caseStudies,
-        ]);
+        return Inertia::render('core/case-studies/Index', compact('caseStudies'));
     }
 
     /**
@@ -42,9 +36,12 @@ class CaseStudyController extends Controller
      */
     public function create(): Response
     {
+        $services = Service::orderBy('sort_order')
+                        ->pluck('title', 'id');
+
         return Inertia::render('core/case-studies/Form', [
             'caseStudy' => null,
-            'services' => $this->serviceOptions(),
+            'services' => $services,
         ]);
     }
 
@@ -54,13 +51,29 @@ class CaseStudyController extends Controller
     public function store(CaseStudyRequest $request, MediaUploader $uploader): RedirectResponse
     {
         // The CaseStudyObserver sets the slug from the title.
-        $caseStudy = CaseStudy::create($this->attributes($request, $uploader));
+        $data = $request->validated();
 
-        $caseStudy->services()->sync($this->serviceIds($request));
+        $caseStudy = CaseStudy::create([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'client' => $data['client'],
+            'industry' => $data['industry'],
+            'challenge' => $data['challenge'],
+            'content' => $data['content'],
+        ]);
+
+        $services = $data['services'] ?? [];
+        $caseStudy->services()->sync($services);
 
         $this->storeImages($request, $caseStudy, $uploader);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Case study created.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Case study created.'),
+            ]
+        );
 
         return to_route('core.case-studies.index');
     }
@@ -80,9 +93,12 @@ class CaseStudyController extends Controller
     {
         $caseStudy->load(['images', 'services']);
 
+        $services = Service::orderBy('sort_order')
+                        ->pluck('title', 'id');
+
         return Inertia::render('core/case-studies/Form', [
-            'caseStudy' => $this->props($caseStudy),
-            'services' => $this->serviceOptions(),
+            'caseStudy' => $caseStudy,
+            'services' => $services,
         ]);
     }
 
@@ -92,14 +108,30 @@ class CaseStudyController extends Controller
     public function update(CaseStudyRequest $request, CaseStudy $caseStudy, MediaUploader $uploader): RedirectResponse
     {
         // The CaseStudyObserver regenerates the slug when the title changes.
-        $caseStudy->update($this->attributes($request, $uploader));
+        $data = $request->validated();
 
-        $caseStudy->services()->sync($this->serviceIds($request));
+        $caseStudy->update([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'client' => $data['client'],
+            'industry' => $data['industry'],
+            'challenge' => $data['challenge'],
+            'content' => $data['content'],
+        ]);
+
+        $services = $data['services'] ?? [];
+        $caseStudy->services()->sync($services);
 
         $this->removeImages($request, $caseStudy);
         $this->storeImages($request, $caseStudy, $uploader);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Case study updated.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Case study updated.'),
+            ]
+        );
 
         return to_route('core.case-studies.index');
     }
@@ -111,47 +143,15 @@ class CaseStudyController extends Controller
     {
         $caseStudy->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Case study deleted.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Case study deleted.'),
+            ]
+        );
 
         return to_route('core.case-studies.index');
-    }
-
-    /**
-     * Text attributes with inline editor images moved to object storage.
-     *
-     * @return array<string, string>
-     */
-    protected function attributes(CaseStudyRequest $request, MediaUploader $uploader): array
-    {
-        /** @var array<string, string> $attributes */
-        $attributes = $request->safe()->only([
-            'title',
-            'description',
-            'client',
-            'industry',
-            'challenge',
-            'content',
-        ]);
-
-        $attributes['content'] = $uploader->storeInlineImages($attributes['content'], self::DIRECTORY);
-
-        return $attributes;
-    }
-
-    /**
-     * The services delivered on the case study.
-     *
-     * @return list<string>
-     */
-    protected function serviceIds(CaseStudyRequest $request): array
-    {
-        $services = $request->validated('services');
-
-        if (! is_array($services)) {
-            return [];
-        }
-
-        return array_values($services);
     }
 
     /**
@@ -165,17 +165,24 @@ class CaseStudyController extends Controller
             return;
         }
 
-        $alts = $request->validated('image_alts');
-        $sortOrder = $this->nextSortOrder($caseStudy);
+        $sortOrder = $caseStudy->images()->max('sort_order');
 
-        foreach ($files as $index => $file) {
+        if ($sortOrder === null) {
+            $sortOrder = 0;
+        } else {
+            $sortOrder = ((int) $sortOrder) + 1;
+        }
+
+        foreach ($files as $file) {
             if (! $file instanceof UploadedFile) {
                 continue;
             }
 
+            $url = $uploader->store($file, self::DIRECTORY);
+
             $caseStudy->images()->create([
-                'url' => $uploader->store($file, self::DIRECTORY),
-                'alt' => $this->alt($alts, $index, $caseStudy),
+                'url' => $url,
+                'alt' => $caseStudy->title,
                 'sort_order' => $sortOrder,
             ]);
 
@@ -185,6 +192,9 @@ class CaseStudyController extends Controller
 
     /**
      * Delete the gallery images the editor unchecked.
+     *
+     * Storage objects are left in place for now: MediaUploader only returns
+     * URLs, not storage keys, so file cleanup stays a follow-up.
      */
     protected function removeImages(CaseStudyRequest $request, CaseStudy $caseStudy): void
     {
@@ -194,71 +204,12 @@ class CaseStudyController extends Controller
             return;
         }
 
-        foreach ($caseStudy->images()->whereIn('id', $ids)->get() as $image) {
+        $images = $caseStudy->images()
+                    ->whereIn('id', $ids)
+                    ->get();
+
+        foreach ($images as $image) {
             $image->delete();
         }
-    }
-
-    /**
-     * The alt text submitted for an image, falling back to the title.
-     */
-    protected function alt(mixed $alts, int|string $index, CaseStudy $caseStudy): string
-    {
-        if (is_array($alts) && isset($alts[$index]) && is_string($alts[$index]) && filled($alts[$index])) {
-            return $alts[$index];
-        }
-
-        return $caseStudy->title;
-    }
-
-    /**
-     * The position for the next appended gallery image.
-     */
-    protected function nextSortOrder(CaseStudy $caseStudy): int
-    {
-        $current = $caseStudy->images()->max('sort_order');
-
-        if ($current === null) {
-            return 0;
-        }
-
-        return ((int) $current) + 1;
-    }
-
-    /**
-     * Shape a case study for the admin pages.
-     *
-     * @return array{id: string, title: string, slug: string, description: string, client: string, industry: string, challenge: string, content: string, services: list<string>, images: list<array{id: string, url: string, alt: string}>}
-     */
-    protected function props(CaseStudy $caseStudy): array
-    {
-        $services = [];
-
-        foreach ($caseStudy->services as $service) {
-            $services[] = $service->id;
-        }
-
-        $images = [];
-
-        foreach ($caseStudy->images as $image) {
-            $images[] = [
-                'id' => $image->id,
-                'url' => $image->url,
-                'alt' => $image->alt,
-            ];
-        }
-
-        return [
-            'id' => $caseStudy->id,
-            'title' => $caseStudy->title,
-            'slug' => $caseStudy->slug,
-            'description' => $caseStudy->description,
-            'client' => $caseStudy->client,
-            'industry' => $caseStudy->industry,
-            'challenge' => $caseStudy->challenge,
-            'content' => $caseStudy->content,
-            'services' => $services,
-            'images' => $images,
-        ];
     }
 }

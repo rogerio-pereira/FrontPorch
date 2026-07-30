@@ -3,31 +3,25 @@
 namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Core\Concerns\ProvidesServiceOptions;
 use App\Http\Requests\Core\FaqRequest;
 use App\Models\Faq;
+use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class FaqController extends Controller
 {
-    use ProvidesServiceOptions;
-
     /**
      * List the FAQs of the home page and of every service landing.
      */
     public function index(): Response
     {
-        $faqs = [];
+        $faqs = Faq::with('service')
+                    ->orderBy('sort_order')
+                    ->get();
 
-        foreach (Faq::with('service')->orderBy('sort_order')->get() as $faq) {
-            $faqs[] = $this->props($faq);
-        }
-
-        return Inertia::render('core/faqs/Index', [
-            'faqs' => $faqs,
-        ]);
+        return Inertia::render('core/faqs/Index', compact('faqs'));
     }
 
     /**
@@ -35,9 +29,12 @@ class FaqController extends Controller
      */
     public function create(): Response
     {
+        $services = Service::orderBy('sort_order')
+                        ->pluck('title', 'id');
+
         return Inertia::render('core/faqs/Form', [
             'faq' => null,
-            'services' => $this->serviceOptions(),
+            'services' => $services,
         ]);
     }
 
@@ -46,9 +43,17 @@ class FaqController extends Controller
      */
     public function store(FaqRequest $request): RedirectResponse
     {
-        Faq::create($request->validated());
+        $data = $request->validated();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ created.')]);
+        Faq::create($data);
+
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('FAQ created.'),
+            ]
+        );
 
         return to_route('core.faqs.index');
     }
@@ -66,9 +71,12 @@ class FaqController extends Controller
      */
     public function edit(Faq $faq): Response
     {
+        $services = Service::orderBy('sort_order')
+                        ->pluck('title', 'id');
+
         return Inertia::render('core/faqs/Form', [
-            'faq' => $this->props($faq),
-            'services' => $this->serviceOptions(),
+            'faq' => $faq,
+            'services' => $services,
         ]);
     }
 
@@ -77,9 +85,17 @@ class FaqController extends Controller
      */
     public function update(FaqRequest $request, Faq $faq): RedirectResponse
     {
-        $faq->update($request->validated());
+        $data = $request->validated();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ updated.')]);
+        $faq->update($data);
+
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('FAQ updated.'),
+            ]
+        );
 
         return to_route('core.faqs.index');
     }
@@ -91,31 +107,14 @@ class FaqController extends Controller
     {
         $faq->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ deleted.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('FAQ deleted.'),
+            ]
+        );
 
         return to_route('core.faqs.index');
-    }
-
-    /**
-     * Shape a FAQ for the admin pages.
-     *
-     * @return array{id: string, question: string, answer: string, sort_order: int, service_id: string|null, service: string|null}
-     */
-    protected function props(Faq $faq): array
-    {
-        $service = null;
-
-        if ($faq->service !== null) {
-            $service = $faq->service->title;
-        }
-
-        return [
-            'id' => $faq->id,
-            'question' => $faq->question,
-            'answer' => $faq->answer,
-            'sort_order' => $faq->sort_order,
-            'service_id' => $faq->service_id,
-            'service' => $service,
-        ];
     }
 }

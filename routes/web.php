@@ -12,26 +12,43 @@ use App\Http\Controllers\ServiceLeadGenerationController;
 use App\Http\Controllers\ServiceWebsiteDesignAndDevelopmentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', HomeController::class)->name('home');
+Route::get('/', HomeController::class)
+    ->name('home');
 
-Route::get('/portfolio', PortfolioController::class)->name('portfolio');
+Route::get('/portfolio', PortfolioController::class)
+    ->name('portfolio');
 
 Route::get('/portfolio/study-case/{caseStudy:slug}', PortfolioStudyCaseController::class)
     ->name('portfolio.study-case');
 
-Route::get('/blog', BlogController::class)->name('blog');
+Route::get('/blog', BlogController::class)
+    ->name('blog');
+
 Route::get('/blog/article/{article:slug}', [BlogArticleController::class, 'show'])
     ->name('blog.article');
 
-Route::get('/services/lead-generation', ServiceLeadGenerationController::class)->name('services.lead-generation');
-Route::get('/services/email-marketing', ServiceEmailMarketingController::class)->name('services.email-marketing');
-Route::get('/services/website-design-and-development', ServiceWebsiteDesignAndDevelopmentController::class)->name('services.website-design-and-development');
-Route::get('/services/business-automations', ServiceBusinessAutomationsController::class)->name('services.business-automations');
-Route::get('/services/custom-software-development', ServiceCustomSoftwareDevelopmentController::class)->name('services.custom-software-development');
+Route::get('/services/lead-generation', ServiceLeadGenerationController::class)
+    ->name('services.lead-generation');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
-});
+Route::get('/services/email-marketing', ServiceEmailMarketingController::class)
+    ->name('services.email-marketing');
+
+Route::get('/services/website-design-and-development', ServiceWebsiteDesignAndDevelopmentController::class)
+    ->name('services.website-design-and-development');
+
+Route::get('/services/business-automations', ServiceBusinessAutomationsController::class)
+    ->name('services.business-automations');
+
+Route::get('/services/custom-software-development', ServiceCustomSoftwareDevelopmentController::class)
+    ->name('services.custom-software-development');
+
+Route::middleware(['auth', 'verified'])
+    ->group(function (): void {
+        Route::inertia('dashboard', 'Dashboard')
+            ->name('dashboard');
+    });
 
 require __DIR__.'/settings.php';
+
+// Admin CMS routes (/core/*) — authenticated back-office shell for CMS resources.
 require __DIR__.'/core.php';

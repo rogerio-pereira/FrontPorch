@@ -8,14 +8,27 @@ use App\Http\Controllers\Core\TestimonialController;
 use App\Http\Controllers\Core\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->prefix('core')->name('core.')->group(function (): void {
-    Route::resource('users', UserController::class);
-    Route::resource('services', ServiceController::class);
-    Route::resource('faqs', FaqController::class);
-    Route::resource('testimonials', TestimonialController::class);
-    Route::resource('case-studies', CaseStudyController::class);
+/*
+|--------------------------------------------------------------------------
+| Core (admin CMS) routes
+|--------------------------------------------------------------------------
+|
+| Authenticated back-office under /core.
+|
+*/
+Route::middleware(['auth'])
+    ->prefix('core')
+    ->name('core.')
+    ->group(function (): void {
+        Route::resource('users', UserController::class);
+        Route::resource('services', ServiceController::class);
+        Route::resource('faqs', FaqController::class);
+        Route::resource('testimonials', TestimonialController::class);
+        Route::resource('case-studies', CaseStudyController::class);
 
-    Route::prefix('blog')->name('blog.')->group(function (): void {
-        Route::resource('articles', BlogArticleController::class);
+        Route::prefix('blog')
+            ->name('blog.')
+            ->group(function (): void {
+                Route::resource('articles', BlogArticleController::class);
+            });
     });
-});

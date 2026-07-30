@@ -4,10 +4,58 @@ use App\Models\CaseStudy;
 use App\Models\Service;
 use App\Models\User;
 
-it('creates a case study from the admin form', function () {
-    $this->actingAs(User::factory()->create());
+it('shows the case studies admin screens to authenticated users', function (string $url, string $heading, ?string $submit) {
+    $user = User::factory()
+                ->create();
 
-    $service = Service::factory()->create(['title' => 'Lead generation']);
+    $this->actingAs($user);
+
+    Service::factory()
+        ->create([
+            'title' => 'Lead generation',
+        ]);
+
+    $page = visit($url)
+                ->waitForEvent('networkidle')
+                ->assertSee($heading);
+
+    if ($submit !== null) {
+        $page->assertPresent($submit);
+    }
+})->with([
+    'index' => ['/core/case-studies', 'Case studies', null],
+    'create' => ['/core/case-studies/create', 'New case study', '@case-study-submit'],
+]);
+
+it('shows the case studies edit form to authenticated users', function () {
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
+
+    $caseStudy = CaseStudy::factory()
+                    ->create([
+                        'title' => 'From missed calls to booked jobs',
+                    ]);
+
+    $url = "/core/case-studies/{$caseStudy->id}/edit";
+
+    visit($url)
+        ->waitForEvent('networkidle')
+        ->assertSee('Edit case study')
+        ->assertPresent('@case-study-submit');
+});
+
+it('creates a case study from the admin form', function () {
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
+
+    $service = Service::factory()
+                    ->create([
+                        'title' => 'Lead generation',
+                    ]);
 
     visit('/core/case-studies/create')
         ->waitForEvent('networkidle')
@@ -22,23 +70,31 @@ it('creates a case study from the admin form', function () {
         ->waitForText('From missed calls to booked jobs')
         ->assertPathIs('/core/case-studies');
 
-    $caseStudy = CaseStudy::where('slug', 'from-missed-calls-to-booked-jobs')->first();
+    $caseStudy = CaseStudy::where('slug', 'from-missed-calls-to-booked-jobs')
+                    ->first();
 
     expect($caseStudy)->not->toBeNull();
-    expect($caseStudy->services)->toHaveCount(1);
+
+    $servicesCount = $caseStudy->services->count();
+
+    expect($servicesCount)->toBe(1);
 });
 
 it('edits a case study from the admin form', function () {
-    $this->actingAs(User::factory()->create());
+    $user = User::factory()
+                ->create();
 
-    $caseStudy = CaseStudy::factory()->create([
-        'title' => 'Original case study',
-        'description' => 'Original description.',
-        'client' => 'Original client',
-        'industry' => 'Original industry',
-        'challenge' => 'Original challenge.',
-        'content' => '<p>Original content.</p>',
-    ]);
+    $this->actingAs($user);
+
+    $caseStudy = CaseStudy::factory()
+                    ->create([
+                        'title' => 'Original case study',
+                        'description' => 'Original description.',
+                        'client' => 'Original client',
+                        'industry' => 'Original industry',
+                        'challenge' => 'Original challenge.',
+                        'content' => '<p>Original content.</p>',
+                    ]);
 
     visit("/core/case-studies/{$caseStudy->id}/edit")
         ->waitForEvent('networkidle')
@@ -47,13 +103,22 @@ it('edits a case study from the admin form', function () {
         ->waitForText('Updated case study')
         ->assertPathIs('/core/case-studies');
 
-    expect($caseStudy->refresh()->slug)->toBe('updated-case-study');
+    $slug = $caseStudy->refresh()
+                ->slug;
+
+    expect($slug)->toBe('updated-case-study');
 });
 
 it('deletes a case study from the admin index', function () {
-    $this->actingAs(User::factory()->create());
+    $user = User::factory()
+                ->create();
 
-    $caseStudy = CaseStudy::factory()->create(['title' => 'Delete this case study']);
+    $this->actingAs($user);
+
+    $caseStudy = CaseStudy::factory()
+                    ->create([
+                        'title' => 'Delete this case study',
+                    ]);
 
     visit('/core/case-studies')
         ->waitForEvent('networkidle')
@@ -62,5 +127,7 @@ it('deletes a case study from the admin index', function () {
         ->waitForText('No case studies yet.')
         ->assertDontSee('Delete this case study');
 
-    expect(CaseStudy::find($caseStudy->id))->toBeNull();
+    $deleted = CaseStudy::find($caseStudy->id);
+
+    expect($deleted)->toBeNull();
 });

@@ -3,7 +3,10 @@
 use App\Models\CaseStudy;
 
 it('has no cover image without gallery images', function () {
-    $caseStudy = CaseStudy::factory()->create();
+    $caseStudy = CaseStudy::factory()
+                    ->create();
 
-    expect($caseStudy->coverImage())->toBeNull();
+    $cover = $caseStudy->coverImage();
+
+    expect($cover)->toBeNull();
 });

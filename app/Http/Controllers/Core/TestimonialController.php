@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Core\Concerns\ProvidesServiceOptions;
 use App\Http\Requests\Core\TestimonialRequest;
+use App\Models\Service;
 use App\Models\Testimonial;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -12,22 +12,16 @@ use Inertia\Response;
 
 class TestimonialController extends Controller
 {
-    use ProvidesServiceOptions;
-
     /**
      * List the testimonials sampled on the home page and service landings.
      */
     public function index(): Response
     {
-        $testimonials = [];
+        $testimonials = Testimonial::with('service')
+                        ->orderBy('person')
+                        ->get();
 
-        foreach (Testimonial::with('service')->orderBy('person')->get() as $testimonial) {
-            $testimonials[] = $this->props($testimonial);
-        }
-
-        return Inertia::render('core/testimonials/Index', [
-            'testimonials' => $testimonials,
-        ]);
+        return Inertia::render('core/testimonials/Index', compact('testimonials'));
     }
 
     /**
@@ -35,9 +29,12 @@ class TestimonialController extends Controller
      */
     public function create(): Response
     {
+        $services = Service::orderBy('sort_order')
+                        ->pluck('title', 'id');
+
         return Inertia::render('core/testimonials/Form', [
             'testimonial' => null,
-            'services' => $this->serviceOptions(),
+            'services' => $services,
         ]);
     }
 
@@ -46,9 +43,17 @@ class TestimonialController extends Controller
      */
     public function store(TestimonialRequest $request): RedirectResponse
     {
-        Testimonial::create($request->validated());
+        $data = $request->validated();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Testimonial created.')]);
+        Testimonial::create($data);
+
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Testimonial created.'),
+            ]
+        );
 
         return to_route('core.testimonials.index');
     }
@@ -66,9 +71,12 @@ class TestimonialController extends Controller
      */
     public function edit(Testimonial $testimonial): Response
     {
+        $services = Service::orderBy('sort_order')
+                        ->pluck('title', 'id');
+
         return Inertia::render('core/testimonials/Form', [
-            'testimonial' => $this->props($testimonial),
-            'services' => $this->serviceOptions(),
+            'testimonial' => $testimonial,
+            'services' => $services,
         ]);
     }
 
@@ -77,9 +85,17 @@ class TestimonialController extends Controller
      */
     public function update(TestimonialRequest $request, Testimonial $testimonial): RedirectResponse
     {
-        $testimonial->update($request->validated());
+        $data = $request->validated();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Testimonial updated.')]);
+        $testimonial->update($data);
+
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Testimonial updated.'),
+            ]
+        );
 
         return to_route('core.testimonials.index');
     }
@@ -91,30 +107,14 @@ class TestimonialController extends Controller
     {
         $testimonial->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Testimonial deleted.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('Testimonial deleted.'),
+            ]
+        );
 
         return to_route('core.testimonials.index');
-    }
-
-    /**
-     * Shape a testimonial for the admin pages.
-     *
-     * @return array{id: string, person: string, testimonial: string, service_id: string, service: string|null}
-     */
-    protected function props(Testimonial $testimonial): array
-    {
-        $service = null;
-
-        if ($testimonial->service !== null) {
-            $service = $testimonial->service->title;
-        }
-
-        return [
-            'id' => $testimonial->id,
-            'person' => $testimonial->person,
-            'testimonial' => $testimonial->testimonial,
-            'service_id' => $testimonial->service_id,
-            'service' => $service,
-        ];
     }
 }

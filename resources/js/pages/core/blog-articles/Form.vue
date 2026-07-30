@@ -114,7 +114,7 @@ const title = computed(() => {
                     required
                 >{{ article?.content }}</textarea>
                 <p class="text-sm text-muted-foreground">
-                    HTML is allowed; pasted inline images are uploaded on save.
+                    HTML is allowed.
                 </p>
                 <InputError :message="errors.content" />
             </div>
