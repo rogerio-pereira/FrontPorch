@@ -18,9 +18,13 @@ class FaqFactory extends Factory
      */
     public function definition(): array
     {
+        $sentence = fake()->sentence(8);
+        $question = rtrim($sentence, '.');
+        $question = $question.'?';
+
         return [
             'service_id' => Service::factory(),
-            'question' => rtrim(fake()->sentence(8), '.').'?',
+            'question' => $question,
             'answer' => fake()->paragraph(3),
             'sort_order' => fake()->numberBetween(0, 20),
         ];
@@ -31,7 +35,7 @@ class FaqFactory extends Factory
      */
     public function forHome(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state([
             'service_id' => null,
         ]);
     }
@@ -41,7 +45,7 @@ class FaqFactory extends Factory
      */
     public function forService(Service $service): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state([
             'service_id' => $service->id,
         ]);
     }
