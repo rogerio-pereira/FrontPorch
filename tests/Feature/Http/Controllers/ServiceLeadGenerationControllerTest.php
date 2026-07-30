@@ -50,11 +50,13 @@ it('renders the faqs and testimonials of the lead generation service', function 
         ->has('faqs.0', fn (Assert $faq) => $faq
             ->where('question', 'How many leads should I expect?')
             ->has('answer')
+            ->etc()
         )
         ->has('testimonials', 1)
         ->has('testimonials.0', fn (Assert $testimonial) => $testimonial
-            ->where('attribution', 'Owner, Plant City lawn care')
-            ->has('quote')
+            ->where('person', 'Owner, Plant City lawn care')
+            ->has('testimonial')
+            ->etc()
         )
     );
 });

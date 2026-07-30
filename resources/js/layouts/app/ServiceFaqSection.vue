@@ -8,13 +8,13 @@ import {
 } from '@/components/ui/accordion';
 
 defineProps<{
-    items: Array<{ question: string; answer: string }>;
+    faqs: Array<{ question: string; answer: string }>;
 }>();
 </script>
 
 <template>
     <SectionShell
-        v-if="items.length > 0"
+        v-if="faqs.length > 0"
         overline="Questions"
         heading="Questions we hear about this service"
         light
@@ -28,8 +28,8 @@ defineProps<{
             data-test="service-faq"
         >
             <AccordionItem
-                v-for="(item, index) in items"
-                :key="item.question"
+                v-for="(faq, index) in faqs"
+                :key="faq.question"
                 :value="`service-faq-${index}`"
                 class="border-border-default px-4"
             >
@@ -37,13 +37,13 @@ defineProps<{
                     class="text-left text-base font-semibold text-[var(--text-primary-on-light)]"
                     :data-test="`service-faq-trigger-${index}`"
                 >
-                    {{ item.question }}
+                    {{ faq.question }}
                 </AccordionTrigger>
                 <AccordionContent
                     class="text-[var(--text-muted-on-light)]"
                     :data-test="`service-faq-content-${index}`"
                 >
-                    {{ item.answer }}
+                    {{ faq.answer }}
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

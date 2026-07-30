@@ -10,7 +10,7 @@ import VisualFrame from '@/layouts/app/VisualFrame.vue';
 
 defineProps<{
     faqs: Array<{ question: string; answer: string }>;
-    testimonials: Array<{ quote: string; attribution: string }>;
+    testimonials: Array<{ testimonial: string; person: string }>;
 }>();
 </script>
 
@@ -339,8 +339,8 @@ defineProps<{
         </div>
     </SectionShell>
 
-    <ServiceTestimonialsSection :quotes="testimonials" />
-    <ServiceFaqSection :items="faqs" />
+    <ServiceTestimonialsSection :testimonials="testimonials" />
+    <ServiceFaqSection :faqs="faqs" />
 
     <CtaBand
         heading="Ready for a site that works while you are working?"

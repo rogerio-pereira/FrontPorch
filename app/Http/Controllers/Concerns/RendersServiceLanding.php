@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Concerns;
 
-use App\Models\Faq;
 use App\Models\Service;
-use App\Models\Testimonial;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,59 +28,13 @@ trait RendersServiceLanding
             ]);
         }
 
-        $faqs = $this->serviceFaqs($service);
-        $testimonials = $this->serviceTestimonials($service);
+        $faqs = $service->faqs;
 
-        return Inertia::render($component, [
-            'faqs' => $faqs,
-            'testimonials' => $testimonials,
-        ]);
-    }
+        $testimonials = $service->testimonials()
+                            ->inRandomOrder()
+                            ->limit(self::TESTIMONIAL_SAMPLE)
+                            ->get();
 
-    /**
-     * The FAQs attached to the service.
-     *
-     * @return list<array{question: string, answer: string}>
-     */
-    protected function serviceFaqs(Service $service): array
-    {
-        $faqs = [];
-
-        $items = Faq::where('service_id', $service->id)
-                    ->orderBy('sort_order')
-                    ->get();
-
-        foreach ($items as $faq) {
-            $faqs[] = [
-                'question' => $faq->question,
-                'answer' => $faq->answer,
-            ];
-        }
-
-        return $faqs;
-    }
-
-    /**
-     * Five random testimonials for the service.
-     *
-     * @return list<array{quote: string, attribution: string}>
-     */
-    protected function serviceTestimonials(Service $service): array
-    {
-        $testimonials = [];
-
-        $sample = Testimonial::where('service_id', $service->id)
-                    ->inRandomOrder()
-                    ->limit(self::TESTIMONIAL_SAMPLE)
-                    ->get();
-
-        foreach ($sample as $testimonial) {
-            $testimonials[] = [
-                'quote' => $testimonial->testimonial,
-                'attribution' => $testimonial->person,
-            ];
-        }
-
-        return $testimonials;
+        return Inertia::render($component, compact('faqs', 'testimonials'));
     }
 }
