@@ -5,17 +5,24 @@ use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    $this->actingAs(User::factory()->create());
+    $user = User::factory()
+                ->create();
+
+    $this->actingAs($user);
 });
 
 it('lists the services in display order', function () {
     Service::factory()
-        ->ordered(2)
-        ->create(['title' => 'Email marketing']);
+        ->create([
+            'title' => 'Email marketing',
+            'sort_order' => 2,
+        ]);
 
     Service::factory()
-        ->ordered(1)
-        ->create(['title' => 'Lead generation']);
+        ->create([
+            'title' => 'Lead generation',
+            'sort_order' => 1,
+        ]);
 
     $response = $this->get('/core/services');
 
@@ -44,65 +51,93 @@ it('shows the form to create a service', function () {
 });
 
 it('creates a service and derives its slug', function () {
-    $response = $this->post('/core/services', [
-        'title' => 'Business automations',
-        'description' => 'Let the repetitive stuff run itself.',
-        'sort_order' => 4,
-    ]);
+    $response = $this->post(
+        '/core/services',
+        [
+            'title' => 'Business automations',
+            'description' => 'Let the repetitive stuff run itself.',
+            'sort_order' => 4,
+        ]
+    );
 
     $response->assertRedirect('/core/services');
 
     $service = Service::where('title', 'Business automations')
-        ->firstOrFail();
+                    ->firstOrFail();
 
-    expect($service->slug)->toBe('business-automations');
-    expect($service->sort_order)->toBe(4);
+    $slug = $service->slug;
+    expect($slug)->toBe('business-automations');
+
+    $sortOrder = $service->sort_order;
+    expect($sortOrder)->toBe(4);
 });
 
 it('validates the service payload', function () {
-    $response = $this->post('/core/services', [
-        'title' => '',
-        'description' => '',
-        'sort_order' => 'first',
-    ]);
+    $response = $this->post(
+        '/core/services',
+        [
+            'title' => '',
+            'description' => '',
+            'sort_order' => 'first',
+        ]
+    );
 
-    $response->assertSessionHasErrors(['title', 'description', 'sort_order']);
+    $response->assertSessionHasErrors([
+        'title',
+        'description',
+        'sort_order',
+    ]);
 });
 
-it('rejects a title that collides with an existing slug', function () {
-    Service::factory()->create(['title' => 'Lead generation']);
+it('rejects a duplicate title', function () {
+    Service::factory()
+        ->create(['title' => 'Lead generation']);
 
-    $response = $this->post('/core/services', [
-        'title' => 'Lead generation',
-        'description' => 'Duplicate slug should fail.',
-        'sort_order' => 2,
-    ]);
+    $response = $this->post(
+        '/core/services',
+        [
+            'title' => 'Lead generation',
+            'description' => 'Duplicate title should fail.',
+            'sort_order' => 2,
+        ]
+    );
 
-    $response->assertSessionHasErrors(['slug']);
+    $response->assertSessionHasErrors(['title']);
 });
 
 it('allows updating a service without changing its title', function () {
-    $service = Service::factory()->create(['title' => 'Lead generation']);
+    $service = Service::factory()
+                    ->create(['title' => 'Lead generation']);
 
-    $response = $this->put("/core/services/{$service->id}", [
-        'title' => 'Lead generation',
-        'description' => 'Updated description only.',
-        'sort_order' => 3,
-    ]);
+    $response = $this->put(
+        "/core/services/{$service->id}",
+        [
+            'title' => 'Lead generation',
+            'description' => 'Updated description only.',
+            'sort_order' => 3,
+        ]
+    );
 
     $response->assertRedirect('/core/services');
 
     $service->refresh();
 
-    expect($service->slug)->toBe('lead-generation');
-    expect($service->description)->toBe('Updated description only.');
-    expect($service->sort_order)->toBe(3);
+    $slug = $service->slug;
+    expect($slug)->toBe('lead-generation');
+
+    $description = $service->description;
+    expect($description)->toBe('Updated description only.');
+
+    $sortOrder = $service->sort_order;
+    expect($sortOrder)->toBe(3);
 });
 
 it('shows the form to edit a service', function () {
-    $service = Service::factory()->create(['title' => 'Lead generation']);
+    $service = Service::factory()
+                    ->create(['title' => 'Lead generation']);
 
-    $response = $this->get("/core/services/{$service->id}/edit");
+    $url = "/core/services/{$service->id}/edit";
+    $response = $this->get($url);
 
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
@@ -118,41 +153,52 @@ it('shows the form to edit a service', function () {
 });
 
 it('updates a service and regenerates the slug', function () {
-    $service = Service::factory()->create(['title' => 'Lead generation']);
+    $service = Service::factory()
+                    ->create(['title' => 'Lead generation']);
 
-    $response = $this->put("/core/services/{$service->id}", [
-        'title' => 'Lead generation and follow-up',
-        'description' => 'Reach the right people and answer them quickly.',
-        'sort_order' => 2,
-    ]);
+    $response = $this->put(
+        "/core/services/{$service->id}",
+        [
+            'title' => 'Lead generation and follow-up',
+            'description' => 'Reach the right people and answer them quickly.',
+            'sort_order' => 2,
+        ]
+    );
 
     $response->assertRedirect('/core/services');
 
     $service->refresh();
 
-    expect($service->slug)->toBe('lead-generation-and-follow-up');
-    expect($service->sort_order)->toBe(2);
+    $slug = $service->slug;
+    expect($slug)->toBe('lead-generation-and-follow-up');
+
+    $sortOrder = $service->sort_order;
+    expect($sortOrder)->toBe(2);
 });
 
 it('soft deletes a service', function () {
-    $service = Service::factory()->create();
+    $service = Service::factory()
+                    ->create();
 
-    $response = $this->delete("/core/services/{$service->id}");
+    $url = "/core/services/{$service->id}";
+    $response = $this->delete($url);
 
     $response->assertRedirect('/core/services');
 
     $deleted = Service::find($service->id);
     $trashed = Service::withTrashed()
-        ->find($service->id);
+                    ->find($service->id);
 
     expect($deleted)->toBeNull();
     expect($trashed)->not->toBeNull();
 });
 
 it('has no detail page for services', function () {
-    $service = Service::factory()->create();
+    $service = Service::factory()
+                    ->create();
 
-    $response = $this->get("/core/services/{$service->id}");
+    $url = "/core/services/{$service->id}";
+    $response = $this->get($url);
 
     $response->assertNotFound();
 });
