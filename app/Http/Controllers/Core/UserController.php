@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Core\UserStoreRequest;
-use App\Http\Requests\Core\UserUpdateRequest;
+use App\Http\Requests\Core\UserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,15 +17,10 @@ class UserController extends Controller
      */
     public function index(): Response
     {
-        $users = [];
+        $users = User::orderBy('name')
+                    ->get();
 
-        foreach (User::orderBy('name')->get() as $user) {
-            $users[] = $this->props($user);
-        }
-
-        return Inertia::render('core/users/Index', [
-            'users' => $users,
-        ]);
+        return Inertia::render('core/users/Index', compact('users'));
     }
 
     /**
@@ -42,11 +36,19 @@ class UserController extends Controller
     /**
      * Store a new user; the model hashes the password on save.
      */
-    public function store(UserStoreRequest $request): RedirectResponse
+    public function store(UserRequest $request): RedirectResponse
     {
-        User::create($request->validated());
+        $data = $request->validated();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('User created.')]);
+        User::create($data);
+
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('User created.'),
+            ]
+        );
 
         return to_route('core.users.index');
     }
@@ -65,24 +67,32 @@ class UserController extends Controller
     public function edit(User $user): Response
     {
         return Inertia::render('core/users/Form', [
-            'user' => $this->props($user),
+            'user' => $user,
         ]);
     }
 
     /**
      * Update a user, keeping the current password when none is provided.
      */
-    public function update(UserUpdateRequest $request, User $user): RedirectResponse
+    public function update(UserRequest $request, User $user): RedirectResponse
     {
-        $attributes = $request->validated();
+        $data = $request->validated();
 
-        if (blank($request->validated('password'))) {
-            unset($attributes['password']);
+        $password = $data['password'] ?? null;
+
+        if (blank($password)) {
+            unset($data['password']);
         }
 
-        $user->update($attributes);
+        $user->update($data);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('User updated.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('User updated.'),
+            ]
+        );
 
         return to_route('core.users.index');
     }
@@ -95,29 +105,27 @@ class UserController extends Controller
         $current = $request->user();
 
         if ($current !== null && $current->is($user)) {
-            Inertia::flash('toast', ['type' => 'error', 'message' => __('You cannot delete the account you are signed in with.')]);
+            Inertia::flash(
+                'toast',
+                [
+                    'type' => 'error',
+                    'message' => __('You cannot delete the account you are signed in with.'),
+                ]
+            );
 
             return to_route('core.users.index');
         }
 
         $user->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('User deleted.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('User deleted.'),
+            ]
+        );
 
         return to_route('core.users.index');
-    }
-
-    /**
-     * Shape a user for the admin pages.
-     *
-     * @return array{id: string, name: string, email: string}
-     */
-    protected function props(User $user): array
-    {
-        return [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-        ];
     }
 }
