@@ -3,21 +3,20 @@ import { Head, Link } from '@inertiajs/vue3';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
-import SitePagination, { type SitePaginationState } from '@/layouts/app/SitePagination.vue';
+import SitePagination, { type LaravelPaginator } from '@/layouts/app/SitePagination.vue';
 
 export type BlogArticleListItem = {
     id: string;
     title: string;
-    excerpt: string;
+    description: string;
     category: string;
-    publishedAt: string;
-    coverImage: string;
-    href: string;
+    created_at: string;
+    image: string;
+    slug: string;
 };
 
 defineProps<{
-    articles: BlogArticleListItem[];
-    pagination: SitePaginationState;
+    articles: LaravelPaginator<BlogArticleListItem>;
 }>();
 </script>
 
@@ -47,18 +46,18 @@ defineProps<{
             </div>
 
             <div
-                v-if="articles.length > 0"
+                v-if="articles.data.length > 0"
                 class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
                 <Link
-                    v-for="(article, index) in articles"
+                    v-for="(article, index) in articles.data"
                     :key="article.id"
-                    :href="article.href"
+                    :href="`/blog/article/${article.slug}`"
                     class="marketing-card-hover group overflow-hidden rounded-xl border border-border-default bg-surface-raised text-left"
                     :data-test="`blog-article-${index}`"
                 >
                     <VisualFrame
-                        :src="article.coverImage"
+                        :src="article.image"
                         :alt="article.title"
                         aspect="video"
                         class="rounded-none border-0 shadow-none"
@@ -68,13 +67,13 @@ defineProps<{
                             <span class="rounded-sm border border-brand-accent/40 px-2 py-0.5 text-brand-accent">
                                 {{ article.category }}
                             </span>
-                            <span>{{ article.publishedAt }}</span>
+                            <span>{{ article.created_at }}</span>
                         </div>
                         <h2 class="mt-3 text-h4 font-semibold leading-snug group-hover:text-brand-accent">
                             {{ article.title }}
                         </h2>
                         <p class="mt-2 line-clamp-3 text-sm text-[var(--text-muted-on-dark)]">
-                            {{ article.excerpt }}
+                            {{ article.description }}
                         </p>
                     </div>
                 </Link>
@@ -94,7 +93,7 @@ defineProps<{
             </div>
 
             <SitePagination
-                :pagination="pagination"
+                :paginator="articles"
                 test-id="blog-pagination"
             />
 

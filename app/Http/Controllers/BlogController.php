@@ -15,42 +15,9 @@ class BlogController extends Controller
 
     public function __invoke(): Response
     {
-        $paginator = BlogArticle::orderByDesc('created_at')
+        $articles = BlogArticle::orderByDesc('created_at')
                         ->paginate(self::PER_PAGE);
 
-        $articles = [];
-
-        foreach ($paginator as $article) {
-            $publishedAt = '';
-            $createdAt = $article->created_at;
-
-            if ($createdAt !== null) {
-                $publishedAt = $createdAt->format('F j, Y');
-            }
-
-            $href = route('blog.article', $article->slug, false);
-
-            $articles[] = [
-                'id' => $article->id,
-                'title' => $article->title,
-                'excerpt' => $article->description,
-                'category' => $article->category,
-                'publishedAt' => $publishedAt,
-                'coverImage' => $article->image,
-                'href' => $href,
-            ];
-        }
-
-        $pagination = [
-            'currentPage' => $paginator->currentPage(),
-            'lastPage' => $paginator->lastPage(),
-            'previousPageUrl' => $paginator->previousPageUrl(),
-            'nextPageUrl' => $paginator->nextPageUrl(),
-        ];
-
-        return Inertia::render('blog/Blog', [
-            'articles' => $articles,
-            'pagination' => $pagination,
-        ]);
+        return Inertia::render('blog/Blog', compact('articles'));
     }
 }
