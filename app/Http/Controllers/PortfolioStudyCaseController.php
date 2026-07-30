@@ -18,26 +18,19 @@ class PortfolioStudyCaseController extends Controller
     {
         $caseStudy->load(['images', 'services']);
 
-        $serviceLine = $this->serviceLine($caseStudy);
-        $coverImage = $this->coverImage($caseStudy);
-        $coverAlt = $this->coverAlt($caseStudy);
-        $galleryImages = $this->galleryImages($caseStudy);
-
-        $payload = [
-            'title' => $caseStudy->title,
-            'description' => $caseStudy->description,
-            'client' => $caseStudy->client,
-            'industry' => $caseStudy->industry,
-            'service' => $serviceLine,
-            'coverImage' => $coverImage,
-            'coverAlt' => $coverAlt,
-            'challenge' => $caseStudy->challenge,
-            'content' => $caseStudy->content,
-            'galleryImages' => $galleryImages,
-        ];
-
         return Inertia::render('portfolio-study-case/PortfolioStudyCase', [
-            'caseStudy' => $payload,
+            'caseStudy' => [
+                'title' => $caseStudy->title,
+                'description' => $caseStudy->description,
+                'client' => $caseStudy->client,
+                'industry' => $caseStudy->industry,
+                'service' => $this->serviceLine($caseStudy),
+                'coverImage' => $this->coverImage($caseStudy),
+                'coverAlt' => $this->coverAlt($caseStudy),
+                'challenge' => $caseStudy->challenge,
+                'content' => $caseStudy->content,
+                'galleryImages' => $this->galleryImages($caseStudy),
+            ],
         ]);
     }
 

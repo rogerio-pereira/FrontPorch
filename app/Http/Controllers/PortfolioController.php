@@ -25,8 +25,6 @@ class PortfolioController extends Controller
         $items = [];
 
         foreach ($caseStudies as $caseStudy) {
-            $serviceLine = $this->serviceLine($caseStudy);
-            $coverImage = $this->coverImage($caseStudy);
             $href = route('portfolio.study-case', $caseStudy->slug, false);
 
             $items[] = [
@@ -34,8 +32,8 @@ class PortfolioController extends Controller
                 'title' => $caseStudy->title,
                 'excerpt' => $caseStudy->description,
                 'client' => $caseStudy->client,
-                'service' => $serviceLine,
-                'coverImage' => $coverImage,
+                'service' => $this->serviceLine($caseStudy),
+                'coverImage' => $this->coverImage($caseStudy),
                 'href' => $href,
             ];
         }
