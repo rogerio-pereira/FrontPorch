@@ -2,6 +2,7 @@
 import { Form, Head } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import InputError from '@/components/InputError.vue';
+import RichTextEditor from '@/components/RichTextEditor.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -81,30 +82,17 @@ function isSelected(serviceId: string): boolean {
             class="space-y-6"
             v-slot="{ errors, processing }"
         >
-            <div class="grid gap-2">
-                <Label for="title">Title</Label>
-                <Input
-                    id="title"
-                    name="title"
-                    :default-value="caseStudy?.title"
-                    required
-                />
-                <InputError :message="errors.title" />
-            </div>
-
-            <div class="grid gap-2">
-                <Label for="description">Description</Label>
-                <textarea
-                    id="description"
-                    name="description"
-                    rows="3"
-                    class="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring"
-                    required
-                >{{ caseStudy?.description }}</textarea>
-                <InputError :message="errors.description" />
-            </div>
-
-            <div class="grid gap-4 sm:grid-cols-2">
+            <div class="grid gap-4 sm:grid-cols-3">
+                <div class="grid gap-2">
+                    <Label for="title">Title</Label>
+                    <Input
+                        id="title"
+                        name="title"
+                        :default-value="caseStudy?.title"
+                        required
+                    />
+                    <InputError :message="errors.title" />
+                </div>
                 <div class="grid gap-2">
                     <Label for="client">Client</Label>
                     <Input
@@ -128,6 +116,18 @@ function isSelected(serviceId: string): boolean {
             </div>
 
             <div class="grid gap-2">
+                <Label for="description">Description</Label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="3"
+                    class="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring"
+                    required
+                >{{ caseStudy?.description }}</textarea>
+                <InputError :message="errors.description" />
+            </div>
+
+            <div class="grid gap-2">
                 <Label for="challenge">Challenge</Label>
                 <textarea
                     id="challenge"
@@ -141,16 +141,14 @@ function isSelected(serviceId: string): boolean {
 
             <div class="grid gap-2">
                 <Label for="content">Content</Label>
-                <textarea
+                <RichTextEditor
                     id="content"
                     name="content"
-                    rows="10"
-                    class="w-full rounded-md border border-input bg-transparent px-3 py-2 font-mono text-sm shadow-xs outline-none focus-visible:border-ring"
+                    directory="case-studies"
+                    :default-value="caseStudy?.content ?? ''"
                     required
-                >{{ caseStudy?.content }}</textarea>
-                <p class="text-sm text-muted-foreground">
-                    HTML is allowed; paragraphs and blockquotes render on the public page.
-                </p>
+                    placeholder="Write the case study body…"
+                />
                 <InputError :message="errors.content" />
             </div>
 

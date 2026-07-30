@@ -22,7 +22,7 @@ defineProps<{
             </Link>
         </div>
 
-        <div class="max-w-3xl rounded-xl border border-sidebar-border/70 p-6 dark:border-sidebar-border">
+        <div class="w-full rounded-xl border border-sidebar-border/70 p-6 dark:border-sidebar-border">
             <slot />
         </div>
     </div>
