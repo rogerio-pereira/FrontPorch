@@ -204,9 +204,38 @@ This convention applies to PHP and JavaScript.
 
 The purpose is to make the chain easy to scan vertically and to avoid compressing several operations into one dense line.
 
-### PHP
+### Alignment (primary structure + one indent)
+
+Continued `->` / `.` lines are indented **one indentation level (4 spaces) ahead of the primary structure of the chain**.
+
+The **primary structure** is where the chain starts on the first line:
+
+- the class or facade name after `=` (`Testimonial`, `CaseStudy`, `Route`, …)
+- the receiver expression for an instance/relation chain (`$service`, `users`, …)
+
+```text
+$testimonials = Testimonial::inRandomOrder()
+|<-- primary -->|
+                    ->limit(10)
+|<-- primary + 4 -->|
+```
+
+The same anchor applies everywhere: Eloquent, relations, Pest `->with()`, `Route::…`, array, multiline parameters, and JavaScript chains.
 
 #### Good
+
+```php
+$testimonials = Testimonial::inRandomOrder()
+                    ->limit(10)
+                    ->get();
+```
+
+```php
+$testimonials = $service->testimonials()
+                    ->inRandomOrder()
+                    ->limit(5)
+                    ->get();
+```
 
 ```php
 Route::middleware(['auth'])
@@ -217,30 +246,92 @@ Route::middleware(['auth'])
     });
 ```
 
-#### Good
-
-```php
-// This one adds spaces to align chained methods to main caller
-$users = User::where('active', true)
-            ->orderBy('name')
-            ->get();
+```
+$foo =  bar(
+            $a,
+            $b,
+            $c
+        )
 ```
 
-#### Avoid
-
 ```php
-Route::middleware(['auth'])->prefix('core')->name('core.')->group(function () {
-    // Domain resource routes are registered in subsequent CMS PRs.
-});
+public function $sendEmail (
+    User $user,
+    array $products,
+    Address $address
+) {
+    // ...
+}
 ```
 
-#### Avoid
+```php
+$cars = [
+            'Audi',
+            'Hyundai',
+            'Kia',
+            'Ford',
+        ];
+```
+
+```php
+it('smoke tests public web routes', function (string $url, string $text) {
+    visit($url)
+        ->assertSee($text);
+})
+->with([
+    ['/', 'You do great work'],
+]);
+```
+
+#### Avoid — same column as the primary structure
+
+```php
+$testimonials = Testimonial::inRandomOrder()
+                ->limit(10)
+                ->get();
+```
+
+#### Avoid — more than one indent ahead of the primary structure
+
+```php
+$testimonials = Testimonial::inRandomOrder()
+                            ->limit(10)
+                            ->get();
+```
+
+#### Avoid — compressed on one line
 
 ```php
 $users = User::where('active', true)->orderBy('name')->get();
 ```
 
+```php
+Route::middleware(['auth'])->prefix('core')->name('core.')->group(function () {
+    // ...
+});
+```
+
+### Edge case — short receivers
+
+If placing the continuation only one indent ahead of the primary structure does **not** create at least one full standard indentation (4 spaces) of visual hierarchy past a weak/same-level alignment, add **one extra tab** so the hierarchy stays obvious.
+
+#### Avoid — aligned indent is weaker than one standard tab
+
+```php
+$faq = Faq::where('id', 1)
+        ->first();
+```
+
+#### Good — one extra tab restores a clear hierarchy
+
+```php
+$faq = Faq::where('id', 1)
+            ->first();
+```
+
 ### JavaScript
+
+Same rule: one indent ahead of the primary structure of the chain.
 
 #### Good
 
@@ -254,14 +345,11 @@ axios.post(url, payload)
     });
 ```
 
-#### Good
-
 ```js
-// This one adds spaces to align chained methods to main caller
 const names = users
-                .filter(activeUsers)
-                .sort(byName)
-                .map(getName);
+                  .filter(activeUsers)
+                  .sort(byName)
+                  .map(getName);
 ```
 
 #### Avoid
@@ -273,8 +361,6 @@ axios.post(url, payload).then(response => {
     console.error('Submission failed:', error);
 });
 ```
-
-#### Avoid
 
 ```js
 const names = users.filter(activeUsers).sort(byName).map(getName);

@@ -1,29 +1,33 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import StudyCaseImageCarousel from '@/pages/portfolio-study-case/component/StudyCaseImageCarousel.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
 
-defineProps<{
-    // TODO: remove demo case study in PortfolioStudyCaseController once CaseStudy model exists
+const props = defineProps<{
     caseStudy: {
         title: string;
+        description: string;
         client: string;
-        location: string;
-        service: string;
         industry: string;
-        coverImage: string;
-        coverAlt: string;
-        intro: string;
         challenge: string;
-        solution: string;
-        quote: string;
-        quoteAttribution: string;
-        closing: string;
-        solutionImages: Array<{ src: string; alt: string }>;
+        content: string;
+        images: Array<{ url: string; alt: string }>;
+        services: Array<{ title: string }>;
     };
 }>();
+
+const cover = computed(() => props.caseStudy.images[0]);
+
+const galleryImages = computed(() => props.caseStudy.images.slice(1));
+
+const serviceTitles = computed(() =>
+    props.caseStudy.services
+        .map((service) => service.title)
+        .join(', '),
+);
 </script>
 
 <template>
@@ -49,7 +53,7 @@ defineProps<{
                         {{ caseStudy.title }}
                     </h1>
                     <p class="text-body-lg text-[var(--text-muted-on-dark)]">
-                        {{ caseStudy.intro }}
+                        {{ caseStudy.description }}
                     </p>
                     <dl class="grid gap-4 sm:grid-cols-2">
                         <div>
@@ -62,33 +66,28 @@ defineProps<{
                         </div>
                         <div>
                             <dt class="text-xs uppercase tracking-wide text-[var(--text-subtle-on-dark)]">
-                                Location
-                            </dt>
-                            <dd class="mt-1 font-semibold">
-                                {{ caseStudy.location }}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt class="text-xs uppercase tracking-wide text-[var(--text-subtle-on-dark)]">
-                                Services
-                            </dt>
-                            <dd class="mt-1 font-semibold">
-                                {{ caseStudy.service }}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt class="text-xs uppercase tracking-wide text-[var(--text-subtle-on-dark)]">
                                 Industry
                             </dt>
                             <dd class="mt-1 font-semibold">
                                 {{ caseStudy.industry }}
                             </dd>
                         </div>
+                        <div
+                            class="sm:col-span-2"
+                            data-test="study-case-services"
+                        >
+                            <dt class="text-xs uppercase tracking-wide text-[var(--text-subtle-on-dark)]">
+                                Services
+                            </dt>
+                            <dd class="mt-1 font-semibold">
+                                {{ serviceTitles }}
+                            </dd>
+                        </div>
                     </dl>
                 </div>
                 <VisualFrame
-                    :src="caseStudy.coverImage"
-                    :alt="caseStudy.coverAlt"
+                    :src="cover.url"
+                    :alt="cover.alt"
                     aspect="video"
                 />
             </div>
@@ -118,42 +117,33 @@ defineProps<{
                 What we built together
             </h2>
 
-            <div class="mt-8">
-                <StudyCaseImageCarousel :images="caseStudy.solutionImages" />
+            <div
+                v-if="galleryImages.length > 0"
+                class="mt-8"
+            >
+                <StudyCaseImageCarousel :images="galleryImages" />
             </div>
 
-            <p class="mx-auto mt-8 max-w-3xl text-center text-body-lg text-[var(--text-muted-on-dark)] whitespace-pre-line">
-                {{ caseStudy.solution }}
-            </p>
+            <div
+                class="prose prose-lg mx-auto mt-8 max-w-3xl text-[var(--text-muted-on-dark)] prose-headings:text-[var(--text-on-dark)] prose-a:text-brand-accent"
+                data-test="study-case-content"
+                v-html="caseStudy.content"
+            />
         </div>
     </section>
 
     <section
         class="bg-[var(--section-light-bg)] text-[var(--text-primary-on-light)]"
-        data-test="study-case-quote"
-    >
-        <div class="section-y mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-            <blockquote class="text-h3 font-semibold leading-snug">
-                “{{ caseStudy.quote }}”
-            </blockquote>
-            <p class="mt-6 text-sm text-[var(--text-muted-on-light)]">
-                - {{ caseStudy.quoteAttribution }}
-            </p>
-        </div>
-    </section>
-
-    <section
-        class="bg-brand-bg text-[var(--text-on-dark)]"
         data-test="study-case-closing"
     >
         <div class="section-y mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-h2 font-semibold">
                 A calmer way to grow
             </h2>
-            <p class="mt-4 text-body-lg text-[var(--text-muted-on-dark)] whitespace-pre-line">
-                {{ caseStudy.closing }}
-            </p>
-            <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div
+                class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
+                data-test="study-case-cta"
+            >
                 <CtaButton
                     label="Book a discovery call"
                     test-id="study-case-schedule"

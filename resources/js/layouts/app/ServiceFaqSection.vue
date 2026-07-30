@@ -14,8 +14,9 @@ defineProps<{
 
 <template>
     <SectionShell
+        v-if="faqs.length > 0"
         overline="Questions"
-        heading="Good questions, happy to answer"
+        heading="Questions we hear about this service"
         light
         wide
         centered
@@ -24,23 +25,23 @@ defineProps<{
             type="single"
             collapsible
             class="mx-auto w-full max-w-3xl rounded-xl border border-border-default bg-white px-2"
-            data-test="home-faq"
+            data-test="service-faq"
         >
             <AccordionItem
                 v-for="(faq, index) in faqs"
                 :key="faq.question"
-                :value="`faq-${index}`"
+                :value="`service-faq-${index}`"
                 class="border-border-default px-4"
             >
                 <AccordionTrigger
                     class="text-left text-base font-semibold text-[var(--text-primary-on-light)]"
-                    :data-test="`home-faq-trigger-${index}`"
+                    :data-test="`service-faq-trigger-${index}`"
                 >
                     {{ faq.question }}
                 </AccordionTrigger>
                 <AccordionContent
                     class="text-[var(--text-muted-on-light)]"
-                    :data-test="`home-faq-content-${index}`"
+                    :data-test="`service-faq-content-${index}`"
                 >
                     {{ faq.answer }}
                 </AccordionContent>

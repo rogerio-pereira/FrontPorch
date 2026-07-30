@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
+use App\Http\Controllers\Concerns\RendersServiceLanding;
 use Inertia\Response;
 
 class ServiceLeadGenerationController extends Controller
 {
+    use RendersServiceLanding;
+
     public function __invoke(): Response
     {
-        return Inertia::render('service-lead-generation/ServiceLeadGeneration');
+        return $this->renderServiceLanding(
+            'lead-generation',                               // slug
+            'service-lead-generation/ServiceLeadGeneration', // view
+        );
     }
 }

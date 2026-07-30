@@ -19,6 +19,11 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             sidebarOpen: boolean;
+            site: {
+                footerContactEmail: string | null;
+                calendarUrl: string | null;
+            };
+            servicesNav: Array<{ slug: string; title: string }>;
             [key: string]: unknown;
         };
     }

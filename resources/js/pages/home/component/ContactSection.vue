@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { usePage } from '@inertiajs/vue3';
 import { Mail } from '@lucide/vue';
+import { computed } from 'vue';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
+
+const page = usePage();
+
+const contactEmail = computed(() => page.props.site.footerContactEmail ?? 'contact@example.com');
 </script>
 
 <template>
@@ -27,11 +33,11 @@ import SectionShell from '@/layouts/app/SectionShell.vue';
             <div class="flex items-center justify-center gap-3 text-sm text-[var(--text-primary-on-light)]">
                 <Mail class="size-5 text-brand-accent" />
                 <a
-                    href="mailto:contact@example.com"
+                    :href="`mailto:${contactEmail}`"
                     class="font-semibold text-brand-accent hover:underline"
                     data-test="home-contact-email"
                 >
-                    contact@example.com
+                    {{ contactEmail }}
                 </a>
             </div>
             <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -40,7 +46,7 @@ import SectionShell from '@/layouts/app/SectionShell.vue';
                     test-id="home-contact-schedule"
                 />
                 <a
-                    href="mailto:contact@example.com"
+                    :href="`mailto:${contactEmail}`"
                     class="text-sm font-semibold text-brand-accent hover:underline"
                     data-test="home-contact-email-cta"
                 >

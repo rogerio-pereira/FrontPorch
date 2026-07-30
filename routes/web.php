@@ -12,29 +12,40 @@ use App\Http\Controllers\ServiceLeadGenerationController;
 use App\Http\Controllers\ServiceWebsiteDesignAndDevelopmentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', HomeController::class)->name('home');
+Route::get('/', HomeController::class)
+    ->name('home');
 
-Route::get('/portfolio', PortfolioController::class)->name('portfolio');
+Route::get('/portfolio', PortfolioController::class)
+    ->name('portfolio');
 
-Route::get('/portfolio/study-case/{id}', PortfolioStudyCaseController::class)
-    ->whereNumber('id')
+Route::get('/portfolio/study-case/{caseStudy:slug}', PortfolioStudyCaseController::class)
     ->name('portfolio.study-case');
 
-Route::get('/blog', BlogController::class)->name('blog');
-Route::get('/blog/article/{id}', [BlogArticleController::class, 'show'])
-    ->whereNumber('id')
-    ->name('blog.article');
-Route::get('/blog/{slug}', [BlogArticleController::class, 'showBySlug'])->name('blog.show');
+Route::get('/blog', BlogController::class)
+    ->name('blog');
 
-Route::get('/services/lead-generation', ServiceLeadGenerationController::class)->name('services.lead-generation');
-Route::get('/services/email-marketing', ServiceEmailMarketingController::class)->name('services.email-marketing');
-Route::get('/services/website-design-and-development', ServiceWebsiteDesignAndDevelopmentController::class)->name('services.website-design-and-development');
-Route::get('/services/business-automations', ServiceBusinessAutomationsController::class)->name('services.business-automations');
-Route::get('/services/custom-software-development', ServiceCustomSoftwareDevelopmentController::class)->name('services.custom-software-development');
+Route::get('/blog/article/{article:slug}', [BlogArticleController::class, 'show'])
+    ->name('blog.article');
+
+Route::get('/services/lead-generation', ServiceLeadGenerationController::class)
+    ->name('services.lead-generation');
+
+Route::get('/services/email-marketing', ServiceEmailMarketingController::class)
+    ->name('services.email-marketing');
+
+Route::get('/services/website-design-and-development', ServiceWebsiteDesignAndDevelopmentController::class)
+    ->name('services.website-design-and-development');
+
+Route::get('/services/business-automations', ServiceBusinessAutomationsController::class)
+    ->name('services.business-automations');
+
+Route::get('/services/custom-software-development', ServiceCustomSoftwareDevelopmentController::class)
+    ->name('services.custom-software-development');
 
 Route::middleware(['auth', 'verified'])
     ->group(function (): void {
-        Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+        Route::inertia('dashboard', 'Dashboard')
+            ->name('dashboard');
     });
 
 require __DIR__.'/settings.php';

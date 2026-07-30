@@ -34,4 +34,15 @@ class BlogArticle extends Model
 {
     /** @use HasFactory<BlogArticleFactory> */
     use HasFactory, HasUuids, SoftDeletes;
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:Y-m-d H:i:s',
+            'updated_at' => 'datetime:Y-m-d H:i:s',
+        ];
+    }
 }

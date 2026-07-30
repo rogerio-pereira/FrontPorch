@@ -48,6 +48,8 @@ class Faq extends Model
     {
         return [
             'sort_order' => 'integer',
+            'created_at' => 'datetime:Y-m-d H:i:s',
+            'updated_at' => 'datetime:Y-m-d H:i:s',
         ];
     }
 }
