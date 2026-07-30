@@ -19,14 +19,18 @@ class FaqController extends Controller
      */
     public function index(): Response
     {
-        $faqs = [];
+        $faqs = Faq::with('service')
+                    ->orderBy('sort_order')
+                    ->get();
 
-        foreach (Faq::with('service')->orderBy('sort_order')->get() as $faq) {
-            $faqs[] = $this->props($faq);
+        $props = [];
+
+        foreach ($faqs as $faq) {
+            $props[] = $this->props($faq);
         }
 
         return Inertia::render('core/faqs/Index', [
-            'faqs' => $faqs,
+            'faqs' => $props,
         ]);
     }
 
@@ -46,9 +50,17 @@ class FaqController extends Controller
      */
     public function store(FaqRequest $request): RedirectResponse
     {
-        Faq::create($request->validated());
+        $data = $request->validated();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ created.')]);
+        Faq::create($data);
+
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('FAQ created.'),
+            ]
+        );
 
         return to_route('core.faqs.index');
     }
@@ -77,9 +89,17 @@ class FaqController extends Controller
      */
     public function update(FaqRequest $request, Faq $faq): RedirectResponse
     {
-        $faq->update($request->validated());
+        $data = $request->validated();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ updated.')]);
+        $faq->update($data);
+
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('FAQ updated.'),
+            ]
+        );
 
         return to_route('core.faqs.index');
     }
@@ -91,7 +111,13 @@ class FaqController extends Controller
     {
         $faq->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ deleted.')]);
+        Inertia::flash(
+            'toast',
+            [
+                'type' => 'success',
+                'message' => __('FAQ deleted.'),
+            ]
+        );
 
         return to_route('core.faqs.index');
     }

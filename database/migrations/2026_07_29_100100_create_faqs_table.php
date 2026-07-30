@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('faqs', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('service_id')->nullable()->constrained('services')->nullOnDelete();
+            $table->foreignUuid('service_id')
+                ->nullable()
+                ->constrained('services')
+                ->nullOnDelete();
             $table->string('question');
             $table->text('answer');
             $table->integer('sort_order')->default(0);

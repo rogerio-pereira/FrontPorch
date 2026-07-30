@@ -13,9 +13,12 @@ trait ProvidesServiceOptions
      */
     protected function serviceOptions(): array
     {
+        $services = Service::orderBy('sort_order')
+                        ->get();
+
         $options = [];
 
-        foreach (Service::orderBy('sort_order')->get() as $service) {
+        foreach ($services as $service) {
             $options[] = [
                 'id' => $service->id,
                 'title' => $service->title,
