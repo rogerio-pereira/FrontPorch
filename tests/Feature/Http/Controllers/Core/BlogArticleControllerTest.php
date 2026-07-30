@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Core\BlogArticleController;
+use App\Http\Requests\Core\BlogArticleRequest;
 use App\Models\BlogArticle;
 use App\Models\User;
+use App\Services\MediaUploader;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 beforeEach(function () {
     $user = User::factory()
@@ -75,6 +79,36 @@ it('creates an article with a cover image and credits the author', function () {
 
     $storedFiles = Storage::allFiles('blog');
     expect($storedFiles)->toHaveCount(1);
+});
+
+it('aborts creating an article when the cover file is missing after validation', function () {
+    $request = Mockery::mock(BlogArticleRequest::class);
+    $request->shouldReceive('validated')
+        ->once()
+        ->andReturn([
+            'title' => 'Why your website should feel like a front porch',
+            'description' => 'A calm, clear online presence earns trust.',
+            'category' => 'Website strategy',
+            'content' => '<p>Most people meet your business online.</p>',
+        ]);
+    $request->shouldReceive('file')
+        ->with('image')
+        ->once()
+        ->andReturn(null);
+
+    $uploader = Mockery::mock(MediaUploader::class);
+    $uploader->shouldNotReceive('store');
+
+    try {
+        app(BlogArticleController::class)->store($request, $uploader);
+        $this->fail('Expected store to abort with 422.');
+    } catch (HttpException $exception) {
+        $statusCode = $exception->getStatusCode();
+        expect($statusCode)->toBe(422);
+    }
+
+    $articleCount = BlogArticle::count();
+    expect($articleCount)->toBe(0);
 });
 
 it('validates the article payload', function () {
