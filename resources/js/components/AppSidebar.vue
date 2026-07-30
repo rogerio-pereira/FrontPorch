@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import {
     BookOpen,
+    Briefcase,
     FolderGit2,
     LayoutGrid,
     MessageSquareQuote,
@@ -43,6 +44,11 @@ const mainNavItems: NavItem[] = [
         title: 'Testimonials',
         href: '/core/testimonials',
         icon: MessageSquareQuote,
+    },
+    {
+        title: 'Case studies',
+        href: '/core/case-studies',
+        icon: Briefcase,
     },
 ];
 

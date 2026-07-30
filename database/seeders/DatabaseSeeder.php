@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             $this->call([
                 UserSeeder::class,
                 TestimonialsSeeder::class,
+                CaseStudiesSeeder::class,
             ]);
         }
     }
