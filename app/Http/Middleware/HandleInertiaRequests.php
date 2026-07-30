@@ -39,19 +39,13 @@ class HandleInertiaRequests extends Middleware
         $parentShare = parent::share($request);
         $servicesNav = $this->servicesNav();
 
-        $sidebarOpen = true;
-
-        if ($request->hasCookie('sidebar_state')) {
-            $sidebarOpen = $request->cookie('sidebar_state') === 'true';
-        }
-
         return [
             ...$parentShare,
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],
-            'sidebarOpen' => $sidebarOpen,
+            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'site' => [
                 'footerContactEmail' => config('site.footer_contact_email'),
                 'calendarUrl' => config('site.calendar_url'),
