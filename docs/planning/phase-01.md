@@ -1,10 +1,10 @@
 # Phase 1 — Static pages and conversion
 
-**References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md)
+**References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md) · [phase-01-backend.md](./phase-01-backend.md) (CMS — delivered)
 
-**Current state (2026-07-29):** Stages **0 (code), 1, 2, 4, and 5** are implemented on `main` / current branch. Home + five service landings + marketing layout ship with **inline copy** (not `docs/content/`). Portfolio and blog exist as **static demo pages** (ahead of Briefing Phase 2 CMS). **Still open:** Stage 0.1 (founders/ops), Stage 3 (legal), Stages 6–8 (form, calendar URL, analytics/consent), Stage 9 polish leftovers, Stage 10 QA.
+**Current state (2026-07-31):** Stages **0 (code), 1, 2, 4, and 5** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`FOOTER_CONTACT_EMAIL`, `CALENDAR_URL`). Stage **7 code largely done** (needs real env values + href assertion test). **Still open:** Stage 0.1 (founders/ops), Stage 3 (legal), Stage 6 (lead form), Stage 8 (analytics/consent), Stage 9 polish leftovers, Stage 10 QA.
 
-**Phase goal:** A launch-ready site that generates qualified leads — long-form home, 5 service landing pages, legal pages, contact form, Calendar scheduling, and consent-gated analytics.
+**Phase goal:** A launch-ready site that generates qualified leads — long-form home, service landing pages, legal pages, contact form, Calendar scheduling, and consent-gated analytics.
 
 ---
 
@@ -16,9 +16,10 @@ The Briefing (§18) lists **8 checklist items** for Phase 1. This plan maps **on
 |-------|---------|------|--------|
 | **Stage 0** | Briefing §18 “Immediate (Pre-Development)” | Technical foundation | Code done; ops (0.1) open |
 | **Stages 1–3** | Checklist items 1–3 | Content only (copy + legal drafts) | 1–2 done; **3 open** |
-| **Stages 4–8** | Checklist items 4–8 | Implementation | **4–5 done;** **6–8 open** |
+| **Stages 4–8** | Checklist items 4–8 | Implementation | **4–5 done;** **7 code mostly done;** **6 + 8 open** |
 | **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO | Partial |
 | **Stage 10** | Definition of Done | Final QA and founder sign-off | Open |
+| **CMS (Phase 2)** | Briefing §18 Phase 2 | Admin + public Eloquent wiring | **Done** — see [phase-01-backend.md](./phase-01-backend.md) |
 
 Each stage is broken into **small steps** (numbered `X.Y`). Treat one step ≈ one focused commit (or a tiny group). Tests + Pint green at the end of each stage.
 
@@ -63,17 +64,17 @@ flowchart TB
 
 **Original plan:** copy in `docs/content/` Markdown for founder review, then loaded via `App\Support\MarketingContent`.
 
-**As implemented:** marketing copy is **inlined** in Vue templates and controller demo arrays (`HomeController`, service page components). `docs/content/home-copy.md` was removed after sync. Do **not** reintroduce a Markdown loader unless product needs founder-editable files again.
+**As implemented:** marketing **page copy** is **inlined** in Vue templates (home sections + each service landing). Dynamic lists (services, FAQs, testimonials, case studies, blog) load from Eloquent. `docs/content/home-copy.md` was removed after sync. Do **not** reintroduce a Markdown loader unless product needs founder-editable landing files again.
 
 | Stage | Review artifact (plan) | As implemented |
 |-------|------------------------|----------------|
-| 1 | `docs/content/home-copy.md` | Inline in `resources/js/pages/home/**` + `HomeController` |
-| 2 | `docs/content/services/{slug}.md` | Inline in each `resources/js/pages/service-*/**` |
+| 1 | `docs/content/home-copy.md` | Inline in `resources/js/pages/home/**`; home lists from Eloquent |
+| 2 | `docs/content/services/{slug}.md` | Inline in each `resources/js/pages/service-*/**`; FAQs/testimonials from DB |
 | 3 | `docs/content/legal/*.md` | **Not started** — still preferred for legal drafts |
 
 **Copy tone (confirmed):** Friendly and approachable (Design System §4.3) — not cold or overly technical. **Geo/SEO specifics** (service area, radius, city lists) belong in **meta tags, service landing pages, and FAQ** — not in hero or main section body copy.
 
-**Contact email:** `FOOTER_CONTACT_EMAIL` in `.env` (see `.env.example`; was `MARKETING_CONTACT_EMAIL`). UI still uses placeholder `contact@example.com` until wired.
+**Contact email / calendar:** `FOOTER_CONTACT_EMAIL` and `CALENDAR_URL` in `.env` → `config/site.php` → Inertia shared `site` props. UI falls back to `contact@example.com` / `#schedule` when unset.
 
 ---
 
@@ -82,26 +83,28 @@ flowchart TB
 ### In scope
 
 - Stage 0 through Stage 10 (below)
-- Portfolio and Blog: Phase 1 originally called for **static placeholders / empty states**
+- Portfolio and Blog public pages (now DB-backed; originally planned as stubs)
 
-### Ahead of plan (static demos — not CMS)
+### Delivered early (Briefing Phase 2 CMS)
 
-Already in the repo (Briefing Phase 2 shells, demo data, no Eloquent CMS):
+Already in the repo (see [phase-01-backend.md](./phase-01-backend.md)):
 
-- `GET /portfolio` — listing with demo case studies
-- `GET /portfolio/study-case/{id}` — study case detail
-- `GET /blog` — listing with demo articles
-- `GET /blog/article/{id}` and `GET /blog/{slug}` — article detail
+- Admin CRUD under `/core/*` (Users, Services, FAQs, Testimonials, Case studies, Blog articles)
+- `GET /portfolio` — paginated case studies from DB
+- `GET /portfolio/study-case/{caseStudy:slug}` — study case detail
+- `GET /blog` — paginated articles from DB
+- `GET /blog/article/{article:slug}` — article detail
+- Home previews + service landing FAQs/testimonials from Eloquent
+- Sixth catalog service: `content-creation`
 
-Treat these as **static Phase-2-ahead UI**. Real CMS, models, and founder content remain Phase 2–3.
+**Still Phase 3 (content, not code):** founder photography, real client portfolio/testimonials, published launch articles.
 
-### Out of scope (Phases 2–3)
+### Out of scope (remaining Phases / post-launch)
 
-- Internal CMS (real portfolio/blog persistence)
-- Real testimonials, founder photography
 - CRM, newsletter, live chat, payments
 - Google Ads / Meta Ads campaigns
 - DNS/production deploy (operational; Stage 0 + Stage 10 checklists)
+- Object-storage image cleanup on soft-delete (deferred; see follow-up below)
 
 ---
 
@@ -111,32 +114,34 @@ Treat these as **static Phase-2-ahead UI**. Real CMS, models, and founder conten
 
 | Route | Inertia page | Status |
 |-------|--------------|--------|
-| `GET /` | `home/Home` | Done (Stage 4) |
+| `GET /` | `home/Home` | Done (Stage 4; Eloquent props) |
 | `GET /services/lead-generation` | `service-lead-generation/ServiceLeadGeneration` | Done |
 | `GET /services/email-marketing` | `service-email-marketing/ServiceEmailMarketing` | Done |
 | `GET /services/website-design-and-development` | `service-website-design-and-development/ServiceWebsiteDesignAndDevelopment` | Done |
+| `GET /services/content-creation` | `service-content-creation/ServiceContentCreation` | Done (added after original five) |
 | `GET /services/business-automations` | `service-business-automations/ServiceBusinessAutomations` | Done |
 | `GET /services/custom-software-development` | `service-custom-software-development/ServiceCustomSoftwareDevelopment` | Done |
-| `GET /portfolio` | `portfolio/Portfolio` | Done (demo listing) |
-| `GET /portfolio/study-case/{id}` | `portfolio-study-case/PortfolioStudyCase` | Done (demo) |
-| `GET /blog` | `blog/Blog` | Done (demo listing) |
-| `GET /blog/article/{id}`, `GET /blog/{slug}` | `blog-article/BlogArticle` | Done (demo) |
+| `GET /portfolio` | `portfolio/Portfolio` | Done (DB, paginated) |
+| `GET /portfolio/study-case/{caseStudy:slug}` | `portfolio-study-case/PortfolioStudyCase` | Done (DB) |
+| `GET /blog` | `blog/Blog` | Done (DB, paginated) |
+| `GET /blog/article/{article:slug}` | `blog-article/BlogArticle` | Done (DB) |
 | `GET /privacy` | — | **Missing** (Stage 3) |
 | `GET /terms` | — | **Missing** (Stage 3) |
 | `POST /contact` | — | **Missing** (Stage 6) |
+| `/core/*` | `core/**` | Done (CMS admin; `routes/core.php`) |
 
-**Service slugs:** `lead-generation` · `email-marketing` · `website-design-and-development` · `business-automations` · `custom-software-development`
+**Service slugs:** `lead-generation` · `email-marketing` · `website-design-and-development` · `content-creation` · `business-automations` · `custom-software-development`
 
 ### Architecture notes (plan vs code)
 
 | Planned | As implemented |
 |---------|----------------|
 | `MarketingLayout.vue` / `marketing/*` pages | `AppLayout` + `layouts/app/SiteHeader.vue` / `SiteFooter.vue` |
-| Single `MarketingController` + `MarketingContent` | Per-page invokable controllers (`HomeController`, `Service*Controller`, …) |
-| `docs/content/` Markdown loader | Inline copy in Vue / controller arrays |
+| Single `MarketingController` + `MarketingContent` | Per-page invokable controllers + `RendersServiceLanding` trait |
+| `docs/content/` Markdown loader | Inline landing copy in Vue; lists from Eloquent |
 | `GET /services/{slug}` dynamic | Explicit routes per slug |
-| Empty `/portfolio` and `/blog` stubs | Full static demo listings + detail pages |
-| `config/marketing.php` | **Not created yet** (needed for Stages 7–8) |
+| Empty `/portfolio` and `/blog` stubs | Full DB-backed listing + detail pages + `/core` admin |
+| `config/marketing.php` | **`config/site.php`** (`footer_contact_email`, `calendar_url`); analytics IDs still env-only for Stage 8 |
 
 ### Target / actual file structure
 
@@ -149,13 +154,14 @@ resources/css/app.css                  # brand tokens — DONE
 resources/js/layouts/AppLayout.vue     # marketing shell — DONE
 resources/js/layouts/app/              # SiteHeader, SiteFooter, SectionShell, CtaBand, CtaButton, …
 resources/js/pages/home/               # Home + section components — DONE
-resources/js/pages/service-*/          # five service pages — DONE
-resources/js/pages/portfolio*/         # demo portfolio — DONE (ahead)
-resources/js/pages/blog*/              # demo blog — DONE (ahead)
-config/marketing.php                   # TODO (Stages 7–8)
+resources/js/pages/service-*/          # six service pages — DONE
+resources/js/pages/portfolio*/         # portfolio listing + study case — DONE (DB)
+resources/js/pages/blog*/              # blog listing + article — DONE (DB)
+resources/js/pages/core/               # admin CMS pages — DONE
+config/site.php                        # DONE (calendar + footer email); extend for Stage 8 IDs
 app/Http/Controllers/ContactController.php  # TODO (Stage 6)
 tests/Feature/ContactFormTest.php      # TODO (Stage 6)
-tests/Browser/Http/…                   # page smoke/feature tests — largely DONE for existing pages
+tests/Browser/… / Feature              # smoke/feature for existing public + core pages — largely DONE
 ```
 
 ---
@@ -307,12 +313,12 @@ tests/Browser/Http/…                   # page smoke/feature tests — largely 
 
 ---
 
-# Stage 2 — Service landing page copy (×5)
+# Stage 2 — Service landing page copy (×6 catalog)
 
-**Briefing checklist:** “Write 5 service landing page copies”  
+**Briefing checklist:** “Write 5 service landing page copies” _(catalog later grew to six with content-creation)_  
 **Goal:** One complete landing page per service for paid + organic traffic.  
 **Prerequisites:** Stage 1 service names aligned; Briefing §10 keyword template.  
-**Status:** Done — copy inlined per service Vue page (+ assets).
+**Status:** Done — copy inlined per service Vue page (+ assets). Sixth service `content-creation` added after the original five.
 
 **Output location (as implemented):** `resources/js/pages/service-{slug}/**`
 
@@ -349,6 +355,10 @@ Document required fields for every service page:
 
 - [x] Full copy per template
 
+### Step 2.6b — `content-creation` (added to catalog)
+
+- [x] Full copy per template + OG + seeder/FAQs
+
 ### Step 2.7 — Cross-page review
 
 - [x] No duplicate H1/meta across pages (unique per service)
@@ -357,7 +367,7 @@ Document required fields for every service page:
 
 ### Stage 2 — Done when
 
-- [x] 5 service pages live with complete copy + SEO meta
+- [x] Catalog service pages live with complete copy + SEO meta
 - [ ] Founder formal sign-off (Stage 10.3)
 
 ---
@@ -409,7 +419,7 @@ Document required fields for every service page:
 **Briefing checklist:** “Design and implement home page (Inertia + Vue)”  
 **Goal:** Long-form home with all 16 sections, marketing layout, portfolio/blog stubs.  
 **Prerequisites:** Stage 0 complete; Stage 1 copy available; Stage 3 legal routes (for footer links).  
-**Status:** **Done** (layout + 16 sections). Legal footer links still depend on Stage 3. Portfolio/blog are full demos, not empty stubs.
+**Status:** **Done** (layout + 16 sections). Legal footer links still depend on Stage 3. Portfolio/blog are DB-backed (CMS delivered), not empty stubs.
 
 ### Step 4.1 — Marketing layout and navigation
 
@@ -476,11 +486,12 @@ Document required fields for every service page:
 ### Step 4.14 — Section 14: Contact (shell only)
 
 - [x] `home/component/ContactSection.vue` — intro + mailto / schedule CTAs (form = Stage 6)
+- [x] Footer/contact email from Inertia `site.footerContactEmail` (fallback placeholder)
 - [x] `id="contact"` anchor for nav
 
 ### Step 4.15 — Section 16: Blog preview
 
-- [x] `home/component/BlogPreviewSection.vue` → `/blog`
+- [x] `home/component/BlogPreviewSection.vue` → `/blog` (latest 3 from DB)
 
 ### Step 4.16 — Scroll motion
 
@@ -489,10 +500,11 @@ Document required fields for every service page:
 
 ### Step 4.17 — Portfolio and blog pages
 
-- [x] `GET /portfolio` — demo listing (beyond original empty-state stub)
-- [x] `GET /blog` — demo listing (beyond original empty-state stub)
-- [x] Study case + article detail routes (ahead of Phase 2 CMS)
+- [x] `GET /portfolio` — DB listing (paginated)
+- [x] `GET /blog` — DB listing (paginated)
+- [x] Study case + article detail by **slug**
 - [x] Browser/Feature coverage for these controllers
+- [x] Admin CMS under `/core` (Briefing Phase 2 — delivered early)
 
 ### Step 4.18 — Home browser test
 
@@ -502,7 +514,7 @@ Document required fields for every service page:
 
 - [x] `/` renders all 16 sections with Stage 1 copy
 - [x] Marketing layout on home; mobile nav works
-- [x] Portfolio/blog reachable
+- [x] Portfolio/blog reachable (DB-backed)
 - [x] Home browser tests pass
 - [ ] Footer Privacy/Terms (blocked on Stage 3)
 
@@ -511,46 +523,48 @@ Document required fields for every service page:
 # Stage 5 — Service landing pages
 
 **Briefing checklist:** “Implement service landing pages”  
-**Goal:** Five SEO/paid-traffic landing pages from one template.  
+**Goal:** SEO/paid-traffic landing pages from one template.  
 **Prerequisites:** Stage 0, Stage 2 copy, Stage 4 layout (header/footer).  
-**Status:** **Done** — explicit per-slug routes/controllers/pages + tests.
+**Status:** **Done** — explicit per-slug routes/controllers/pages + tests. Catalog now has **six** services (original five + `content-creation`). Landing body copy remains in Vue; FAQs/testimonials/related services from DB (`RendersServiceLanding`).
 
 ### Step 5.1 — Config and slug validation
 
-- [ ] `config/marketing.php` — optional; not required for current explicit routes
+- [x] Site chrome config lives in `config/site.php` (not required for explicit service routes)
 - [x] Invalid / unknown service paths → 404 (`ReturnsNotFoundForUnknownServiceSlugsTest`)
 
 ### Step 5.2 — Controller and route
 
 - [x] Per-service invokable controllers (e.g. `ServiceLeadGenerationController`)
-- [x] Explicit `GET /services/{slug}` routes for all five slugs
+- [x] Explicit `GET /services/{slug}` routes for all catalog slugs
 
 ### Step 5.3 — Page template
 
 - [x] Shared landing pattern: H1, hero, benefits, process, CTA, Inertia `Head` + OG
 - [x] Paid-traffic pattern: primary CTA above fold + repeat lower on page
+- [x] “Also explore” related services from catalog
 
-### Step 5.4 — Implement five pages (content wiring)
+### Step 5.4 — Implement service pages (content wiring)
 
 - [x] `lead-generation`
 - [x] `email-marketing`
 - [x] `website-design-and-development`
+- [x] `content-creation`
 - [x] `business-automations`
 - [x] `custom-software-development`
 
 ### Step 5.5 — Navigation integration
 
-- [x] Services dropdown in header links to all 5 slugs
+- [x] Services dropdown in header from Eloquent `servicesNav`
 - [x] Home service cards link to services (covered in tests)
 
 ### Step 5.6 — Browser test
 
-- [x] Browser tests per service controller (incl. `lead-generation`)
+- [x] Browser tests per service controller (incl. `lead-generation`, `content-creation`)
 - [x] Feature test: unknown slug 404
 
 ### Stage 5 — Done when
 
-- [x] All 5 URLs live with Stage 2 copy
+- [x] All catalog service URLs live with Stage 2-style copy (+ content-creation)
 - [x] One H1 per page; meta unique per page
 
 ---
@@ -560,7 +574,7 @@ Document required fields for every service page:
 **Briefing checklist:** “Implement lead form with email delivery”  
 **Goal:** Contact form submits to Laravel and sends Gmail notification.  
 **Prerequisites:** Stage 4 contact section shell; `.env` mail config.  
-**Status:** **Not started** — contact section is mailto + schedule CTA only (`contact@example.com`).
+**Status:** **Not started** — contact section is mailto + schedule CTA only (email from `site.footerContactEmail` when set).
 
 ### Step 6.1 — Form request validation
 
@@ -602,20 +616,21 @@ Document required fields for every service page:
 **Briefing checklist:** “Integrate Google Calendar redirect”  
 **Goal:** All scheduling CTAs open the external Calendar link in a new tab.  
 **Prerequisites:** Step 0.1 Calendar link; Stage 4 header/hero CTAs exist.  
-**Status:** **Partial** — `CtaButton` supports `calendarUrl` + `target="_blank"` for http(s); header/contact still hardcode `#schedule`. `CALENDAR_URL` exists in `.env.example` only (was `MARKETING_CALENDAR_URL`).
+**Status:** **Mostly done (code)** — `config/site.php` + Inertia `site.calendarUrl`; `SiteHeader` / `CtaButton` use it with `#schedule` fallback when env empty. **Still open:** production `CALENDAR_URL` value + automated href assertion. Briefing checklist can stay open until env + test land.
 
 ### Step 7.1 — Config
 
-- [ ] `config/marketing.php` → `'calendar_url' => env('CALENDAR_URL')`
+- [x] `config/site.php` → `'calendar_url' => env('CALENDAR_URL')`
+- [x] Shared via `HandleInertiaRequests` as `site.calendarUrl`
 - [x] Document in `.env.example` (`CALENDAR_URL`)
 - [x] Document in `.env.example` (`FOOTER_CONTACT_EMAIL`)
 
 ### Step 7.2 — CTA wiring
 
-- [ ] Header “Schedule” button → real `calendar_url` (today: `#schedule`)
-- [ ] Hero primary CTA → `calendar_url`
-- [ ] Service page primary CTAs → `calendar_url` (consistent pattern)
-- [x] `CtaButton` already supports `target="_blank"` + `rel="noopener noreferrer"` when URL is external
+- [x] Header “Schedule” button → `site.calendarUrl` (fallback `#schedule` if unset)
+- [x] Home / contact `CtaButton` → same shared URL
+- [x] Service landings use schedule / contact patterns consistent with home
+- [x] `CtaButton` supports `target="_blank"` + `rel="noopener noreferrer"` when URL is external
 
 ### Step 7.3 — Copy notice (optional)
 
@@ -627,8 +642,9 @@ Document required fields for every service page:
 
 ### Stage 7 — Done when
 
-- [ ] Every “Schedule” / primary booking CTA uses `CALENDAR_URL`
-- [ ] Link opens in new tab
+- [ ] Every “Schedule” / primary booking CTA uses `CALENDAR_URL` when set (no `#schedule` fallback in production)
+- [x] Link opens in new tab when URL is external
+- [ ] Href assertion covered by a test
 
 ---
 
@@ -637,11 +653,11 @@ Document required fields for every service page:
 **Briefing checklist:** “Add GA and Meta Pixel with cookie consent banner”  
 **Goal:** Analytics load only after explicit consent.  
 **Prerequisites:** Stage 0; Stage 4 layout (banner placement); GA/Meta IDs in `.env`.  
-**Status:** **Not started** — IDs documented in `.env.example` only; no banner/scripts.
+**Status:** **Not started** — IDs documented in `.env.example` only; no banner/scripts. Prefer extending `config/site.php` (same pattern as calendar/email).
 
 ### Step 8.1 — Config
 
-- [ ] `google_analytics_id`, `meta_pixel_id` in `config/marketing.php`
+- [ ] `google_analytics_id`, `meta_pixel_id` in `config/site.php`
 - [x] `.env.example` entries (`GOOGLE_ANALYTICS_ID`, `META_PIXEL_ID`)
 
 ### Step 8.2 — Cookie consent UI
@@ -671,13 +687,13 @@ Document required fields for every service page:
 
 **Goal:** Search engines and social previews see a complete, branded site.  
 **Prerequisites:** Stages 4–8 complete.  
-**Status:** **Partial.**
+**Status:** **Partial.** Branded HTTP error pages (404 / 500 / 503) delivered.
 
 ### Step 9.1 — Per-page Head audit
 
-- [x] Unique `<title>` + meta description on home and 5 services
+- [x] Unique `<title>` + meta description on home and service landings (incl. content-creation)
 - [ ] Privacy, terms (blocked on Stage 3)
-- [x] Portfolio / blog stubs/demos have titles
+- [x] Portfolio / blog pages have titles
 
 ### Step 9.2 — Open Graph
 
@@ -692,13 +708,14 @@ Document required fields for every service page:
 ### Step 9.4 — Crawling
 
 - [x] `public/robots.txt` (allow-all baseline)
-- [ ] `public/sitemap.xml` — all Phase 1 URLs
+- [ ] `public/sitemap.xml` — all Phase 1 public URLs (home, 6 services, portfolio, blog, legal)
 
 ### Step 9.5 — Favicon and cleanup
 
 - [x] Favicon present (`public/favicon.ico`, `favicon.svg`)
 - [ ] Remove unused `Welcome.vue` / starter references if still present
 - [ ] CTA contrast review (accent button text color — WCAG)
+- [x] Branded error pages (404, 500, 503)
 
 ### Step 9.6 — Open design decisions
 
@@ -716,7 +733,7 @@ Document required fields for every service page:
 # Stage 10 — QA and acceptance
 
 **Goal:** Phase 1 meets Briefing success criteria and repo quality gates.  
-**Status:** Open (blocked on Stages 3, 6–8 and remaining 9).
+**Status:** Open (blocked on Stages 3, 6, 8 and remaining 7/9).
 
 ### Step 10.1 — Automated gates
 
@@ -729,10 +746,10 @@ Document required fields for every service page:
 ### Step 10.2 — Manual smoke checklist
 
 - [x] Home: all 16 sections; portfolio/blog reachable
-- [x] 5 service pages live
+- [x] Service landings live (6 catalog slugs)
 - [ ] Legal pages
 - [ ] Contact form → email received (staging mail or log driver test)
-- [ ] Schedule CTAs → Calendar
+- [ ] Schedule CTAs → Calendar (with real `CALENDAR_URL`)
 - [ ] Cookie banner → analytics gating
 - [ ] Mobile header + contact form usable
 
@@ -744,8 +761,9 @@ Document required fields for every service page:
 
 ### Phase 1 — Definition of Done
 
-- [ ] All Stage 1–10 checklists complete (remaining: 0.1, 3, 6–8, 9 leftovers, 10)
+- [ ] All Stage 1–10 checklists complete (remaining: 0.1, 3, 6, 7 leftovers, 8, 9 leftovers, 10)
 - [x] Browser tests: public marketing routes for home, services, portfolio, blog
+- [x] Admin CMS + public Eloquent wiring (Briefing Phase 2 — done early)
 - [ ] Browser tests: contact form + one scheduling href assertion
 - [x] Brand theme applied throughout marketing surfaces
 
@@ -755,12 +773,13 @@ Document required fields for every service page:
 
 | Risk | Mitigation |
 |------|------------|
-| No real portfolio/testimonials | Honest placeholders / demo static pages; strong FAQ and Who we are |
+| No real portfolio/testimonials yet | Seeded / honest placeholders; strong FAQ and Who we are; Phase 3 content |
 | Copy blocks implementation | Stages 1–2 delivered inline; Stage 3 legal still needed |
 | Brand assets missing | Stage 0.2 done |
 | No staging environment | Stage 10 automated tests + production build before deploy |
 | Gmail for leads | Acceptable MVP; WorkMail later |
-| Plan drift (Markdown loader / empty stubs) | Documented above; prefer finishing 3, 6–8 over re-architecture |
+| Plan drift (Markdown loader / empty stubs) | Documented above; prefer finishing 3, 6, 8 over re-architecture |
+| Orphaned MinIO/S3 objects | Deferred cleanup follow-up below |
 
 ---
 
@@ -768,18 +787,18 @@ Document required fields for every service page:
 
 1. **Stage 3** — Privacy + Terms + footer links  
 2. **Stage 6** — Contact form + email  
-3. **Stage 7** — Wire `CALENDAR_URL` through `config/marketing.php` + CTAs  
-4. **Stage 8** — Cookie consent + GA/Meta  
-5. **Stage 9** leftovers — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
+3. **Stage 7 leftovers** — set `CALENDAR_URL` + href assertion test  
+4. **Stage 8** — Cookie consent + GA/Meta (`config/site.php`)  
+5. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
 6. **Stage 10** — automated + founder QA  
 
 ---
 
-## Post–Phase 1 (handoff to Phase 2)
+## Post–Phase 1 / CMS status
 
-See Briefing §18 Phase 2: internal CMS, replace demo portfolio/blog payloads with real models/content.
+**Briefing Phase 2 (CMS) is delivered** — persistence, `/core` admin, and public list/detail wiring. See [phase-01-backend.md](./phase-01-backend.md).
 
-Static portfolio/blog UI already exists — Phase 2 focus is **persistence + admin**, not greenfield page shells.
+**Briefing Phase 3** owns real content: founder photography, launch portfolio items, real testimonials, initial blog posts, ads, GBP, organic social.
 
 ### Open follow-up — object storage image cleanup
 
@@ -808,7 +827,7 @@ Until then, orphaned objects in object storage are acceptable for MVP.
 Non-code items (overlap with Step 0.1; re-verify before launch):
 
 - [ ] DNS live: `.io` canonical; redirects from `.agency` / `.marketing`
-- [ ] `GOOGLE_ANALYTICS_ID`, `META_PIXEL_ID`, `CALENDAR_URL` set in production
+- [ ] `GOOGLE_ANALYTICS_ID`, `META_PIXEL_ID`, `CALENDAR_URL`, `FOOTER_CONTACT_EMAIL`, `MAIL_LEAD_RECIPIENT` set in production
 - [ ] Search Console verified
 - [ ] Google Business Profile (if decided)
 - [ ] Founder review: copy + legal (Stage 10.3)
