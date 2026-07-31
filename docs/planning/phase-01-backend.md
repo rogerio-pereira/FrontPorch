@@ -6,13 +6,13 @@
 
 **Summary:** Plan for a new branch with an admin panel (Inertia + Vue + CoreLayout) that persists and edits services, FAQs, testimonials, portfolio, and blog — normalized entities only. Marketing page copy stays hardcoded in Vue/HTML; site config lives in `.env`.
 
-**Status:** Domain interviews complete — ready to implement from locked domain docs. Schema and admin depth below should match [phase-01-backend/](./phase-01-backend/).
+**Status:** Domain interviews complete — **CMS implemented** (migrations, models, `/core` admin, public Eloquent wiring, seeders). See acceptance below; polish follow-ups remain (media delete).
 
 ---
 
 ## Context
 
-Today marketing is **100% static**: demo arrays in controllers (`HomeController`, `Portfolio*`, `Blog*`) and **inline** copy in the Vue files for the 5 landings. Only model: `User`. Auth already exists (Fortify + `CoreLayout` + sidebar). Public portfolio/blog shells already exist — the work is **persistence + admin + wiring list/detail props**.
+Public marketing pages use **hardcoded Vue copy** for home/service landings and **Eloquent** for services, FAQs, testimonials, case studies, and blog. Admin lives under `/core/*` (Fortify + CoreLayout). Site chrome (`FOOTER_CONTACT_EMAIL`, `CALENDAR_URL`) is `.env` / `config/site.php`, shared via Inertia.
 
 **Branch:** `feat/admin-cms` (from the current branch / aligned `main`).
 
@@ -290,14 +290,15 @@ Sail + Pint per `.cursor/rules/starting-environment.mdc`; target 90%.
 
 ## Implementation checklist
 
-- [ ] Domain interviews complete; parent plan synced to locked decisions
-- [ ] Create branch `feat/admin-cms`
-- [ ] Media/storage decision implemented (MinIO or simpler)
-- [ ] Migrations + Models + Factories
-- [ ] Seeders with current dynamic demo
-- [ ] Site config keys in `.env.example`
-- [ ] Core routes (`/core`) + controllers + views + sidebar
-- [ ] Replace public demos with Eloquent; share env config via Inertia
-- [ ] Keep home/service landing copy hardcoded in Vue
-- [ ] Feature + Browser tests
-- [ ] Update Briefing Phase 2 checklist in a separate docs commit when done
+- [x] Domain interviews complete; parent plan synced to locked decisions
+- [x] Create branch `feat/admin-cms` _(merged)_
+- [x] Media/storage decision implemented (MinIO or simpler)
+- [x] Migrations + Models + Factories
+- [x] Seeders with current dynamic demo
+- [x] Site config keys in `.env.example` (`config/site.php`)
+- [x] Core routes (`/core`) + controllers + views + sidebar
+- [x] Replace public demos with Eloquent; share env config via Inertia
+- [x] Keep home/service landing copy hardcoded in Vue
+- [x] Feature + Browser tests
+- [x] Update Briefing Phase 2 checklist in a separate docs commit when done
+- [ ] Media object cleanup on soft-delete / replace (deferred — see [phase-01.md](./phase-01.md) follow-up)
