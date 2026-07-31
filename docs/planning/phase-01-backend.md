@@ -95,7 +95,7 @@ AWS_URL=http://localhost:9000/frontporch
 AWS_USE_PATH_STYLE_ENDPOINT=true
 ```
 
-Document MinIO console URL/ports in `.env.example`. Create the bucket on first boot (Sail MinIO docs / init script). Tests may use `Storage::fake('s3')` or the same disk config in phpunit.
+Document MinIO console URL/ports in `.env.example`. Create the bucket on first boot (Sail MinIO docs / init script). Tests may use `Storage::fake()` or the same disk config in phpunit.
 
 ---
 

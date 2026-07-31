@@ -4,13 +4,18 @@ import SectionShell from '@/layouts/app/SectionShell.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
 
 defineProps<{
-    // TODO: remove demo blog preview in HomeController once Article listings exist
-    articles: Array<{ title: string; description: string; image: string }>;
+    articles: Array<{
+        title: string;
+        description: string;
+        image: string;
+        slug: string;
+    }>;
 }>();
 </script>
 
 <template>
     <SectionShell
+        v-if="articles.length > 0"
         overline="From the blog"
         heading="Ideas worth sharing"
         intro="Helpful reads for small business owners, more articles are on the way."
@@ -18,10 +23,12 @@ defineProps<{
         centered
     >
         <div class="grid gap-6 md:grid-cols-3">
-            <article
-                v-for="article in articles"
-                :key="article.title"
-                class="marketing-card-hover overflow-hidden rounded-xl border border-border-default bg-surface-raised text-left"
+            <Link
+                v-for="(article, index) in articles"
+                :key="article.slug"
+                :href="`/blog/article/${article.slug}`"
+                class="marketing-card-hover group overflow-hidden rounded-xl border border-border-default bg-surface-raised text-left"
+                :data-test="`home-blog-article-${index}`"
             >
                 <VisualFrame
                     :src="article.image"
@@ -30,14 +37,14 @@ defineProps<{
                     class="rounded-none border-0 shadow-none"
                 />
                 <div class="p-5">
-                    <h3 class="font-semibold leading-snug">
+                    <h3 class="font-semibold leading-snug group-hover:text-brand-accent">
                         {{ article.title }}
                     </h3>
                     <p class="mt-2 line-clamp-2 text-sm text-[var(--text-muted-on-dark)]">
                         {{ article.description }}
                     </p>
                 </div>
-            </article>
+            </Link>
         </div>
         <div class="mt-8 text-center">
             <Link

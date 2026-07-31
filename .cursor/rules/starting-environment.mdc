@@ -42,11 +42,20 @@ grep -q "^APP_KEY=$" .env && \
 ./vendor/bin/sail npm run dev
 ```
 
-### Running tests
+### Running tests (mandatory — full suite once)
+When validating work, run the **complete** suite **once** with the required threshold. Do **not** run a single file/folder/`--filter` as the final check, and do **not** re-run the same suite with a lower `--min`.
+
 ```
 ./vendor/bin/sail artisan test --parallel --coverage --min=90
+```
+
+Type coverage is a **separate** check (not the same command). Run it once when finishing:
+
+```
 ./vendor/bin/sail artisan test --type-coverage --min=90 --parallel
 ```
+
+A path/`--filter` run is allowed only while diagnosing a failure; the task is not done until the coverage gate above passes.
 
 ### Running linter
 ```

@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
-const contactEmail = 'contact@example.com';
+const page = usePage();
+
+const contactEmail = computed(() => page.props.site.footerContactEmail ?? 'contact@example.com');
 </script>
 
 <template>

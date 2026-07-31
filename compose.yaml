@@ -25,6 +25,7 @@ services:
             - pgsql
             - redis
             - mailpit
+            - minio
     pgsql:
         image: 'postgres:18-alpine'
         ports:
@@ -87,8 +88,45 @@ services:
             - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
+    minio:
+        image: 'minio/minio:latest'
+        ports:
+            - '${FORWARD_MINIO_PORT:-9000}:9000'
+            - '${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
+        environment:
+            MINIO_ROOT_USER: '${AWS_ACCESS_KEY_ID:-sail}'
+            MINIO_ROOT_PASSWORD: '${AWS_SECRET_ACCESS_KEY:-password}'
+        volumes:
+            - 'sail-minio:/data'
+        networks:
+            - sail
+        command: 'minio server /data --console-address ":8900"'
+        healthcheck:
+            test:
+                - CMD
+                - mc
+                - ready
+                - local
+            retries: 3
+            timeout: 5s
+    createbuckets:
+        image: 'minio/mc:latest'
+        networks:
+            - sail
+        depends_on:
+            minio:
+                condition: service_healthy
+        entrypoint: >
+            /bin/sh -c "
+            /usr/bin/mc alias set local http://minio:9000 '${AWS_ACCESS_KEY_ID:-sail}' '${AWS_SECRET_ACCESS_KEY:-password}';
+            /usr/bin/mc mb --ignore-existing 'local/${AWS_BUCKET:-frontporch}';
+            /usr/bin/mc anonymous set download 'local/${AWS_BUCKET:-frontporch}';
+            exit 0;
+            "
 volumes:
     pgadmin_data:
+        driver: local
+    sail-minio:
         driver: local
 networks:
     sail:

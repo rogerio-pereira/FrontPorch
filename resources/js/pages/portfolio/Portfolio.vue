@@ -3,21 +3,27 @@ import { Head, Link } from '@inertiajs/vue3';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
+import SitePagination, { type LaravelPaginator } from '@/layouts/app/SitePagination.vue';
 
-export type PortfolioListItem = {
-    id: number;
+export type PortfolioCaseStudy = {
+    id: string;
     title: string;
-    excerpt: string;
+    description: string;
     client: string;
-    service: string;
-    coverImage: string;
-    href: string;
+    slug: string;
+    images: Array<{ url: string; alt: string }>;
+    services: Array<{ title: string }>;
 };
 
 defineProps<{
-    // TODO: remove demo payload in PortfolioController once CaseStudy model exists
-    items: PortfolioListItem[];
+    caseStudies: LaravelPaginator<PortfolioCaseStudy>;
 }>();
+
+function serviceTitles(caseStudy: PortfolioCaseStudy): string {
+    return caseStudy.services
+        .map((service) => service.title)
+        .join(', ');
+}
 </script>
 
 <template>
@@ -39,34 +45,34 @@ defineProps<{
             </div>
 
             <div
-                v-if="items.length > 0"
+                v-if="caseStudies.data.length > 0"
                 class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
                 <Link
-                    v-for="item in items"
-                    :key="item.id"
-                    :href="item.href"
+                    v-for="(caseStudy, index) in caseStudies.data"
+                    :key="caseStudy.id"
+                    :href="`/portfolio/study-case/${caseStudy.slug}`"
                     class="marketing-card-hover group overflow-hidden rounded-xl border border-border-default bg-surface-raised text-left"
-                    :data-test="`portfolio-case-${item.id}`"
+                    :data-test="`portfolio-case-${index}`"
                 >
                     <VisualFrame
-                        :src="item.coverImage"
-                        :alt="item.title"
+                        :src="caseStudy.images[0].url"
+                        :alt="caseStudy.images[0].alt"
                         aspect="video"
                         class="rounded-none border-0 shadow-none"
                     />
                     <div class="p-5">
                         <p class="text-overline text-brand-accent">
-                            {{ item.service }}
+                            {{ serviceTitles(caseStudy) }}
                         </p>
                         <h2 class="mt-2 text-h4 font-semibold group-hover:text-brand-accent">
-                            {{ item.title }}
+                            {{ caseStudy.title }}
                         </h2>
                         <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
-                            {{ item.client }}
+                            {{ caseStudy.client }}
                         </p>
                         <p class="mt-3 line-clamp-3 text-sm text-[var(--text-muted-on-dark)]">
-                            {{ item.excerpt }}
+                            {{ caseStudy.description }}
                         </p>
                     </div>
                 </Link>
@@ -84,6 +90,11 @@ defineProps<{
                     We are putting the finishing touches on our first public case studies. In the meantime, we would love to hear about your project.
                 </p>
             </div>
+
+            <SitePagination
+                :paginator="caseStudies"
+                test-id="portfolio-pagination"
+            />
 
             <div class="mt-14 flex flex-col items-center gap-4 text-center">
                 <p class="max-w-xl text-body text-[var(--text-muted-on-dark)]">

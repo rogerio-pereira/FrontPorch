@@ -19,6 +19,10 @@ createInertiaApp({
             return [CoreLayout, SettingsLayout];
         }
 
+        if (name.startsWith('core/')) {
+            return CoreLayout;
+        }
+
         if (name === 'Dashboard') {
             return CoreLayout;
         }
@@ -26,7 +30,7 @@ createInertiaApp({
         return AppLayout;
     },
     progress: {
-        color: '#4B5563',
+        color: '#72887b',
     },
 });
 

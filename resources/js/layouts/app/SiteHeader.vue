@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { Menu } from '@lucide/vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,15 +18,11 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const calendarUrl = '#schedule';
+const page = usePage();
 
-const services = [
-    { slug: 'lead-generation', label: 'Lead generation' },
-    { slug: 'email-marketing', label: 'Email marketing' },
-    { slug: 'website-design-and-development', label: 'Website design & development' },
-    { slug: 'business-automations', label: 'Business automations' },
-    { slug: 'custom-software-development', label: 'Custom software development' },
-];
+const calendarUrl = computed(() => page.props.site.calendarUrl ?? '#schedule');
+
+const services = computed(() => page.props.servicesNav);
 
 const mobileOpen = ref(false);
 
@@ -62,7 +58,7 @@ const navItems = [
                             as-child
                         >
                             <Link :href="`/services/${service.slug}`" :data-test="`nav-service-${service.slug}`">
-                                {{ service.label }}
+                                {{ service.title }}
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -112,7 +108,7 @@ const navItems = [
                             :data-test="`nav-mobile-service-${service.slug}`"
                             @click="mobileOpen = false"
                         >
-                            {{ service.label }}
+                            {{ service.title }}
                         </Link>
                         <Link
                             v-for="item in navItems"

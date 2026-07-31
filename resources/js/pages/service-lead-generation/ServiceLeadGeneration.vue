@@ -4,7 +4,14 @@ import CtaBand from '@/layouts/app/CtaBand.vue';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
+import ServiceFaqSection from '@/layouts/app/ServiceFaqSection.vue';
+import ServiceTestimonialsSection from '@/layouts/app/ServiceTestimonialsSection.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
+
+defineProps<{
+    faqs: Array<{ question: string; answer: string }>;
+    testimonials: Array<{ testimonial: string; person: string }>;
+}>();
 </script>
 
 <template>
@@ -331,6 +338,9 @@ import VisualFrame from '@/layouts/app/VisualFrame.vue';
             </Link>
         </div>
     </SectionShell>
+
+    <ServiceTestimonialsSection :testimonials="testimonials" />
+    <ServiceFaqSection :faqs="faqs" />
 
     <CtaBand
         heading="Ready for more of the right conversations?"

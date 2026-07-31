@@ -10,6 +10,7 @@ const props = defineProps<{
   <nav
     aria-label="breadcrumb"
     data-slot="breadcrumb"
+    data-test="admin-breadcrumbs"
     :class="props.class"
   >
     <slot />

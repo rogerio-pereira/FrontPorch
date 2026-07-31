@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, FolderGit2, LayoutGrid } from '@lucide/vue';
+import {
+    BookOpen,
+    Briefcase,
+    LayoutGrid,
+    MessageSquareQuote,
+    Newspaper,
+    Sparkles,
+    Users,
+} from '@lucide/vue';
 import AppLogo from '@/components/AppLogo.vue';
-import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import {
@@ -13,28 +20,53 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const crmNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
     },
-];
-
-const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: FolderGit2,
+        title: 'Services',
+        href: '/core/services',
+        icon: Sparkles,
+        separatorBefore: true,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
+        title: 'FAQs',
+        href: '/core/faqs',
         icon: BookOpen,
+    },
+    {
+        title: 'Testimonials',
+        href: '/core/testimonials',
+        icon: MessageSquareQuote,
+    },
+    {
+        title: 'Case studies',
+        href: '/core/case-studies',
+        icon: Briefcase,
+    },
+];
+
+const blogNavItems: NavItem[] = [
+    {
+        title: 'Blog',
+        href: '/core/blog/articles',
+        icon: Newspaper,
+    },
+];
+
+const systemNavItems: NavItem[] = [
+    {
+        title: 'Users',
+        href: '/core/users',
+        icon: Users,
     },
 ];
 </script>
@@ -53,12 +85,15 @@ const footerNavItems: NavItem[] = [
             </SidebarMenu>
         </SidebarHeader>
 
-        <SidebarContent>
-            <NavMain :items="mainNavItems" />
+        <SidebarContent class="overflow-x-hidden overflow-y-auto">
+            <NavMain label="CRM" :items="crmNavItems" />
+            <SidebarSeparator class="my-2" />
+            <NavMain label="Blog" :items="blogNavItems" />
+            <SidebarSeparator class="my-2" />
+            <NavMain label="System" :items="systemNavItems" />
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>
     </Sidebar>
