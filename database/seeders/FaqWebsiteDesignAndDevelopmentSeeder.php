@@ -83,7 +83,7 @@ class FaqWebsiteDesignAndDevelopmentSeeder extends Seeder
                 'question' => 'Will a new website get me to the top of Google?',
             ],
             [
-                'answer' => 'A clear, fast, well-structured site is the foundation for local search, but rankings also need ongoing content and relevance. We build with SEO basics in mind and can talk separately about lead generation or content if you want more visibility over time.',
+                'answer' => 'A clear, fast, well-structured site is the foundation for local search, but rankings also need ongoing content and relevance. We build with SEO basics in mind and can talk separately about lead generation or our content creation service (blog posts and social writing) if you want more visibility over time.',
                 'sort_order' => 6,
             ]
         );

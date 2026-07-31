@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 class ServicesSeeder extends Seeder
 {
     /**
-     * Seed the five services offered on the marketing site.
+     * Seed the services offered on the marketing site.
      *
      * Events are disabled so stable public slugs (including cases where
      * Str::slug(title) would differ) can be set explicitly.
@@ -46,13 +46,23 @@ class ServicesSeeder extends Seeder
                 ]
             );
 
+            // Content Creation
+            Service::updateOrCreate(
+                ['slug' => 'content-creation'],
+                [
+                    'title' => 'Content creation',
+                    'description' => 'Blog posts and social writing that keep you visible without the scramble.',
+                    'sort_order' => 4,
+                ]
+            );
+
             // Business Automations
             Service::updateOrCreate(
                 ['slug' => 'business-automations'],
                 [
                     'title' => 'Business automations',
                     'description' => 'Let the repetitive stuff run itself so you can focus on customers.',
-                    'sort_order' => 4,
+                    'sort_order' => 5,
                 ]
             );
 
@@ -62,7 +72,7 @@ class ServicesSeeder extends Seeder
                 [
                     'title' => 'Custom software development',
                     'description' => 'When ready-made tools do not fit, we build something that does.',
-                    'sort_order' => 5,
+                    'sort_order' => 6,
                 ]
             );
         });
@@ -71,6 +81,7 @@ class ServicesSeeder extends Seeder
             FaqLeadGenerationSeeder::class,
             FaqEmailMarketingSeeder::class,
             FaqWebsiteDesignAndDevelopmentSeeder::class,
+            FaqContentCreationSeeder::class,
             FaqBusinessAutomationsSeeder::class,
             FaqCustomSoftwareDevelopmentSeeder::class,
         ]);
