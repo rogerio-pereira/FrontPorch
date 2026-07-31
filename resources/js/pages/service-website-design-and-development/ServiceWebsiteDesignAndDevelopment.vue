@@ -287,7 +287,7 @@ defineProps<{
         wide
         centered
     >
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Link
                 href="/services/lead-generation"
                 class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
@@ -307,6 +307,18 @@ defineProps<{
             >
                 <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Email marketing
+                </h3>
+                <p class="mt-2 text-sm text-brand-accent">
+                    Learn more →
+                </p>
+            </Link>
+            <Link
+                href="/services/content-creation"
+                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
+                data-test="service-related-content-creation"
+            >
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
+                    Content creation
                 </h3>
                 <p class="mt-2 text-sm text-brand-accent">
                     Learn more →

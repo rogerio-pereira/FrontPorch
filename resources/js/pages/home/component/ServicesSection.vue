@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { Code2, Cog, Layout, Mail, Target } from '@lucide/vue';
+import { Code2, Cog, Layout, Mail, PenLine, Target } from '@lucide/vue';
 import type { Component } from 'vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 
@@ -12,6 +12,7 @@ const iconBySlug: Record<string, Component> = {
     'lead-generation': Target,
     'email-marketing': Mail,
     'website-design-and-development': Layout,
+    'content-creation': PenLine,
     'business-automations': Cog,
     'custom-software-development': Code2,
 };
