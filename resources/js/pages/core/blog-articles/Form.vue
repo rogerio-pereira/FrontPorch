@@ -9,14 +9,17 @@ import { Label } from '@/components/ui/label';
 import CoreFormShell from '@/pages/core/component/CoreFormShell.vue';
 
 defineOptions({
-    layout: {
+    layout: (props: { article: { id: string } | null }) => ({
         breadcrumbs: [
             {
                 title: 'Blog',
                 href: '/core/blog/articles',
             },
+            {
+                title: props.article === null ? 'New article' : 'Edit article',
+            },
         ],
-    },
+    }),
 });
 
 const props = defineProps<{
@@ -63,7 +66,6 @@ const title = computed(() => {
     <CoreFormShell
         :title="title"
         description="The slug and the author are filled in automatically"
-        back-href="/core/blog/articles"
     >
         <Form
             :action="action"

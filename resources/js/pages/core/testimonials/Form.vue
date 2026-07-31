@@ -8,14 +8,20 @@ import { Label } from '@/components/ui/label';
 import CoreFormShell from '@/pages/core/component/CoreFormShell.vue';
 
 defineOptions({
-    layout: {
+    layout: (props: { testimonial: { id: string } | null }) => ({
         breadcrumbs: [
             {
                 title: 'Testimonials',
                 href: '/core/testimonials',
             },
+            {
+                title:
+                    props.testimonial === null
+                        ? 'New testimonial'
+                        : 'Edit testimonial',
+            },
         ],
-    },
+    }),
 });
 
 const props = defineProps<{
@@ -59,7 +65,6 @@ const title = computed(() => {
     <CoreFormShell
         :title="title"
         description="Every testimonial belongs to one service"
-        back-href="/core/testimonials"
     >
         <Form
             :action="action"

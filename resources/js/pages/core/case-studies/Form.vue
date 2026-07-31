@@ -9,14 +9,20 @@ import { Label } from '@/components/ui/label';
 import CoreFormShell from '@/pages/core/component/CoreFormShell.vue';
 
 defineOptions({
-    layout: {
+    layout: (props: { caseStudy: { id: string } | null }) => ({
         breadcrumbs: [
             {
                 title: 'Case studies',
                 href: '/core/case-studies',
             },
+            {
+                title:
+                    props.caseStudy === null
+                        ? 'New case study'
+                        : 'Edit case study',
+            },
         ],
-    },
+    }),
 });
 
 const props = defineProps<{
@@ -74,7 +80,6 @@ function isSelected(serviceId: string): boolean {
     <CoreFormShell
         :title="title"
         description="The first gallery image is used as the cover on listings"
-        back-href="/core/case-studies"
     >
         <Form
             :action="action"

@@ -8,14 +8,17 @@ import { Label } from '@/components/ui/label';
 import CoreFormShell from '@/pages/core/component/CoreFormShell.vue';
 
 defineOptions({
-    layout: {
+    layout: (props: { user: { id: string } | null }) => ({
         breadcrumbs: [
             {
                 title: 'Users',
                 href: '/core/users',
             },
+            {
+                title: props.user === null ? 'New user' : 'Edit user',
+            },
         ],
-    },
+    }),
 });
 
 const props = defineProps<{
@@ -55,7 +58,6 @@ const title = computed(() => {
     <CoreFormShell
         :title="title"
         description="Name, email and password for the admin panel"
-        back-href="/core/users"
     >
         <Form
             :action="action"

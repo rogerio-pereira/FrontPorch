@@ -8,14 +8,17 @@ import { Label } from '@/components/ui/label';
 import CoreFormShell from '@/pages/core/component/CoreFormShell.vue';
 
 defineOptions({
-    layout: {
+    layout: (props: { service: { id: string } | null }) => ({
         breadcrumbs: [
             {
                 title: 'Services',
                 href: '/core/services',
             },
+            {
+                title: props.service === null ? 'New service' : 'Edit service',
+            },
         ],
-    },
+    }),
 });
 
 const props = defineProps<{
@@ -59,7 +62,6 @@ const title = computed(() => {
     <CoreFormShell
         :title="title"
         description="The slug is generated from the title"
-        back-href="/core/services"
     >
         <Form
             :action="action"

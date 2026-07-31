@@ -8,14 +8,17 @@ import { Label } from '@/components/ui/label';
 import CoreFormShell from '@/pages/core/component/CoreFormShell.vue';
 
 defineOptions({
-    layout: {
+    layout: (props: { faq: { id: string } | null }) => ({
         breadcrumbs: [
             {
                 title: 'FAQs',
                 href: '/core/faqs',
             },
+            {
+                title: props.faq === null ? 'New FAQ' : 'Edit FAQ',
+            },
         ],
-    },
+    }),
 });
 
 const props = defineProps<{
@@ -60,7 +63,6 @@ const title = computed(() => {
     <CoreFormShell
         :title="title"
         description="Leave the service empty to show the question on the home page"
-        back-href="/core/faqs"
     >
         <Form
             :action="action"
