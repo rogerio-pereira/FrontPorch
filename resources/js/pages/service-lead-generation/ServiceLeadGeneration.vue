@@ -5,12 +5,14 @@ import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 import ServiceFaqSection from '@/layouts/app/ServiceFaqSection.vue';
+import ServiceRelatedSection from '@/layouts/app/ServiceRelatedSection.vue';
 import ServiceTestimonialsSection from '@/layouts/app/ServiceTestimonialsSection.vue';
 import VisualFrame from '@/layouts/app/VisualFrame.vue';
 
 defineProps<{
     faqs: Array<{ question: string; answer: string }>;
     testimonials: Array<{ testimonial: string; person: string }>;
+    relatedServices: Record<string, string>;
 }>();
 </script>
 
@@ -279,77 +281,7 @@ defineProps<{
         </p>
     </SectionShell>
 
-    <SectionShell
-        overline="Also explore"
-        heading="Other ways we can help"
-        intro="Each service stands alone, and they work even better together."
-        light
-        wide
-        centered
-    >
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <Link
-                href="/services/email-marketing"
-                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                data-test="service-related-email-marketing"
-            >
-                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    Email marketing
-                </h3>
-                <p class="mt-2 text-sm text-brand-accent">
-                    Learn more →
-                </p>
-            </Link>
-            <Link
-                href="/services/website-design-and-development"
-                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                data-test="service-related-website-design-and-development"
-            >
-                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    Website design &amp; development
-                </h3>
-                <p class="mt-2 text-sm text-brand-accent">
-                    Learn more →
-                </p>
-            </Link>
-            <Link
-                href="/services/content-creation"
-                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                data-test="service-related-content-creation"
-            >
-                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    Content creation
-                </h3>
-                <p class="mt-2 text-sm text-brand-accent">
-                    Learn more →
-                </p>
-            </Link>
-            <Link
-                href="/services/business-automations"
-                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                data-test="service-related-business-automations"
-            >
-                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    Business automations
-                </h3>
-                <p class="mt-2 text-sm text-brand-accent">
-                    Learn more →
-                </p>
-            </Link>
-            <Link
-                href="/services/custom-software-development"
-                class="rounded-xl border border-border-default bg-white p-5 text-left transition hover:border-brand-accent/50 hover:shadow-md"
-                data-test="service-related-custom-software-development"
-            >
-                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
-                    Custom software development
-                </h3>
-                <p class="mt-2 text-sm text-brand-accent">
-                    Learn more →
-                </p>
-            </Link>
-        </div>
-    </SectionShell>
+    <ServiceRelatedSection :services="relatedServices" />
 
     <ServiceTestimonialsSection :testimonials="testimonials" />
     <ServiceFaqSection :faqs="faqs" />
