@@ -34,12 +34,12 @@ it('seeds the real catalog and stays idempotent for real data', function () {
     $homeFaqCount = Faq::whereNull('service_id')
                         ->count();
 
-    expect($homeFaqCount)->toBe(9);
+    expect($homeFaqCount)->toBe(10);
 
     $serviceFaqCount = Faq::whereNotNull('service_id')
                         ->count();
 
-    expect($serviceFaqCount)->toBe(55);
+    expect($serviceFaqCount)->toBe(61);
 
     $leadGeneration = Service::where('slug', 'lead-generation')
                         ->firstOrFail();
@@ -47,7 +47,7 @@ it('seeds the real catalog and stays idempotent for real data', function () {
     $leadGenerationFaqCount = Faq::where('service_id', $leadGeneration->id)
                                 ->count();
 
-    expect($leadGenerationFaqCount)->toBe(8);
+    expect($leadGenerationFaqCount)->toBe(9);
 
     $contentCreation = Service::where('slug', 'content-creation')
                         ->firstOrFail();
@@ -55,7 +55,7 @@ it('seeds the real catalog and stays idempotent for real data', function () {
     $contentCreationFaqCount = Faq::where('service_id', $contentCreation->id)
                                 ->count();
 
-    expect($contentCreationFaqCount)->toBe(8);
+    expect($contentCreationFaqCount)->toBe(9);
 });
 
 it('seeds fake local content for testimonials case studies and articles', function () {
