@@ -11,7 +11,9 @@ it('shows the services admin screens to authenticated users', function (string $
 
     $page = visit($url)
                 ->waitForEvent('networkidle')
-                ->assertSee($heading);
+                ->assertSee($heading)
+                ->assertPresent('@admin-breadcrumbs')
+                ->assertDontSee('Back to list');
 
     if ($submit !== null) {
         $page->assertPresent($submit);
