@@ -715,19 +715,19 @@ These are recommendations for the founders—not website scope items:
 ### Phase 1 — Pages
 
 - [x] Write home page copy (all 16 sections)
-- [x] Write 5 service landing page copies
+- [x] Write service landing page copies (catalog now includes content-creation)
 - [ ] Draft Privacy Policy and Terms of Service
 - [x] Design and implement home page (Inertia + Vue)
 - [x] Implement service landing pages
 - [ ] Implement lead form with email delivery
-- [ ] Integrate Google Calendar redirect
+- [ ] Integrate Google Calendar redirect _(code wired via `config/site.php`; needs production URL + test)_
 - [ ] Add GA and Meta Pixel with cookie consent banner
 
 ### Phase 2 — CMS
 
-- [ ] Build internal CMS for portfolio and blog
-- [ ] Implement portfolio page (full) and home portfolio section _(static demo listing + home preview already exist; CMS wiring remains)_
-- [ ] Implement blog listing and article pages _(static demo listing + article routes already exist; CMS wiring remains)_
+- [x] Build internal CMS for portfolio and blog
+- [x] Implement portfolio page (full) and home portfolio section _(DB-backed; admin under `/core`)_
+- [x] Implement blog listing and article pages _(DB-backed; admin under `/core`)_
 - [ ] ~~Add category support for blog~~ _(dropped — articles only; see phase-01-backend/blog.md)_
 
 ### Phase 3 — Content and Marketing
