@@ -66,5 +66,13 @@ class ServicesSeeder extends Seeder
                 ]
             );
         });
+
+        $this->call([
+            FaqLeadGenerationSeeder::class,
+            FaqEmailMarketingSeeder::class,
+            FaqWebsiteDesignAndDevelopmentSeeder::class,
+            FaqBusinessAutomationsSeeder::class,
+            FaqCustomSoftwareDevelopmentSeeder::class,
+        ]);
     }
 }
