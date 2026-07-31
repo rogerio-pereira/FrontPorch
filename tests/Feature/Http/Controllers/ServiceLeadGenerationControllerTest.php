@@ -13,6 +13,7 @@ it('renders the lead generation service landing page', function () {
         ->component('service-lead-generation/ServiceLeadGeneration')
         ->has('faqs', 0)
         ->has('testimonials', 0)
+        ->has('relatedServices', 0)
     );
 });
 
@@ -76,4 +77,58 @@ it('caps testimonials on the lead generation service landing at ten', function (
 
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page->has('testimonials', 10));
+});
+
+it('lists other catalog services in relatedServices ordered by sort_order', function () {
+    Service::factory()
+        ->create([
+            'title' => 'Lead generation',
+            'sort_order' => 1,
+        ]);
+
+    Service::factory()
+        ->create([
+            'title' => 'Content creation',
+            'sort_order' => 4,
+        ]);
+
+    Service::factory()
+        ->create([
+            'title' => 'Email marketing',
+            'sort_order' => 2,
+        ]);
+
+    $response = $this->get('/services/lead-generation');
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('relatedServices', 2)
+        ->where('relatedServices', [
+            'email-marketing' => 'Email marketing',
+            'content-creation' => 'Content creation',
+        ])
+    );
+});
+
+it('excludes the current service from relatedServices', function () {
+    Service::factory()
+        ->create([
+            'title' => 'Lead generation',
+            'sort_order' => 1,
+        ]);
+
+    Service::factory()
+        ->create([
+            'title' => 'Website design and development',
+            'sort_order' => 3,
+        ]);
+
+    $response = $this->get('/services/lead-generation');
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('relatedServices', 1)
+        ->where('relatedServices.website-design-and-development', 'Website design and development')
+        ->missing('relatedServices.lead-generation')
+    );
 });
