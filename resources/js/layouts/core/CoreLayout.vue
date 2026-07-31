@@ -4,9 +4,14 @@ import { updateTheme } from '@/composables/useAppearance';
 import CoreSidebarLayout from '@/layouts/core/CoreSidebarLayout.vue';
 import type { Appearance, BreadcrumbItem } from '@/types';
 
-const { breadcrumbs = [] } = defineProps<{
-    breadcrumbs?: BreadcrumbItem[];
-}>();
+withDefaults(
+    defineProps<{
+        breadcrumbs?: BreadcrumbItem[];
+    }>(),
+    {
+        breadcrumbs: () => [],
+    },
+);
 
 onMounted(() => {
     document.documentElement.classList.add('dark');
