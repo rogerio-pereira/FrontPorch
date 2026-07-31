@@ -265,7 +265,7 @@ defineProps<{
         centered
     >
         <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
-            From Plant City to Tampa, Brandon, Lakeland, and Wesley Chapel, local customers compare options online before they call. A clear, mobile-friendly site helps you show up as the obvious choice, not the one they skip because the page felt confusing.
+            From Plant City to Tampa, Brandon, Lakeland, Wesley Chapel, Orlando, and Sarasota, local customers compare options online before they call. A clear, mobile-friendly site helps you show up as the obvious choice, not the one they skip because the page felt confusing.
         </p>
     </SectionShell>
 

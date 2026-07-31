@@ -210,7 +210,7 @@ defineProps<{
         centered
     >
         <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
-            We work side-by-side with owners in Plant City, Tampa, Lakeland, and nearby communities. You do not need a big IT department, you need a partner who explains options plainly and builds only what earns its keep.
+            We work side-by-side with owners in Plant City, Tampa, Lakeland, Orlando, Sarasota, and nearby communities. You do not need a big IT department, you need a partner who explains options plainly and builds only what earns its keep.
         </p>
     </SectionShell>
 

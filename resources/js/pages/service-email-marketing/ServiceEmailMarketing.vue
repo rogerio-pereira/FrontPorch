@@ -210,7 +210,7 @@ defineProps<{
         centered
     >
         <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
-            Whether you are in Plant City, Tampa, Sarasota, or nearby, email is often the most personal way to stay close to people who already like what you do. We keep the tone local and human, the opposite of a national brand blasting templates.
+            Whether you are in Plant City, Tampa, Orlando, Sarasota, or nearby, email is often the most personal way to stay close to people who already like what you do. We keep the tone local and human, the opposite of a national brand blasting templates.
         </p>
     </SectionShell>
 

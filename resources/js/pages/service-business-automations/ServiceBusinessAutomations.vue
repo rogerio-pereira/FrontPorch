@@ -265,7 +265,7 @@ defineProps<{
         centered
     >
         <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
-            Small teams around Plant City, Tampa, and Lakeland rarely have a "operations person." Automations are how you get some of that support without hiring a whole department, so you can keep the personal service your customers love.
+            Small teams around Plant City, Tampa, Lakeland, Orlando, and Sarasota rarely have a "operations person." Automations are how you get some of that support without hiring a whole department, so you can keep the personal service your customers love.
         </p>
     </SectionShell>
 
