@@ -17,6 +17,7 @@ it('smoke tests public web routes', function (string $url, string $text) {
     ['/services/lead-generation', 'More of the right people reaching out'],
     ['/services/email-marketing', 'Stay in touch in a way that feels human'],
     ['/services/website-design-and-development', 'A site that looks like you'],
+    ['/services/content-creation', 'Blog posts and social writing'],
     ['/services/business-automations', 'Give the copy-paste work to the system'],
     ['/services/custom-software-development', 'When ready-made tools do not fit'],
     ['/login', 'Email address'],
