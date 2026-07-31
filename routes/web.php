@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\PortfolioStudyCaseController;
 use App\Http\Controllers\ServiceBusinessAutomationsController;
+use App\Http\Controllers\ServiceContentCreationController;
 use App\Http\Controllers\ServiceCustomSoftwareDevelopmentController;
 use App\Http\Controllers\ServiceEmailMarketingController;
 use App\Http\Controllers\ServiceLeadGenerationController;
@@ -35,6 +36,9 @@ Route::get('/services/email-marketing', ServiceEmailMarketingController::class)
 
 Route::get('/services/website-design-and-development', ServiceWebsiteDesignAndDevelopmentController::class)
     ->name('services.website-design-and-development');
+
+Route::get('/services/content-creation', ServiceContentCreationController::class)
+    ->name('services.content-creation');
 
 Route::get('/services/business-automations', ServiceBusinessAutomationsController::class)
     ->name('services.business-automations');
