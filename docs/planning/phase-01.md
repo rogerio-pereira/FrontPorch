@@ -2,7 +2,7 @@
 
 **References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md) · [phase-01-backend.md](./phase-01-backend.md) (CMS — delivered)
 
-**Current state (2026-07-31):** Stages **0 (code), 1, 2, 4, and 5** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`FOOTER_CONTACT_EMAIL`, `CALENDAR_URL`). Stage **7 code largely done** (needs real env values + href assertion test). **Still open:** Stage 0.1 (founders/ops), Stage 3 (legal), Stage 6 (lead form), Stage 8 (analytics/consent), Stage 9 polish leftovers, Stage 10 QA.
+**Current state (2026-07-31):** Stages **0 (code), 1, 2, 4, and 5** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`FOOTER_CONTACT_EMAIL`, `CALENDAR_URL`). Stage **7 code largely done** (needs real env values + href assertion test). **Still open (precedence order):** Stage 6 (lead form) → Stage 7 leftovers → Stage 3 (legal) → Stage 8 (analytics/consent) → Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage.
 
 **Phase goal:** A launch-ready site that generates qualified leads — long-form home, service landing pages, legal pages, contact form, Calendar scheduling, and consent-gated analytics.
 
@@ -15,25 +15,41 @@ The Briefing (§18) lists **8 checklist items** for Phase 1. This plan maps **on
 | Stage | Maps to | Role | Status |
 |-------|---------|------|--------|
 | **Stage 0** | Briefing §18 “Immediate (Pre-Development)” | Technical foundation | Code done; ops (0.1) open |
-| **Stages 1–3** | Checklist items 1–3 | Content only (copy + legal drafts) | 1–2 done; **3 open** |
-| **Stages 4–8** | Checklist items 4–8 | Implementation | **4–5 done;** **7 code mostly done;** **6 + 8 open** |
+| **Stages 1–2** | Checklist items 1–2 | Marketing copy | **Done** (inline Vue) |
+| **Stages 4–5** | Checklist items 4–5 | Home + service pages | **Done** |
+| **Stage 6** | Checklist item 6 | Lead form (defines personal data collected) | **Open — next** |
+| **Stage 7** | Checklist item 7 | Calendar CTAs | Code mostly done; leftovers open |
+| **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Open — after 6** |
+| **Stage 8** | Checklist item 8 | Analytics + consent (needs `/privacy` link) | **Open — after 3** |
 | **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO | Partial |
 | **Stage 10** | Definition of Done | Final QA and founder sign-off | Open |
 | **CMS (Phase 2)** | Briefing §18 Phase 2 | Admin + public Eloquent wiring | **Done** — see [phase-01-backend.md](./phase-01-backend.md) |
 
 Each stage is broken into **small steps** (numbered `X.Y`). Treat one step ≈ one focused commit (or a tiny group). Tests + Pint green at the end of each stage.
 
+### Precedence (why this order)
+
+Legal pages must describe **real** site behavior. Drafting Privacy/Terms before the contact form and analytics either invents practices or forces a rewrite. Therefore:
+
+1. **Stage 6** ships the lead form → Privacy can list name, email, phone, message accurately.
+2. **Stage 7 leftovers** finish scheduling CTAs (independent of legal copy).
+3. **Stage 3** publishes Privacy + Terms + footer links → describes the live form and the GA/Meta + consent model that Stage 8 implements next.
+4. **Stage 8** adds consent banner + scripts → banner links to the live `/privacy` page.
+5. **Stages 9–10** polish and accept.
+
+Do **not** parallelize Stage 3 with Stage 6/8. Stages 1–2 (copy) and Stage 0 (foundation) were correctly parallel with early UI work; legal is not “content-only” in the same sense once it must mirror product behavior.
+
 ```mermaid
 flowchart TB
     S0[Stage 0 Foundation]
     S1[Stage 1 Home copy]
     S2[Stage 2 Service copy]
-    S3[Stage 3 Legal copy]
     S4[Stage 4 Home page]
     S5[Stage 5 Service pages]
     S6[Stage 6 Lead form]
     S7[Stage 7 Calendar]
-    S8[Stage 8 Analytics]
+    S3[Stage 3 Legal pages]
+    S8[Stage 8 Analytics + consent]
     S9[Stage 9 SEO polish]
     S10[Stage 10 QA]
 
@@ -41,24 +57,19 @@ flowchart TB
     S0 --> S5
     S1 --> S4
     S2 --> S5
-    S3 --> S4
-    S3 --> S5
     S4 --> S6
     S4 --> S7
-    S0 --> S8
-    S4 --> S8
+    S6 --> S3
+    S7 --> S9
+    S3 --> S8
+    S8 --> S9
     S5 --> S9
     S6 --> S9
-    S7 --> S9
-    S8 --> S9
     S9 --> S10
 
     S1 -. parallel .- S2
-    S2 -. parallel .- S3
     S1 -. parallel .- S0
 ```
-
-**Parallel work:** Stages 1–3 (copy) and Stage 0 (foundation) can run in parallel. Stages 6–8 can overlap after Stage 4 layout exists.
 
 ### Content workflow
 
@@ -66,15 +77,15 @@ flowchart TB
 
 **As implemented:** marketing **page copy** is **inlined** in Vue templates (home sections + each service landing). Dynamic lists (services, FAQs, testimonials, case studies, blog) load from Eloquent. `docs/content/home-copy.md` was removed after sync. Do **not** reintroduce a Markdown loader unless product needs founder-editable landing files again.
 
-| Stage | Review artifact (plan) | As implemented |
-|-------|------------------------|----------------|
+| Stage | Review artifact (plan) | As implemented / locked decision |
+|-------|------------------------|----------------------------------|
 | 1 | `docs/content/home-copy.md` | Inline in `resources/js/pages/home/**`; home lists from Eloquent |
 | 2 | `docs/content/services/{slug}.md` | Inline in each `resources/js/pages/service-*/**`; FAQs/testimonials from DB |
-| 3 | `docs/content/legal/*.md` | **Not started** — still preferred for legal drafts |
+| 3 | `docs/content/legal/*.md` (old preference) | **Locked:** inline Vue pages (same pattern as marketing); after Stage 6 |
 
 **Copy tone (confirmed):** Friendly and approachable (Design System §4.3) — not cold or overly technical. **Geo/SEO specifics** (service area, radius, city lists) belong in **meta tags, service landing pages, and FAQ** — not in hero or main section body copy.
 
-**Contact email / calendar:** `FOOTER_CONTACT_EMAIL` and `CALENDAR_URL` in `.env` → `config/site.php` → Inertia shared `site` props. UI falls back to `contact@example.com` / `#schedule` when unset.
+**Contact email / calendar:** `FOOTER_CONTACT_EMAIL` and `CALENDAR_URL` in `.env` → `config/site.php` → Inertia shared `site` props. UI falls back to `contact@example.com` / `#schedule` when unset. **Legal pages:** do not hardcode the current test placeholder; render the shared `site.footerContactEmail` (production env will hold the real address) or point readers to the footer contact when unset.
 
 ---
 
@@ -149,7 +160,9 @@ Already in the repo (see [phase-01-backend.md](./phase-01-backend.md)):
 public/fonts/                          # Montserrat — DONE
 public/images/branding/                # logos — DONE
 docs/branding/                         # source fonts + logos — DONE
-docs/content/                          # DROPPED for marketing copy; still OK for Stage 3 legal drafts
+docs/content/                          # DROPPED — marketing + legal copy are inline Vue
+resources/js/pages/privacy/            # Stage 3 — after Stage 6
+resources/js/pages/terms/              # Stage 3 — after Stage 6
 resources/css/app.css                  # brand tokens — DONE
 resources/js/layouts/AppLayout.vue     # marketing shell — DONE
 resources/js/layouts/app/              # SiteHeader, SiteFooter, SectionShell, CtaBand, CtaButton, …
@@ -170,7 +183,7 @@ tests/Browser/… / Feature              # smoke/feature for existing public + c
 
 **Briefing ref:** §18 “Immediate (Pre-Development)” · §8 Branding  
 **Goal:** Brand assets and design tokens in code so Stages 4–8 build on a consistent base.  
-**Prerequisites:** None (start here or in parallel with Stages 1–3).  
+**Prerequisites:** None (start here or in parallel with Stages 1–2).  
 **Status:** Code complete; founder/ops items open.
 
 ### Step 0.1 — Operational setup (founders, non-code)
@@ -375,15 +388,17 @@ Document required fields for every service page:
 # Stage 3 — Privacy Policy and Terms of Service
 
 **Briefing checklist:** “Draft Privacy Policy and Terms of Service”  
-**Goal:** Legal drafts published as readable pages (copy + minimal page shell).  
-**Prerequisites:** Stage 0 tokens (for page styling). Can draft copy before Stage 0.  
-**Status:** **Not started** — footer has no Privacy/Terms links yet.
+**Goal:** Legal pages published as readable shells with inline Vue copy that matches live product behavior.  
+**Prerequisites:** Stage 0 tokens; **Stage 6 complete** (so Privacy lists the real contact-form fields and email delivery). Stage 8 may follow immediately after so cookie/analytics sections stay accurate.  
+**Status:** **Not started** — deferred until after Stage 6 (precedence). Footer has no Privacy/Terms links yet.
 
-**Output location:** Prefer `docs/content/legal/privacy.md`, `docs/content/legal/terms.md` (or inline if matching current marketing pattern).
+**Output location (locked):** inline Vue pages (`resources/js/pages/privacy/**`, `resources/js/pages/terms/**`) — same pattern as marketing copy. No Markdown loader.
+
+**Company facts (locked):** Front Porch Creative · domain `frontporchcreative.io` · contact via shared `site.footerContactEmail` (do not bake in local test placeholders).
 
 ### Step 3.1 — Privacy Policy draft
 
-- [ ] AI draft covering: data collected (contact form), email delivery, analytics cookies (GA/Meta), US/Florida baseline, contact email, last updated date
+- [ ] AI draft covering: data collected (contact form — after Stage 6), email delivery, analytics cookies (GA/Meta + consent — Stage 8 next), US/Florida baseline, contact email from shared site props, last updated date
 - [ ] Sections: Introduction, Information we collect, How we use it, Cookies, Third parties, Your rights, Contact
 
 ### Step 3.2 — Terms of Service draft
@@ -392,14 +407,14 @@ Document required fields for every service page:
 
 ### Step 3.3 — Founder legal review
 
-- [ ] Founders read both documents (optional attorney review per Briefing §17)
-- [ ] Fix company name, domain, contact details
+- [ ] Founders may request edits after publish (optional attorney review per Briefing §17)
+- [ ] Ship AI draft as published text when Stage 3 is implemented (founder will iterate in-product)
 
 ### Step 3.4 — Routes and page shells
 
 - [ ] `GET /privacy` → legal Privacy page (light bg, `max-w-3xl`, prose styling)
 - [ ] `GET /terms` → legal Terms page
-- [ ] Controller loads content (Markdown or inline consistent with project)
+- [ ] Controllers render Inertia pages; copy lives inline in Vue
 - [ ] Footer links to both (`SiteFooter.vue`)
 
 ### Step 3.5 — Browser smoke test
@@ -410,7 +425,7 @@ Document required fields for every service page:
 
 - [ ] Both legal pages render readable content
 - [ ] Routes publicly accessible
-- [ ] Founder approved text (or explicitly marked “v1 — review by [date]”)
+- [ ] Privacy reflects Stage 6 form behavior; cookie/analytics language matches the Stage 8 model about to ship (or already shipped if Stage 8 was split)
 
 ---
 
@@ -418,7 +433,7 @@ Document required fields for every service page:
 
 **Briefing checklist:** “Design and implement home page (Inertia + Vue)”  
 **Goal:** Long-form home with all 16 sections, marketing layout, portfolio/blog stubs.  
-**Prerequisites:** Stage 0 complete; Stage 1 copy available; Stage 3 legal routes (for footer links).  
+**Prerequisites:** Stage 0 complete; Stage 1 copy available. Footer Privacy/Terms links come later with Stage 3 (after Stage 6).  
 **Status:** **Done** (layout + 16 sections). Legal footer links still depend on Stage 3. Portfolio/blog are DB-backed (CMS delivered), not empty stubs.
 
 ### Step 4.1 — Marketing layout and navigation
@@ -574,7 +589,7 @@ Document required fields for every service page:
 **Briefing checklist:** “Implement lead form with email delivery”  
 **Goal:** Contact form submits to Laravel and sends Gmail notification.  
 **Prerequisites:** Stage 4 contact section shell; `.env` mail config.  
-**Status:** **Not started** — contact section is mailto + schedule CTA only (email from `site.footerContactEmail` when set).
+**Status:** **Not started — next by precedence** — contact section is mailto + schedule CTA only (email from `site.footerContactEmail` when set). Completing this unblocks Stage 3 (Privacy can describe real fields + delivery).
 
 ### Step 6.1 — Form request validation
 
@@ -652,8 +667,8 @@ Document required fields for every service page:
 
 **Briefing checklist:** “Add GA and Meta Pixel with cookie consent banner”  
 **Goal:** Analytics load only after explicit consent.  
-**Prerequisites:** Stage 0; Stage 4 layout (banner placement); GA/Meta IDs in `.env`.  
-**Status:** **Not started** — IDs documented in `.env.example` only; no banner/scripts. Prefer extending `config/site.php` (same pattern as calendar/email).
+**Prerequisites:** Stage 0; Stage 4 layout (banner placement); GA/Meta IDs in `.env`; **Stage 3** so the banner can link to `/privacy`.  
+**Status:** **Not started** — IDs documented in `.env.example` only; no banner/scripts. Prefer extending `config/site.php` (same pattern as calendar/email). Do after Stage 3.
 
 ### Step 8.1 — Config
 
@@ -686,7 +701,7 @@ Document required fields for every service page:
 # Stage 9 — Technical SEO and polish
 
 **Goal:** Search engines and social previews see a complete, branded site.  
-**Prerequisites:** Stages 4–8 complete.  
+**Prerequisites:** Stages 4–5 complete for most items; Stage 3 for legal Head/sitemap entries; Stages 6–8 before final SEO close-out.  
 **Status:** **Partial.** Branded HTTP error pages (404 / 500 / 503) delivered.
 
 ### Step 9.1 — Per-page Head audit
@@ -733,7 +748,7 @@ Document required fields for every service page:
 # Stage 10 — QA and acceptance
 
 **Goal:** Phase 1 meets Briefing success criteria and repo quality gates.  
-**Status:** Open (blocked on Stages 3, 6, 8 and remaining 7/9).
+**Status:** Open (blocked on Stages 6 → 3 → 8 chain, plus remaining 7/9).
 
 ### Step 10.1 — Automated gates
 
@@ -774,23 +789,24 @@ Document required fields for every service page:
 | Risk | Mitigation |
 |------|------------|
 | No real portfolio/testimonials yet | Seeded / honest placeholders; strong FAQ and Who we are; Phase 3 content |
-| Copy blocks implementation | Stages 1–2 delivered inline; Stage 3 legal still needed |
+| Copy blocks implementation | Stages 1–2 delivered inline; Stage 3 legal waits on Stage 6 |
 | Brand assets missing | Stage 0.2 done |
 | No staging environment | Stage 10 automated tests + production build before deploy |
 | Gmail for leads | Acceptable MVP; WorkMail later |
-| Plan drift (Markdown loader / empty stubs) | Documented above; prefer finishing 3, 6, 8 over re-architecture |
+| Plan drift (Markdown loader / empty stubs) | Documented above; follow precedence 6 → 7 leftovers → 3 → 8 → 9 → 10 |
+| Legal drafted before product behavior | Mitigated by reordering Stage 3 after Stage 6 and before Stage 8 |
 | Orphaned MinIO/S3 objects | Deferred cleanup follow-up below |
 
 ---
 
 ## Suggested next implementation order
 
-1. **Stage 3** — Privacy + Terms + footer links  
-2. **Stage 6** — Contact form + email  
-3. **Stage 7 leftovers** — set `CALENDAR_URL` + href assertion test  
-4. **Stage 8** — Cookie consent + GA/Meta (`config/site.php`)  
+1. **Stage 6** — Contact form + email (defines personal data for Privacy)  
+2. **Stage 7 leftovers** — production `CALENDAR_URL` + href assertion test  
+3. **Stage 3** — Privacy + Terms (inline Vue) + footer links  
+4. **Stage 8** — Cookie consent + GA/Meta (`config/site.php`; links to `/privacy`)  
 5. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
-6. **Stage 10** — automated + founder QA  
+6. **Stage 10** — automated + founder QA 
 
 ---
 
