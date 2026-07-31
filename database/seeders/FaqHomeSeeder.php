@@ -119,5 +119,17 @@ class FaqHomeSeeder extends Seeder
                 'sort_order' => 9,
             ]
         );
+
+        // AI use
+        Faq::updateOrCreate(
+            [
+                'service_id' => null,
+                'question' => 'Do you use AI in your work?',
+            ],
+            [
+                'answer' => 'Yes. We use AI as a helper for drafts, research, and speeding up the boring parts of marketing and build work. A human still shapes the strategy, reviews the words, and makes the decisions that affect your business. Tools do not replace judgment on the front porch.',
+                'sort_order' => 10,
+            ]
+        );
     }
 }

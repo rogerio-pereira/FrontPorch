@@ -99,5 +99,17 @@ class FaqBusinessAutomationsSeeder extends Seeder
                 'sort_order' => 7,
             ]
         );
+
+        // AI in automations
+        Faq::updateOrCreate(
+            [
+                'service_id' => $service->id,
+                'question' => 'Do your automations use AI?',
+            ],
+            [
+                'answer' => 'When it helps. Some workflows are simple rules: if this, then that. Others benefit from AI, like summarizing notes, drafting a first reply you still approve, or sorting inquiries by urgency. We only add AI where it saves real time and stays under your control, not because it sounds trendy.',
+                'sort_order' => 8,
+            ]
+        );
     }
 }

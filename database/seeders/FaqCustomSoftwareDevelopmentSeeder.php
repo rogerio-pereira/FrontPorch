@@ -231,5 +231,21 @@ class FaqCustomSoftwareDevelopmentSeeder extends Seeder
                 'sort_order' => 18,
             ]
         );
+
+        // AI in the build
+        Faq::where('service_id', $service->id)
+            ->where('question', 'Can you build AI into custom software?')
+            ->delete();
+
+        Faq::updateOrCreate(
+            [
+                'service_id' => $service->id,
+                'question' => 'Do you use AI when building custom software?',
+            ],
+            [
+                'answer' => 'Yes. We may use AI to assist and speed up development so we can focus more time on your workflow, edge cases, and quality. Everything is human-reviewed before it ships: architecture, code, tests, and decisions that affect your business. If you also want AI features inside the product itself, we can talk through that when it solves a real problem.',
+                'sort_order' => 19,
+            ]
+        );
     }
 }

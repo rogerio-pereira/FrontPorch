@@ -99,5 +99,17 @@ class FaqEmailMarketingSeeder extends Seeder
                 'sort_order' => 7,
             ]
         );
+
+        // AI drafting
+        Faq::updateOrCreate(
+            [
+                'service_id' => $service->id,
+                'question' => 'Do you use AI to write my emails?',
+            ],
+            [
+                'answer' => 'We may use AI to draft faster, then we edit so the message still feels like you, not a bulk blast. You review and approve before anything sends. The goal is personal follow-up at a pace you could never keep alone, without sounding like a robot.',
+                'sort_order' => 8,
+            ]
+        );
     }
 }

@@ -111,5 +111,17 @@ class FaqLeadGenerationSeeder extends Seeder
                 'sort_order' => 8,
             ]
         );
+
+        // AI for ads
+        Faq::updateOrCreate(
+            [
+                'service_id' => $service->id,
+                'question' => 'Do you use AI for ads and lead generation?',
+            ],
+            [
+                'answer' => 'Yes. We may use AI to draft headlines, ad variations, or landing-page ideas faster, and also to help understand performance and suggest or automate campaign improvements over time. A human still sets strategy, reviews what goes live, and decides where budget goes, with plain-language reporting so you always know what is happening.',
+                'sort_order' => 9,
+            ]
+        );
     }
 }

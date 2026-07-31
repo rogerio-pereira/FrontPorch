@@ -111,5 +111,17 @@ class FaqContentCreationSeeder extends Seeder
                 'sort_order' => 8,
             ]
         );
+
+        // AI drafting
+        Faq::updateOrCreate(
+            [
+                'service_id' => $service->id,
+                'question' => 'Do you use AI to write my content?',
+            ],
+            [
+                'answer' => 'Yes, as a drafting aid. AI helps us move faster on first drafts and ideas so you get more consistent publishing without waiting weeks. Every piece still gets human editing for voice, accuracy, and whether it actually sounds like your business. Nothing goes live until you approve it.',
+                'sort_order' => 9,
+            ]
+        );
     }
 }

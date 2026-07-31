@@ -99,5 +99,21 @@ class FaqWebsiteDesignAndDevelopmentSeeder extends Seeder
                 'sort_order' => 7,
             ]
         );
+
+        // AI in the build
+        Faq::where('service_id', $service->id)
+            ->where('question', 'Do you use AI for website copy?')
+            ->delete();
+
+        Faq::updateOrCreate(
+            [
+                'service_id' => $service->id,
+                'question' => 'Do you use AI when building my website?',
+            ],
+            [
+                'answer' => 'Yes. We may use AI to assist and speed up development and drafting so your site moves faster without cutting corners. Everything is human-reviewed before it ships: design choices, code, and copy. The finished site should still feel like a clear conversation with your business, not a generic AI brochure.',
+                'sort_order' => 8,
+            ]
+        );
     }
 }
