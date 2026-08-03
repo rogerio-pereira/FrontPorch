@@ -1,6 +1,7 @@
 <?php
 
 use App\Mail\LeadEmail;
+use App\Mail\LeadSchedulingEmail;
 use App\Notifications\SlackNotification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -8,7 +9,10 @@ use RyanChandler\LaravelCloudflareTurnstile\Facades\Turnstile;
 
 beforeEach(function () {
     Turnstile::fake();
-    config(['site.contact_email' => 'leads@example.com']);
+    config([
+        'site.contact_email' => 'leads@example.com',
+        'site.calendar_url' => 'https://calendar.example.com/book',
+    ]);
 });
 
 it('accepts a valid contact submission and sends email', function () {
@@ -32,6 +36,11 @@ it('accepts a valid contact submission and sends email', function () {
             && $mail->lead['phone'] === '(813) 555-0100'
             && $mail->lead['website'] === 'https://example.com'
             && $mail->hasTo('leads@example.com');
+    });
+
+    Mail::assertSent(LeadSchedulingEmail::class, function (LeadSchedulingEmail $mail): bool {
+        return $mail->hasTo('alex@example.com')
+            && $mail->calendarUrl === 'https://calendar.example.com/book';
     });
 });
 
@@ -169,7 +178,27 @@ it('skips slack when token is missing', function () {
         ->assertRedirect('/');
 
     Mail::assertSent(LeadEmail::class);
+    Mail::assertSent(LeadSchedulingEmail::class);
     Notification::assertNothingSent();
+});
+
+it('skips the scheduling email when calendar url is missing', function () {
+    Mail::fake();
+    Notification::fake();
+
+    config(['site.calendar_url' => null]);
+
+    $this->from('/')
+        ->post('/contact', [
+            'name' => 'Alex Rivera',
+            'email' => 'alex@example.com',
+            'website' => 'https://example.com',
+            'cf-turnstile-response' => Turnstile::dummy(),
+        ])
+        ->assertRedirect('/');
+
+    Mail::assertSent(LeadEmail::class);
+    Mail::assertNotSent(LeadSchedulingEmail::class);
 });
 
 it('throttles contact submissions', function () {

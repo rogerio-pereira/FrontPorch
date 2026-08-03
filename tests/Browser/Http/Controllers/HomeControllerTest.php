@@ -140,3 +140,11 @@ it('exposes the contact section via hash', function () {
         ->assertPresent('@contact-form')
         ->assertPresent('@contact-submit');
 });
+
+it('points schedule CTAs to the contact form', function () {
+    visit('/')
+        ->assertPresent('@nav-schedule')
+        ->assertAttribute('@nav-schedule', 'href', '/#contact')
+        ->assertPresent('@home-hero-primary-cta')
+        ->assertAttribute('@home-hero-primary-cta', 'href', '/#contact');
+});
