@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Toaster } from '@/components/ui/sonner';
 import SiteFooter from '@/layouts/app/SiteFooter.vue';
 import SiteHeader from '@/layouts/app/SiteHeader.vue';
 </script>
@@ -10,5 +11,6 @@ import SiteHeader from '@/layouts/app/SiteHeader.vue';
             <slot />
         </main>
         <SiteFooter />
+        <Toaster />
     </div>
 </template>

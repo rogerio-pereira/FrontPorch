@@ -4,7 +4,7 @@ import { computed } from 'vue';
 
 const page = usePage();
 
-const contactEmail = computed(() => page.props.site.footerContactEmail ?? 'contact@example.com');
+const contactEmail = computed(() => page.props.site.contactEmail ?? 'contact@example.com');
 </script>
 
 <template>

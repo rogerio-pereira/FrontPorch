@@ -2,7 +2,7 @@
 
 **References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md) · [phase-01-backend.md](./phase-01-backend.md) (CMS — delivered)
 
-**Current state (2026-07-31):** Stages **0 (code), 1, 2, 4, and 5** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`FOOTER_CONTACT_EMAIL`, `CALENDAR_URL`). Stage **7 code largely done** (needs real env values + href assertion test). **Still open (precedence order):** Stage 6 (lead form) → Stage 7 leftovers → Stage 3 (legal) → Stage 8 (analytics/consent) → Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage.
+**Current state (2026-07-31):** Stages **0 (code), 1, 2, 4, 5, and 6** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`, `CALENDAR_URL`). Stage **7 code largely done** (needs real env values + href assertion test). **Still open (precedence order):** Stage 7 leftovers → Stage 3 (legal) → Stage 8 (analytics/consent) → Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage.
 
 **Phase goal:** A launch-ready site that generates qualified leads — long-form home, service landing pages, legal pages, contact form, Calendar scheduling, and consent-gated analytics.
 
@@ -17,9 +17,9 @@ The Briefing (§18) lists **8 checklist items** for Phase 1. This plan maps **on
 | **Stage 0** | Briefing §18 “Immediate (Pre-Development)” | Technical foundation | Code done; ops (0.1) open |
 | **Stages 1–2** | Checklist items 1–2 | Marketing copy | **Done** (inline Vue) |
 | **Stages 4–5** | Checklist items 4–5 | Home + service pages | **Done** |
-| **Stage 6** | Checklist item 6 | Lead form (defines personal data collected) | **Open — next** |
+| **Stage 6** | Checklist item 6 | Lead form (defines personal data collected) | **Done** |
 | **Stage 7** | Checklist item 7 | Calendar CTAs | Code mostly done; leftovers open |
-| **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Open — after 6** |
+| **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Open — next** |
 | **Stage 8** | Checklist item 8 | Analytics + consent (needs `/privacy` link) | **Open — after 3** |
 | **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO | Partial |
 | **Stage 10** | Definition of Done | Final QA and founder sign-off | Open |
@@ -31,7 +31,7 @@ Each stage is broken into **small steps** (numbered `X.Y`). Treat one step ≈ o
 
 Legal pages must describe **real** site behavior. Drafting Privacy/Terms before the contact form and analytics either invents practices or forces a rewrite. Therefore:
 
-1. **Stage 6** ships the lead form → Privacy can list name, email, phone, message accurately.
+1. **Stage 6** ships the lead form → Privacy can list name, email, optional phone accurately.
 2. **Stage 7 leftovers** finish scheduling CTAs (independent of legal copy).
 3. **Stage 3** publishes Privacy + Terms + footer links → describes the live form and the GA/Meta + consent model that Stage 8 implements next.
 4. **Stage 8** adds consent banner + scripts → banner links to the live `/privacy` page.
@@ -85,7 +85,7 @@ flowchart TB
 
 **Copy tone (confirmed):** Friendly and approachable (Design System §4.3) — not cold or overly technical. **Geo/SEO specifics** (service area, radius, city lists) belong in **meta tags, service landing pages, and FAQ** — not in hero or main section body copy.
 
-**Contact email / calendar:** `FOOTER_CONTACT_EMAIL` and `CALENDAR_URL` in `.env` → `config/site.php` → Inertia shared `site` props. UI falls back to `contact@example.com` / `#schedule` when unset. **Legal pages:** do not hardcode the current test placeholder; render the shared `site.footerContactEmail` (production env will hold the real address) or point readers to the footer contact when unset.
+**Contact email / calendar:** `CONTACT_EMAIL` and `CALENDAR_URL` in `.env` → `config/site.php` → Inertia shared `site` props. UI falls back to `contact@example.com` / `#schedule` when unset. **Legal pages:** do not hardcode the current test placeholder; render the shared `site.contactEmail` (production env will hold the real address) or point readers to the footer contact when unset.
 
 ---
 
@@ -138,7 +138,7 @@ Already in the repo (see [phase-01-backend.md](./phase-01-backend.md)):
 | `GET /blog/article/{article:slug}` | `blog-article/BlogArticle` | Done (DB) |
 | `GET /privacy` | — | **Missing** (Stage 3) |
 | `GET /terms` | — | **Missing** (Stage 3) |
-| `POST /contact` | — | **Missing** (Stage 6) |
+| `POST /contact` | ContactController | **Done** (Stage 6) |
 | `/core/*` | `core/**` | Done (CMS admin; `routes/core.php`) |
 
 **Service slugs:** `lead-generation` · `email-marketing` · `website-design-and-development` · `content-creation` · `business-automations` · `custom-software-development`
@@ -152,7 +152,7 @@ Already in the repo (see [phase-01-backend.md](./phase-01-backend.md)):
 | `docs/content/` Markdown loader | Inline landing copy in Vue; lists from Eloquent |
 | `GET /services/{slug}` dynamic | Explicit routes per slug |
 | Empty `/portfolio` and `/blog` stubs | Full DB-backed listing + detail pages + `/core` admin |
-| `config/marketing.php` | **`config/site.php`** (`footer_contact_email`, `calendar_url`); analytics IDs still env-only for Stage 8 |
+| `config/marketing.php` | **`config/site.php`** (`contact_email`, `calendar_url`); analytics IDs still env-only for Stage 8 |
 
 ### Target / actual file structure
 
@@ -171,9 +171,9 @@ resources/js/pages/service-*/          # six service pages — DONE
 resources/js/pages/portfolio*/         # portfolio listing + study case — DONE (DB)
 resources/js/pages/blog*/              # blog listing + article — DONE (DB)
 resources/js/pages/core/               # admin CMS pages — DONE
-config/site.php                        # DONE (calendar + footer email); extend for Stage 8 IDs
-app/Http/Controllers/ContactController.php  # TODO (Stage 6)
-tests/Feature/ContactFormTest.php      # TODO (Stage 6)
+config/site.php                        # DONE (calendar + contact email); extend for Stage 8 IDs
+app/Http/Controllers/ContactController.php  # Stage 6
+tests/Feature/ContactFormTest.php      # Stage 6
 tests/Browser/… / Feature              # smoke/feature for existing public + core pages — largely DONE
 ```
 
@@ -394,7 +394,7 @@ Document required fields for every service page:
 
 **Output location (locked):** inline Vue pages (`resources/js/pages/privacy/**`, `resources/js/pages/terms/**`) — same pattern as marketing copy. No Markdown loader.
 
-**Company facts (locked):** Front Porch Creative · domain `frontporchcreative.io` · contact via shared `site.footerContactEmail` (do not bake in local test placeholders).
+**Company facts (locked):** Front Porch Creative · domain `frontporchcreative.io` · contact via shared `site.contactEmail` (do not bake in local test placeholders).
 
 ### Step 3.1 — Privacy Policy draft
 
@@ -500,8 +500,8 @@ Document required fields for every service page:
 
 ### Step 4.14 — Section 14: Contact (shell only)
 
-- [x] `home/component/ContactSection.vue` — intro + mailto / schedule CTAs (form = Stage 6)
-- [x] Footer/contact email from Inertia `site.footerContactEmail` (fallback placeholder)
+- [x] `home/component/ContactSection.vue` — intro + contact form + schedule CTA
+- [x] Footer/contact email from Inertia `site.contactEmail` (fallback placeholder)
 - [x] `id="contact"` anchor for nav
 
 ### Step 4.15 — Section 16: Blog preview
@@ -587,42 +587,46 @@ Document required fields for every service page:
 # Stage 6 — Lead form with email delivery
 
 **Briefing checklist:** “Implement lead form with email delivery”  
-**Goal:** Contact form submits to Laravel and sends Gmail notification.  
+**Goal:** Contact form submits to Laravel and sends email notification (Slack optional; CRM TBD).  
 **Prerequisites:** Stage 4 contact section shell; `.env` mail config.  
-**Status:** **Not started — next by precedence** — contact section is mailto + schedule CTA only (email from `site.footerContactEmail` when set). Completing this unblocks Stage 3 (Privacy can describe real fields + delivery).
+**Status:** **Done (code)** — form on home; Turnstile (fail closed); email to `CONTACT_EMAIL` with retry; Slack skipped when unset; CRM placeholder comment. Toast feedback on marketing layout. Completing this unblocks Stage 3.
 
 ### Step 6.1 — Form request validation
 
-- [ ] `StoreContactRequest` — name, email, phone, message (all required); email + phone format rules
+- [x] `StoreContactRequest` — name + email required; phone optional (US format); Turnstile token required
+- [x] No `message` field (product decision)
 
 ### Step 6.2 — Controller and route
 
-- [ ] `POST /contact` → `ContactController@store`
-- [ ] Rate limit (e.g. 5/min per IP)
-- [ ] Optional honeypot field
+- [x] `POST /contact` → `ContactController@store`
+- [x] Rate limit (5/min per IP)
+- [x] Cloudflare Turnstile via `ryangjchandler/laravel-cloudflare-turnstile` (see `docs/integration/TURNSTILE_SETUP.md`)
 
-### Step 6.3 — Mailable
+### Step 6.3 — Mailable and integrations
 
-- [ ] `LeadNotification` mailable
-- [ ] `resources/views/emails/lead-notification.blade.php`
-- [ ] Recipient: `MAIL_LEAD_RECIPIENT` env var (already listed in `.env.example`)
+- [x] `LeadNotification` mailable
+- [x] `resources/views/emails/lead-notification.blade.php`
+- [x] Recipient: `CONTACT_EMAIL` (`config/site.php` → `site.contactEmail`)
+- [x] Single `LeadSubmissionService` — Turnstile verify, email retry, optional Slack
+- [x] Slack via `SLACK_BOT_USER_OAUTH_TOKEN` + `SLACK_BOT_USER_DEFAULT_CHANNEL` (skip when empty; log failures)
+- [x] CRM: comment only — under development (user success does not depend on CRM yet)
 
 ### Step 6.4 — Frontend form
 
-- [ ] `ContactForm.vue` — Reka Input/Label/Textarea
-- [ ] `data-test="contact-name"`, `contact-email`, `contact-phone`, `contact-message`, `contact-submit`
-- [ ] Success and error feedback (inline or toast)
-- [ ] Wire into `ContactSection.vue` (replace mailto-only shell)
+- [x] `ContactForm.vue` — Reka Input/Label + Turnstile widget
+- [x] `data-test="contact-name"`, `contact-email`, `contact-phone`, `contact-submit`
+- [x] Success toast (`AppLayout` Toaster); validation errors inline
+- [x] Wired into `ContactSection.vue`; keep “Book a discovery call” CTA
 
 ### Step 6.5 — Tests
 
-- [ ] `tests/Feature/ContactFormTest.php` — validation errors, Mail::fake success
-- [ ] Browser test — happy path submit (mail mocked)
+- [x] `tests/Feature/ContactFormTest.php` — validation, Mail::fake, Slack, throttle
+- [x] Browser test — happy path submit (Turnstile mocked / testing token)
 
 ### Stage 6 — Done when
 
-- [ ] Form on home submits and sends email
-- [ ] Validation and throttle verified by tests
+- [x] Form on home submits and sends email
+- [x] Validation and throttle verified by tests
 
 ---
 
@@ -638,7 +642,7 @@ Document required fields for every service page:
 - [x] `config/site.php` → `'calendar_url' => env('CALENDAR_URL')`
 - [x] Shared via `HandleInertiaRequests` as `site.calendarUrl`
 - [x] Document in `.env.example` (`CALENDAR_URL`)
-- [x] Document in `.env.example` (`FOOTER_CONTACT_EMAIL`)
+- [x] Document in `.env.example` (`CONTACT_EMAIL`)
 
 ### Step 7.2 — CTA wiring
 
@@ -801,12 +805,11 @@ Document required fields for every service page:
 
 ## Suggested next implementation order
 
-1. **Stage 6** — Contact form + email (defines personal data for Privacy)  
-2. **Stage 7 leftovers** — production `CALENDAR_URL` + href assertion test  
-3. **Stage 3** — Privacy + Terms (inline Vue) + footer links  
-4. **Stage 8** — Cookie consent + GA/Meta (`config/site.php`; links to `/privacy`)  
-5. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
-6. **Stage 10** — automated + founder QA 
+1. **Stage 7 leftovers** — production `CALENDAR_URL` + href assertion test  
+2. **Stage 3** — Privacy + Terms (inline Vue) + footer links  
+3. **Stage 8** — Cookie consent + GA/Meta (`config/site.php`; links to `/privacy`)  
+4. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
+5. **Stage 10** — automated + founder QA 
 
 ---
 
@@ -843,7 +846,7 @@ Until then, orphaned objects in object storage are acceptable for MVP.
 Non-code items (overlap with Step 0.1; re-verify before launch):
 
 - [ ] DNS live: `.io` canonical; redirects from `.agency` / `.marketing`
-- [ ] `GOOGLE_ANALYTICS_ID`, `META_PIXEL_ID`, `CALENDAR_URL`, `FOOTER_CONTACT_EMAIL`, `MAIL_LEAD_RECIPIENT` set in production
+- [ ] `GOOGLE_ANALYTICS_ID`, `META_PIXEL_ID`, `CALENDAR_URL`, `CONTACT_EMAIL`, Turnstile + Slack keys set in production
 - [ ] Search Console verified
 - [ ] Google Business Profile (if decided)
 - [ ] Founder review: copy + legal (Stage 10.3)

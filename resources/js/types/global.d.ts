@@ -1,5 +1,15 @@
 import type { Auth } from '@/types/auth';
 
+interface TurnstileApi {
+    reset: (widget?: string | HTMLElement) => void;
+}
+
+declare global {
+    interface Window {
+        turnstile?: TurnstileApi;
+    }
+}
+
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
     interface ImportMetaEnv {
@@ -20,8 +30,10 @@ declare module '@inertiajs/core' {
             auth: Auth;
             sidebarOpen: boolean;
             site: {
-                footerContactEmail: string | null;
+                contactEmail: string | null;
                 calendarUrl: string | null;
+                turnstileSiteKey: string | null;
+                turnstileTesting: boolean;
             };
             servicesNav: Array<{ slug: string; title: string }>;
             [key: string]: unknown;

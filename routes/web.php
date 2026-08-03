@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BlogArticleController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\PortfolioStudyCaseController;
@@ -15,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)
     ->name('home');
+
+Route::post('/contact', [ContactController::class, 'store'])
+    ->middleware('throttle:3,1') // max 3 contact submissions per IP per 1 minute
+    ->name('contact.store');
 
 Route::get('/portfolio', PortfolioController::class)
     ->name('portfolio');

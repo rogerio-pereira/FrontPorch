@@ -63,7 +63,7 @@ it('renders the home page hero and main sections', function () {
         ->assertPresent('@home-hero-visual')
         ->assertSee('Good questions, happy to answer')
         ->assertPresent('@home-faq')
-        ->assertPresent('@home-contact-email')
+        ->assertPresent('@contact-form')
         ->assertPresent('@home-service-lead-generation');
 });
 
@@ -137,5 +137,6 @@ it('exposes the contact anchor for navigation', function () {
 it('exposes the contact section via hash', function () {
     visit('/#contact')
         ->assertSee('We would love to hear from you')
-        ->assertPresent('@home-contact-schedule');
+        ->assertPresent('@contact-form')
+        ->assertPresent('@contact-submit');
 });
