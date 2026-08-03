@@ -20,8 +20,10 @@ declare module '@inertiajs/core' {
             auth: Auth;
             sidebarOpen: boolean;
             site: {
-                footerContactEmail: string | null;
+                contactEmail: string | null;
                 calendarUrl: string | null;
+                turnstileSiteKey: string | null;
+                turnstileTesting: boolean;
             };
             servicesNav: Array<{ slug: string; title: string }>;
             [key: string]: unknown;

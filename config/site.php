@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'footer_contact_email' => env('FOOTER_CONTACT_EMAIL'),
+    'contact_email' => env('CONTACT_EMAIL'),
 
     'calendar_url' => env('CALENDAR_URL'),
 

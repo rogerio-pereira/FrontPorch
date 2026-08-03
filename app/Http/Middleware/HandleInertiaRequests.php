@@ -49,8 +49,10 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'site' => [
-                'footerContactEmail' => config('site.footer_contact_email'),
+                'contactEmail' => config('site.contact_email'),
                 'calendarUrl' => config('site.calendar_url'),
+                'turnstileSiteKey' => config('services.turnstile.key'),
+                'turnstileTesting' => app()->environment('testing'),
             ],
             'servicesNav' => $servicesNav,
         ];
