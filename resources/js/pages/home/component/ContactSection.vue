@@ -129,7 +129,7 @@ const turnstileTesting = computed(() => {
                 </div>
 
                 <p
-                    class="rounded-md border-l-4 border-[var(--text-accent-on-light)] bg-[#e4ece6] px-4 py-3 text-sm text-[var(--text-primary-on-light)]"
+                    class="mx-auto max-w-lg rounded-md border border-[#b8a088] bg-[#f4ebe3] px-4 py-3 text-center text-sm text-[var(--text-primary-on-light)]"
                     data-test="contact-email-notice"
                 >
                     <strong class="block text-base">We will email you the discovery-call link.</strong>
