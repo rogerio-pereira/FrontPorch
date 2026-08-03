@@ -20,27 +20,27 @@ const turnstileTesting = computed(() => {
 
 function formatPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const digits = input.value.replace(/\D/g, '').slice(0, 10);
+    const parts = input.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
 
-    if (digits.length === 0) {
+    if (parts === null) {
         input.value = '';
 
         return;
     }
 
-    if (digits.length < 4) {
-        input.value = `(${digits}`;
+    if (parts[2] === '') {
+        input.value = parts[1];
 
         return;
     }
 
-    if (digits.length < 7) {
-        input.value = `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    if (parts[3] === '') {
+        input.value = `(${parts[1]}) ${parts[2]}`;
 
         return;
     }
 
-    input.value = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+    input.value = `(${parts[1]}) ${parts[2]}-${parts[3]}`;
 }
 </script>
 
@@ -118,9 +118,8 @@ function formatPhoneInput(event: Event): void {
                     <Input
                         id="contact-phone"
                         name="phone"
-                        type="tel"
+                        type="text"
                         autocomplete="tel"
-                        inputmode="numeric"
                         maxlength="14"
                         placeholder="(555) 555-5555"
                         data-test="contact-phone"
