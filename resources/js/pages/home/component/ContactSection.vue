@@ -133,7 +133,7 @@ const turnstileTesting = computed(() => {
                     data-test="contact-email-notice"
                 >
                     <strong class="block text-base">We will email you the discovery-call link.</strong>
-                    A real email address is required so we can avoid fake submissions.
+                    A real email address is required.
                 </p>
 
                 <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
