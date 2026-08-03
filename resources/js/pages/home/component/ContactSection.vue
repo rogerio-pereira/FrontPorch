@@ -103,7 +103,6 @@ function formatPhoneInput(event: Event): void {
                         name="website"
                         type="url"
                         required
-                        autocomplete="url"
                         placeholder="https://yourbusiness.com"
                         data-test="contact-website"
                     />
