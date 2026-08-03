@@ -17,6 +17,31 @@ const turnstileSiteKey = computed(() => {
 const turnstileTesting = computed(() => {
     return page.props.site.turnstileTesting === true;
 });
+
+function formatPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digits = input.value.replace(/\D/g, '').slice(0, 10);
+
+    if (digits.length === 0) {
+        input.value = '';
+
+        return;
+    }
+
+    if (digits.length < 4) {
+        input.value = `(${digits}`;
+
+        return;
+    }
+
+    if (digits.length < 7) {
+        input.value = `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+
+        return;
+    }
+
+    input.value = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
 </script>
 
 <template>
@@ -95,8 +120,11 @@ const turnstileTesting = computed(() => {
                         name="phone"
                         type="tel"
                         autocomplete="tel"
+                        inputmode="numeric"
+                        maxlength="14"
                         placeholder="(555) 555-5555"
                         data-test="contact-phone"
+                        @input="formatPhoneInput"
                     />
                     <InputError :message="errors.phone" />
                 </div>
