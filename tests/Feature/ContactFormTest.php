@@ -89,6 +89,24 @@ it('rejects an invalid us phone number', function () {
     Mail::assertNothingSent();
 });
 
+it('rejects phone numbers outside the (555) 555-5555 format', function () {
+    Mail::fake();
+
+    $response = $this->from('/')
+        ->post('/contact', [
+            'name' => 'Alex Rivera',
+            'email' => 'alex@example.com',
+            'phone' => '813-555-0100',
+            'website' => 'https://example.com',
+            'cf-turnstile-response' => Turnstile::dummy(),
+        ]);
+
+    $response->assertRedirect('/');
+    $response->assertSessionHasErrors(['phone']);
+
+    Mail::assertNothingSent();
+});
+
 it('rejects when turnstile verification fails', function () {
     Mail::fake();
 

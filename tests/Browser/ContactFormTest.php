@@ -28,7 +28,7 @@ it('submits the home contact form successfully', function () {
         ->type('name', 'Alex Rivera')
         ->type('email', 'alex@example.com')
         ->type('website', 'https://example.com')
-        ->type('phone', '8135550100')
+        ->type('phone', '(813) 555-0100')
         ->click('@contact-submit')
         ->assertPathIs('/');
 
