@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Form, usePage } from '@inertiajs/vue3';
+import { vMaska } from 'maska/vue';
 import { computed } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -17,31 +18,6 @@ const turnstileSiteKey = computed(() => {
 const turnstileTesting = computed(() => {
     return page.props.site.turnstileTesting === true;
 });
-
-function formatPhoneInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const parts = input.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-
-    if (parts === null) {
-        input.value = '';
-
-        return;
-    }
-
-    if (parts[2] === '') {
-        input.value = parts[1];
-
-        return;
-    }
-
-    if (parts[3] === '') {
-        input.value = `(${parts[1]}) ${parts[2]}`;
-
-        return;
-    }
-
-    input.value = `(${parts[1]}) ${parts[2]}-${parts[3]}`;
-}
 </script>
 
 <template>
@@ -116,13 +92,12 @@ function formatPhoneInput(event: Event): void {
                     </Label>
                     <Input
                         id="contact-phone"
+                        v-maska="'(###) ###-####'"
                         name="phone"
                         type="text"
                         autocomplete="tel"
-                        maxlength="14"
                         placeholder="(555) 555-5555"
                         data-test="contact-phone"
-                        @input="formatPhoneInput"
                     />
                     <InputError :message="errors.phone" />
                 </div>
