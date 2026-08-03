@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Form, usePage } from '@inertiajs/vue3';
 import { vMaska } from 'maska/vue';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 
 const page = usePage();
+const turnstileWidget = ref<HTMLElement | null>(null);
 
 const turnstileSiteKey = computed(() => {
     return page.props.site.turnstileSiteKey ?? '';
@@ -18,6 +19,18 @@ const turnstileSiteKey = computed(() => {
 const turnstileTesting = computed(() => {
     return page.props.site.turnstileTesting === true;
 });
+
+function resetTurnstile(): void {
+    if (turnstileTesting.value) {
+        return;
+    }
+
+    if (!turnstileWidget.value) {
+        return;
+    }
+
+    window.turnstile?.reset(turnstileWidget.value);
+}
 </script>
 
 <template>
@@ -44,6 +57,7 @@ const turnstileTesting = computed(() => {
                 method="post"
                 class="stack-default w-full text-left"
                 data-test="contact-form"
+                :on-finish="resetTurnstile"
                 v-slot="{ errors, processing }"
             >
                 <div class="grid gap-2">
@@ -114,6 +128,7 @@ const turnstileTesting = computed(() => {
                     />
                     <div
                         v-else-if="turnstileSiteKey !== ''"
+                        ref="turnstileWidget"
                         class="cf-turnstile"
                         :data-sitekey="turnstileSiteKey"
                         data-test="contact-turnstile"
