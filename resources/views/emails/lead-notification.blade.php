@@ -5,7 +5,9 @@
 
 **Email:** {{ $lead['email'] }}
 
-**Phone:** @if ($lead['phone']){{ $lead['phone'] }}@else (not provided) @endif
+**Phone:** {{ $phoneDisplay }}
+
+**Website:** {{ $lead['website'] }}
 
 Thanks,<br>
 {{ config('app.name') }}

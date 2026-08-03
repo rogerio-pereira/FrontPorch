@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)
     ->name('home');
 
+// throttle:5,1 = max 5 contact submissions per IP per 1 minute
 Route::post('/contact', [ContactController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('contact.store');

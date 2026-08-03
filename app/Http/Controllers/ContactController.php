@@ -2,32 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ContactLeadSubmitted;
 use App\Http\Requests\StoreContactRequest;
-use App\Services\LeadSubmissionService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
 class ContactController extends Controller
 {
-    public function store(
-        StoreContactRequest $request,
-        LeadSubmissionService $leadSubmissionService,
-    ): RedirectResponse {
+    public function store(StoreContactRequest $request): RedirectResponse
+    {
         $data = $request->validated();
-
-        $phone = $data['phone'] ?? null;
-
-        if (! is_string($phone) || trim($phone) === '') {
-            $phone = null;
-        }
 
         $lead = [
             'name' => $data['name'],
             'email' => $data['email'],
-            'phone' => $phone,
+            'phone' => $data['phone'] ?? null,
+            'website' => $data['website'],
         ];
 
-        $leadSubmissionService->submit($lead);
+        /*
+         * Dispatch event (will call two listeners)
+         *      SendLeadEmail: notifies CONTACT_EMAIL
+         *      SendLeadSlackNotification: optional Slack ping
+         */
+        ContactLeadSubmitted::dispatch($lead);
 
         Inertia::flash('toast', [
             'type' => 'success',

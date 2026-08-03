@@ -13,17 +13,6 @@ class StoreContactRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation(): void
-    {
-        $phone = $this->input('phone');
-
-        if ($phone === '') {
-            $this->merge([
-                'phone' => null,
-            ]);
-        }
-    }
-
     /**
      * @return array<string, ValidationRule|array<mixed>|string>
      */
@@ -36,8 +25,10 @@ class StoreContactRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:30',
+                // US phone: optional +1, area code, exchange, line — e.g. (813) 555-0100, 813-555-0100, +1 813 555 0100
                 'regex:/^(\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/',
             ],
+            'website' => ['required', 'url', 'max:255'],
             'cf-turnstile-response' => ['required', new Turnstile],
         ];
     }
