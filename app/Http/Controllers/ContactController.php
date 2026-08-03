@@ -3,22 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Events\ContactLeadSubmitted;
-use App\Http\Requests\StoreContactRequest;
+use App\Http\Requests\ContactRequest;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
 class ContactController extends Controller
 {
-    public function store(StoreContactRequest $request): RedirectResponse
+    public function store(ContactRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $lead = $request->validated();
 
-        $lead = [
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'] ?? null,
-            'website' => $data['website'],
-        ];
+        if (empty($lead['phone'])) {
+            $lead['phone'] = null;
+        }
 
         /*
          * Dispatch event (will call two listeners)
