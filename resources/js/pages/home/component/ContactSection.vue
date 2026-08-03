@@ -104,14 +104,6 @@ const turnstileTesting = computed(() => {
                     <InputError :message="errors.phone" />
                 </div>
 
-                <p
-                    class="rounded-md border-l-4 border-[var(--text-accent-on-light)] bg-[#e4ece6] px-4 py-3 text-sm text-[var(--text-primary-on-light)]"
-                    data-test="contact-email-notice"
-                >
-                    <strong class="block text-base">We will email you the discovery-call link.</strong>
-                    A real email address is required so we can avoid fake submissions.
-                </p>
-
                 <div class="grid gap-2">
                     <input
                         v-if="turnstileTesting"
@@ -135,6 +127,14 @@ const turnstileTesting = computed(() => {
                     </p>
                     <InputError :message="errors['cf-turnstile-response']" />
                 </div>
+
+                <p
+                    class="rounded-md border-l-4 border-[var(--text-accent-on-light)] bg-[#e4ece6] px-4 py-3 text-sm text-[var(--text-primary-on-light)]"
+                    data-test="contact-email-notice"
+                >
+                    <strong class="block text-base">We will email you the discovery-call link.</strong>
+                    A real email address is required so we can avoid fake submissions.
+                </p>
 
                 <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
                     <Button
