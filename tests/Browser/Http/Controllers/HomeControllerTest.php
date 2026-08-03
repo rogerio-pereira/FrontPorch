@@ -63,7 +63,7 @@ it('renders the home page hero and main sections', function () {
         ->assertPresent('@home-hero-visual')
         ->assertSee('Good questions, happy to answer')
         ->assertPresent('@home-faq')
-        ->assertPresent('@home-contact-email')
+        ->assertPresent('@contact-form')
         ->assertPresent('@home-service-lead-generation');
 });
 
