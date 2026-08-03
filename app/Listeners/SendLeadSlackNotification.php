@@ -30,7 +30,9 @@ class SendLeadSlackNotification
             ."Phone: {$phone}\n"
             ."Website: {$lead['website']}";
 
+        $notification = new SlackNotification($text);
+
         Notification::route('slack', $channel)
-            ->notify(new SlackNotification($text));
+                        ->notify($notification);
     }
 }

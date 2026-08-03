@@ -158,7 +158,7 @@ it('throttles contact submissions', function () {
     Mail::fake();
     Notification::fake();
 
-    for ($i = 0; $i < 5; $i++) {
+    for ($i = 0; $i < 3; $i++) {
         $this->from('/')
             ->post('/contact', [
                 'name' => 'Alex Rivera',

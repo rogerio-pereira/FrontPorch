@@ -26,23 +26,31 @@ class SendLeadEmail
 
         while ($attempt <= self::EMAIL_MAX_ATTEMPTS) {
             try {
+                $mail = new LeadEmail($event->lead);
+
                 Mail::to($recipient)
-                    ->send(new LeadEmail($event->lead));
+                        ->send($mail);
 
                 return;
             } catch (Throwable $exception) {
-                Log::warning('Lead email attempt failed.', [
+                $message = $exception->getMessage();
+
+                $context = [
                     'attempt' => $attempt,
-                    'message' => $exception->getMessage(),
-                ]);
+                    'message' => $message,
+                ];
+
+                Log::warning('Lead email attempt failed.', $context);
 
                 $attempt++;
             }
         }
 
-        Log::error('Lead email failed after all retries.', [
+        $context = [
             'recipient' => $recipient,
             'lead_email' => $event->lead['email'],
-        ]);
+        ];
+
+        Log::error('Lead email failed after all retries.', $context);
     }
 }
