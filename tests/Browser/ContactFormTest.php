@@ -1,8 +1,9 @@
 <?php
 
-use App\Mail\LeadNotification;
+use App\Mail\LeadEmail;
 use App\Models\Service;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use RyanChandler\LaravelCloudflareTurnstile\Facades\Turnstile;
 
 beforeEach(function () {
@@ -13,6 +14,8 @@ beforeEach(function () {
         ]);
 
     Turnstile::fake();
+    config(['site.contact_email' => 'leads@example.com']);
+    Notification::fake();
 });
 
 it('submits the home contact form successfully', function () {
@@ -20,12 +23,14 @@ it('submits the home contact form successfully', function () {
 
     visit('/')
         ->assertPresent('@contact-form')
-        ->assertPresent('@home-contact-schedule')
+        ->assertPresent('@contact-submit')
+        ->assertSee('We will email you the discovery-call link.')
         ->type('name', 'Alex Rivera')
         ->type('email', 'alex@example.com')
+        ->type('website', 'https://example.com')
         ->type('phone', '8135550100')
         ->click('@contact-submit')
         ->assertPathIs('/');
 
-    Mail::assertSent(LeadNotification::class);
+    Mail::assertSent(LeadEmail::class);
 });

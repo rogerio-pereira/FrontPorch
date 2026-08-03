@@ -1,53 +1,61 @@
 <?php
 
-use App\Mail\LeadNotification;
-use Illuminate\Support\Facades\Http;
+use App\Mail\LeadEmail;
+use App\Notifications\SlackNotification;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use RyanChandler\LaravelCloudflareTurnstile\Facades\Turnstile;
 
 beforeEach(function () {
     Turnstile::fake();
+    config(['site.contact_email' => 'leads@example.com']);
 });
 
 it('accepts a valid contact submission and sends email', function () {
     Mail::fake();
+    Notification::fake();
 
     $response = $this->from('/')
         ->post('/contact', [
             'name' => 'Alex Rivera',
             'email' => 'alex@example.com',
             'phone' => '(813) 555-0100',
+            'website' => 'https://example.com',
             'cf-turnstile-response' => Turnstile::dummy(),
         ]);
 
     $response->assertRedirect('/');
 
-    Mail::assertSent(LeadNotification::class, function (LeadNotification $mail): bool {
+    Mail::assertSent(LeadEmail::class, function (LeadEmail $mail): bool {
         return $mail->lead['name'] === 'Alex Rivera'
             && $mail->lead['email'] === 'alex@example.com'
             && $mail->lead['phone'] === '(813) 555-0100'
+            && $mail->lead['website'] === 'https://example.com'
             && $mail->hasTo('leads@example.com');
     });
 });
 
 it('accepts a submission without phone', function () {
     Mail::fake();
+    Notification::fake();
 
     $response = $this->from('/')
         ->post('/contact', [
             'name' => 'Alex Rivera',
             'email' => 'alex@example.com',
+            'website' => 'https://example.com',
             'cf-turnstile-response' => Turnstile::dummy(),
         ]);
 
     $response->assertRedirect('/');
 
-    Mail::assertSent(LeadNotification::class, function (LeadNotification $mail): bool {
-        return $mail->lead['phone'] === null;
+    Mail::assertSent(LeadEmail::class, function (LeadEmail $mail): bool {
+        return $mail->lead['phone'] === null
+            && $mail->phoneDisplay === '(not provided)';
     });
 });
 
-it('validates required name and email', function () {
+it('validates required name email and website', function () {
     Mail::fake();
 
     $response = $this->from('/')
@@ -58,7 +66,7 @@ it('validates required name and email', function () {
         ]);
 
     $response->assertRedirect('/');
-    $response->assertSessionHasErrors(['name', 'email']);
+    $response->assertSessionHasErrors(['name', 'email', 'website']);
 
     Mail::assertNothingSent();
 });
@@ -71,6 +79,7 @@ it('rejects an invalid us phone number', function () {
             'name' => 'Alex Rivera',
             'email' => 'alex@example.com',
             'phone' => '123',
+            'website' => 'https://example.com',
             'cf-turnstile-response' => Turnstile::dummy(),
         ]);
 
@@ -89,6 +98,7 @@ it('rejects when turnstile verification fails', function () {
         ->post('/contact', [
             'name' => 'Alex Rivera',
             'email' => 'alex@example.com',
+            'website' => 'https://example.com',
             'cf-turnstile-response' => Turnstile::dummy(),
         ]);
 
@@ -100,38 +110,31 @@ it('rejects when turnstile verification fails', function () {
 
 it('notifies slack when configured', function () {
     Mail::fake();
+    Notification::fake();
 
     config([
         'services.slack.notifications.bot_user_oauth_token' => 'xoxb-test-token',
         'services.slack.notifications.channel' => '#leads',
     ]);
 
-    Http::fake([
-        'slack.com/api/chat.postMessage' => Http::response([
-            'ok' => true,
-        ]),
-    ]);
-
     $this->from('/')
         ->post('/contact', [
             'name' => 'Alex Rivera',
             'email' => 'alex@example.com',
+            'website' => 'https://example.com',
             'cf-turnstile-response' => Turnstile::dummy(),
         ])
         ->assertRedirect('/');
 
-    Http::assertSent(function ($request): bool {
-        if ($request->url() !== 'https://slack.com/api/chat.postMessage') {
-            return false;
-        }
-
-        return $request['channel'] === '#leads'
-            && str_contains((string) $request['text'], 'Alex Rivera');
+    Notification::assertSentOnDemand(SlackNotification::class, function (SlackNotification $notification, array $channels, object $notifiable): bool {
+        return isset($notifiable->routes['slack'])
+            && $notifiable->routes['slack'] === '#leads';
     });
 });
 
 it('skips slack when token is missing', function () {
     Mail::fake();
+    Notification::fake();
 
     config([
         'services.slack.notifications.bot_user_oauth_token' => null,
@@ -142,21 +145,25 @@ it('skips slack when token is missing', function () {
         ->post('/contact', [
             'name' => 'Alex Rivera',
             'email' => 'alex@example.com',
+            'website' => 'https://example.com',
             'cf-turnstile-response' => Turnstile::dummy(),
         ])
         ->assertRedirect('/');
 
-    Mail::assertSent(LeadNotification::class);
+    Mail::assertSent(LeadEmail::class);
+    Notification::assertNothingSent();
 });
 
 it('throttles contact submissions', function () {
     Mail::fake();
+    Notification::fake();
 
     for ($i = 0; $i < 5; $i++) {
         $this->from('/')
             ->post('/contact', [
                 'name' => 'Alex Rivera',
                 'email' => 'alex@example.com',
+                'website' => 'https://example.com',
                 'cf-turnstile-response' => Turnstile::dummy(),
             ])
             ->assertRedirect('/');
@@ -166,6 +173,7 @@ it('throttles contact submissions', function () {
         ->post('/contact', [
             'name' => 'Alex Rivera',
             'email' => 'alex@example.com',
+            'website' => 'https://example.com',
             'cf-turnstile-response' => Turnstile::dummy(),
         ])
         ->assertStatus(429);
