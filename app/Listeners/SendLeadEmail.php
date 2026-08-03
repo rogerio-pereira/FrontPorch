@@ -29,7 +29,7 @@ class SendLeadEmail
                 $mail = new LeadEmail($event->lead);
 
                 Mail::to($recipient)
-                        ->send($mail);
+                    ->send($mail);
 
                 return;
             } catch (Throwable $exception) {

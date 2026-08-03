@@ -33,6 +33,6 @@ class SendLeadSlackNotification
         $notification = new SlackNotification($text);
 
         Notification::route('slack', $channel)
-                        ->notify($notification);
+            ->notify($notification);
     }
 }
