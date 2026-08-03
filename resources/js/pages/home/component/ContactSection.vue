@@ -32,8 +32,9 @@ const turnstileTesting = computed(() => {
             <DecorativeBackground variant="grid" />
         </template>
 
-        <div class="mx-auto max-w-2xl stack-loose rounded-xl border border-border-default bg-white p-8 lg:p-10">
-            <p class="text-center text-body-lg text-[var(--text-muted-on-light)]">
+        <div
+            class="mx-auto max-w-2xl stack-loose rounded-xl border border-border-default bg-white p-8 lg:p-10 [--muted-foreground:var(--text-muted-on-light)]"
+        >            <p class="text-center text-body-lg text-[var(--text-muted-on-light)]">
                 Share a little about your business and what you are hoping to improve. We usually reply within one business day.
             </p>
 
