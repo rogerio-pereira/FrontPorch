@@ -31,7 +31,6 @@ declare module '@inertiajs/core' {
             sidebarOpen: boolean;
             site: {
                 contactEmail: string | null;
-                calendarUrl: string | null;
                 turnstileSiteKey: string | null;
                 turnstileTesting: boolean;
             };

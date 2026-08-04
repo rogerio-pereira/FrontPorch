@@ -20,8 +20,6 @@ import {
 
 const page = usePage();
 
-const calendarUrl = computed(() => page.props.site.calendarUrl ?? '#schedule');
-
 const services = computed(() => page.props.servicesNav);
 
 const mobileOpen = ref(false);
@@ -29,7 +27,6 @@ const mobileOpen = ref(false);
 const navItems = [
     { label: 'Portfolio', href: '/portfolio', test: 'nav-portfolio' },
     { label: 'Blog', href: '/blog', test: 'nav-blog' },
-    { label: 'Contact', href: '/#contact', test: 'nav-contact' },
 ];
 </script>
 
@@ -76,7 +73,6 @@ const navItems = [
 
                 <CtaButton
                     label="Book a call"
-                    :calendar-url="calendarUrl"
                     test-id="nav-schedule"
                 />
             </nav>
@@ -122,7 +118,6 @@ const navItems = [
                         </Link>
                         <CtaButton
                             label="Book a call"
-                            :calendar-url="calendarUrl"
                             test-id="nav-mobile-schedule"
                         />
                     </nav>

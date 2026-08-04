@@ -18,15 +18,23 @@ class ContactController extends Controller
         }
 
         /*
-         * Dispatch event (will call two listeners)
+         * Dispatch event (will call following listeners)
          *      SendLeadEmail: notifies CONTACT_EMAIL
+         *      SendLeadSchedulingEmail: emails the lead a Calendar booking link
          *      SendLeadSlackNotification: optional Slack ping
          */
         ContactLeadSubmitted::dispatch($lead);
 
+        $toastMessage = __('Thanks — we received your message and will be in touch soon.');
+        $calendarUrl = config('site.calendar_url');
+
+        if (is_string($calendarUrl) && $calendarUrl !== '') {
+            $toastMessage = __('Thanks — check your email for the link to book your discovery call.');
+        }
+
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Thanks — we received your message and will be in touch soon.'),
+            'message' => $toastMessage,
         ]);
 
         return back();

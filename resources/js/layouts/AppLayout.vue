@@ -11,6 +11,21 @@ import SiteHeader from '@/layouts/app/SiteHeader.vue';
             <slot />
         </main>
         <SiteFooter />
-        <Toaster />
+        <Toaster
+            theme="dark"
+            position="bottom-center"
+            close-button
+            :duration="6000"
+            :toast-options="{
+                classNames: {
+                    toast: 'shadow-lg',
+                    success:
+                        '!bg-[#1e2f28] !text-[#f5f5f5] !border-[#8fa894]',
+                    title: '!text-[#f5f5f5] !font-semibold',
+                    description: '!text-[#e8f0ea]',
+                    icon: '!text-[#8fa894]',
+                },
+            }"
+        />
     </div>
 </template>

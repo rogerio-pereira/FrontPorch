@@ -6,12 +6,14 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\PortfolioStudyCaseController;
+use App\Http\Controllers\PrivacyController;
 use App\Http\Controllers\ServiceBusinessAutomationsController;
 use App\Http\Controllers\ServiceContentCreationController;
 use App\Http\Controllers\ServiceCustomSoftwareDevelopmentController;
 use App\Http\Controllers\ServiceEmailMarketingController;
 use App\Http\Controllers\ServiceLeadGenerationController;
 use App\Http\Controllers\ServiceWebsiteDesignAndDevelopmentController;
+use App\Http\Controllers\TermsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)
@@ -50,6 +52,12 @@ Route::get('/services/business-automations', ServiceBusinessAutomationsControlle
 
 Route::get('/services/custom-software-development', ServiceCustomSoftwareDevelopmentController::class)
     ->name('services.custom-software-development');
+
+Route::get('/privacy', PrivacyController::class)
+    ->name('privacy');
+
+Route::get('/terms', TermsController::class)
+    ->name('terms');
 
 Route::middleware(['auth', 'verified'])
     ->group(function (): void {

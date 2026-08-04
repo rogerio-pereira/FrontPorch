@@ -5,7 +5,6 @@ it('renders the custom software development service landing page', function () {
         ->assertSee('When ready-made tools do not fit')
         ->assertVisible('@service-heading')
         ->assertVisible('@service-schedule')
-        ->assertVisible('@service-contact')
         ->assertVisible('@service-hero-visual')
         ->assertVisible('@service-mid-cta')
         ->assertVisible('@service-closing-cta');

@@ -84,7 +84,9 @@ it('expands a faq item on the home page', function () {
         ]);
 
     visit('/')
+        ->assertPresent('@home-faq-trigger-0')
         ->click('@home-faq-trigger-0')
+        ->wait(0.5)
         ->assertSee('That is a fair question.');
 });
 
@@ -129,14 +131,17 @@ it('links home portfolio cards to the case study page', function () {
         ->assertSee('From missed calls to booked jobs');
 });
 
-it('exposes the contact anchor for navigation', function () {
-    visit('/')
-        ->assertPresent('@nav-contact');
-});
-
 it('exposes the contact section via hash', function () {
     visit('/#contact')
         ->assertSee('We would love to hear from you')
         ->assertPresent('@contact-form')
         ->assertPresent('@contact-submit');
+});
+
+it('points schedule CTAs to the contact form', function () {
+    visit('/')
+        ->assertPresent('@nav-schedule')
+        ->assertAttribute('@nav-schedule', 'href', '/#contact')
+        ->assertPresent('@home-hero-primary-cta')
+        ->assertAttribute('@home-hero-primary-cta', 'href', '/#contact');
 });
