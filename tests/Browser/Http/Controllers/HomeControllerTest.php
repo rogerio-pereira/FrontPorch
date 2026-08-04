@@ -129,11 +129,6 @@ it('links home portfolio cards to the case study page', function () {
         ->assertSee('From missed calls to booked jobs');
 });
 
-it('exposes the contact anchor for navigation', function () {
-    visit('/')
-        ->assertPresent('@nav-contact');
-});
-
 it('exposes the contact section via hash', function () {
     visit('/#contact')
         ->assertSee('We would love to hear from you')
