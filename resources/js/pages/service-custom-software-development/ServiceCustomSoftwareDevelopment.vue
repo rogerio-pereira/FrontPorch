@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import CtaBand from '@/layouts/app/CtaBand.vue';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
@@ -43,17 +43,10 @@ defineProps<{
                     </p>
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                         <CtaButton
-                            label="Explore a custom fit"
+                            label="Talk about custom software"
                             size="lg"
                             test-id="service-schedule"
                         />
-                        <Link
-                            href="/#contact"
-                            class="inline-flex h-11 items-center justify-center rounded-md border border-brand-accent/50 px-6 text-sm font-semibold text-brand-accent transition hover:bg-brand-accent/10"
-                            data-test="service-contact"
-                        >
-                            Send a message
-                        </Link>
                     </div>
                 </div>
 
@@ -201,7 +194,7 @@ defineProps<{
     <CtaBand
         heading="Fighting your tools more than using them?"
         body="Describe the friction. We will help you see whether custom software, an automation, or a simpler tweak is the right move."
-        button="Explore a custom fit"
+        button="Talk about custom software"
         test-id="service-mid-cta"
     />
 
@@ -234,7 +227,7 @@ defineProps<{
     <CtaBand
         heading="Ready for tools that finally feel like yours?"
         body="Pull up a chair and tell us how work really happens day to day. We will help you decide what, if anything, is worth building."
-        button="Explore a custom fit"
+        button="Talk about custom software"
         test-id="service-closing-cta"
     />
 </template>

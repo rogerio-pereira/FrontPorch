@@ -27,7 +27,6 @@ const mobileOpen = ref(false);
 const navItems = [
     { label: 'Portfolio', href: '/portfolio', test: 'nav-portfolio' },
     { label: 'Blog', href: '/blog', test: 'nav-blog' },
-    { label: 'Contact', href: '/#contact', test: 'nav-contact' },
 ];
 </script>
 

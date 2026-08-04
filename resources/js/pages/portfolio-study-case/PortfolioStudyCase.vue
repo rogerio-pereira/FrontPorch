@@ -148,13 +148,6 @@ const serviceTitles = computed(() =>
                     label="Book a discovery call"
                     test-id="study-case-schedule"
                 />
-                <Link
-                    href="/#contact"
-                    class="inline-flex items-center text-sm font-semibold text-brand-accent hover:underline"
-                    data-test="study-case-contact"
-                >
-                    Send a message
-                </Link>
             </div>
         </div>
     </section>
