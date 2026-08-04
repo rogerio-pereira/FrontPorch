@@ -22,28 +22,39 @@ const contactEmail = computed(() => page.props.site.contactEmail ?? 'contact@exa
                     </p>
                 </div>
 
-                <div class="grid gap-8 sm:grid-cols-2">
-                    <div class="stack-default">
+                <div class="grid gap-8 sm:grid-cols-3">
+                    <div class="flex flex-col gap-3">
                         <p class="text-overline text-[var(--text-muted-on-dark)]">
                             Explore
                         </p>
-                        <Link href="/portfolio" class="text-sm hover:text-brand-accent" data-test="footer-portfolio">
+                        <Link href="/portfolio" class="block text-sm hover:text-brand-accent" data-test="footer-portfolio">
                             Portfolio
                         </Link>
-                        <Link href="/blog" class="text-sm hover:text-brand-accent" data-test="footer-blog">
+                        <Link href="/blog" class="block text-sm hover:text-brand-accent" data-test="footer-blog">
                             Blog
                         </Link>
-                        <Link href="/#contact" class="text-sm hover:text-brand-accent" data-test="footer-contact">
+                        <Link href="/#contact" class="block text-sm hover:text-brand-accent" data-test="footer-contact">
                             Contact
                         </Link>
                     </div>
-                    <div class="stack-default">
+                    <div class="flex flex-col gap-3">
+                        <p class="text-overline text-[var(--text-muted-on-dark)]">
+                            Legal
+                        </p>
+                        <Link href="/privacy" class="block text-sm hover:text-brand-accent" data-test="footer-privacy">
+                            Privacy Policy
+                        </Link>
+                        <Link href="/terms" class="block text-sm hover:text-brand-accent" data-test="footer-terms">
+                            Terms of Service
+                        </Link>
+                    </div>
+                    <div class="flex flex-col gap-3">
                         <p class="text-overline text-[var(--text-muted-on-dark)]">
                             Contact
                         </p>
                         <a
                             :href="`mailto:${contactEmail}`"
-                            class="text-sm hover:text-brand-accent"
+                            class="block text-sm hover:text-brand-accent"
                             data-test="footer-email"
                         >
                             {{ contactEmail }}
