@@ -129,14 +129,17 @@ it('links home portfolio cards to the case study page', function () {
         ->assertSee('From missed calls to booked jobs');
 });
 
-it('exposes the contact anchor for navigation', function () {
-    visit('/')
-        ->assertPresent('@nav-contact');
-});
-
 it('exposes the contact section via hash', function () {
     visit('/#contact')
         ->assertSee('We would love to hear from you')
         ->assertPresent('@contact-form')
         ->assertPresent('@contact-submit');
+});
+
+it('points schedule CTAs to the contact form', function () {
+    visit('/')
+        ->assertPresent('@nav-schedule')
+        ->assertAttribute('@nav-schedule', 'href', '/#contact')
+        ->assertPresent('@home-hero-primary-cta')
+        ->assertAttribute('@home-hero-primary-cta', 'href', '/#contact');
 });

@@ -6,7 +6,6 @@ defineProps<{
     heading: string;
     body: string;
     button: string;
-    calendarUrl?: string;
     testId?: string;
 }>();
 </script>
@@ -24,7 +23,6 @@ defineProps<{
                 </p>
                 <CtaButton
                     :label="button"
-                    :calendar-url="calendarUrl"
                     size="lg"
                     :test-id="testId"
                 />

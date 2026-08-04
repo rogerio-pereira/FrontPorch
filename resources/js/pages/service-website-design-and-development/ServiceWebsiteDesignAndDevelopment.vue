@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import CtaBand from '@/layouts/app/CtaBand.vue';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
@@ -47,13 +47,6 @@ defineProps<{
                             size="lg"
                             test-id="service-schedule"
                         />
-                        <Link
-                            href="/#contact"
-                            class="inline-flex h-11 items-center justify-center rounded-md border border-brand-accent/50 px-6 text-sm font-semibold text-brand-accent transition hover:bg-brand-accent/10"
-                            data-test="service-contact"
-                        >
-                            Send a message
-                        </Link>
                     </div>
                 </div>
 

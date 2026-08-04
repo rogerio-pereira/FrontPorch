@@ -25,12 +25,6 @@ import VisualFrame from '@/layouts/app/VisualFrame.vue';
                             size="lg"
                             test-id="home-hero-primary-cta"
                         />
-                        <CtaButton
-                            label="Send us a message → #contact"
-                            variant="outline"
-                            size="lg"
-                            test-id="home-hero-secondary-cta"
-                        />
                     </div>
                 </div>
 

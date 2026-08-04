@@ -2,7 +2,7 @@
 
 **References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md) · [phase-01-backend.md](./phase-01-backend.md) (CMS — delivered)
 
-**Current state (2026-07-31):** Stages **0 (code), 1, 2, 4, 5, and 6** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`, `CALENDAR_URL`). Stage **7 code largely done** (needs real env values + href assertion test). **Still open (precedence order):** Stage 7 leftovers → Stage 3 (legal) → Stage 8 (analytics/consent) → Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage.
+**Current state (2026-08-03):** Stages **0 (code), 1, 2, 4, 5, and 6** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit. **Still open (precedence order):** Stage 7 leftovers (production `CALENDAR_URL`) → Stage 3 (legal) → Stage 8 (analytics/consent) → Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage.
 
 **Phase goal:** A launch-ready site that generates qualified leads — long-form home, service landing pages, legal pages, contact form, Calendar scheduling, and consent-gated analytics.
 
@@ -18,7 +18,7 @@ The Briefing (§18) lists **8 checklist items** for Phase 1. This plan maps **on
 | **Stages 1–2** | Checklist items 1–2 | Marketing copy | **Done** (inline Vue) |
 | **Stages 4–5** | Checklist items 4–5 | Home + service pages | **Done** |
 | **Stage 6** | Checklist item 6 | Lead form (defines personal data collected) | **Done** |
-| **Stage 7** | Checklist item 7 | Calendar CTAs | Code mostly done; leftovers open |
+| **Stage 7** | Checklist item 7 | Scheduling via contact form + email link | Code mostly done; needs production `CALENDAR_URL` |
 | **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Open — next** |
 | **Stage 8** | Checklist item 8 | Analytics + consent (needs `/privacy` link) | **Open — after 3** |
 | **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO | Partial |
@@ -32,7 +32,7 @@ Each stage is broken into **small steps** (numbered `X.Y`). Treat one step ≈ o
 Legal pages must describe **real** site behavior. Drafting Privacy/Terms before the contact form and analytics either invents practices or forces a rewrite. Therefore:
 
 1. **Stage 6** ships the lead form → Privacy can list name, email, optional phone accurately.
-2. **Stage 7 leftovers** finish scheduling CTAs (independent of legal copy).
+2. **Stage 7 leftovers** — production `CALENDAR_URL` so leads receive a booking email after contact submit.
 3. **Stage 3** publishes Privacy + Terms + footer links → describes the live form and the GA/Meta + consent model that Stage 8 implements next.
 4. **Stage 8** adds consent banner + scripts → banner links to the live `/privacy` page.
 5. **Stages 9–10** polish and accept.
@@ -630,40 +630,42 @@ Document required fields for every service page:
 
 ---
 
-# Stage 7 — Google Calendar redirect
+# Stage 7 — Scheduling via contact form + Calendar email
 
 **Briefing checklist:** “Integrate Google Calendar redirect”  
-**Goal:** All scheduling CTAs open the external Calendar link in a new tab.  
-**Prerequisites:** Step 0.1 Calendar link; Stage 4 header/hero CTAs exist.  
-**Status:** **Mostly done (code)** — `config/site.php` + Inertia `site.calendarUrl`; `SiteHeader` / `CtaButton` use it with `#schedule` fallback when env empty. **Still open:** production `CALENDAR_URL` value + automated href assertion. Briefing checklist can stay open until env + test land.
+**Goal:** Booking CTAs send visitors to the contact form; after submit, the lead receives an email with the Google Calendar scheduling link (`CALENDAR_URL`).  
+**Prerequisites:** Step 0.1 Calendar link; Stage 6 contact form.  
+**Status:** **Mostly done (code)** — CTAs point to `/#contact`; `SendLeadSchedulingEmail` mails the lead when `CALENDAR_URL` is set. **Still open:** production `CALENDAR_URL` value.
 
 ### Step 7.1 — Config
 
-- [x] `config/site.php` → `'calendar_url' => env('CALENDAR_URL')`
-- [x] Shared via `HandleInertiaRequests` as `site.calendarUrl`
+- [x] `config/site.php` → `'calendar_url' => env('CALENDAR_URL')` (used by the scheduling email, not public CTAs)
 - [x] Document in `.env.example` (`CALENDAR_URL`)
 - [x] Document in `.env.example` (`CONTACT_EMAIL`)
 
 ### Step 7.2 — CTA wiring
 
-- [x] Header “Schedule” button → `site.calendarUrl` (fallback `#schedule` if unset)
-- [x] Home / contact `CtaButton` → same shared URL
-- [x] Service landings use schedule / contact patterns consistent with home
-- [x] `CtaButton` supports `target="_blank"` + `rel="noopener noreferrer"` when URL is external
+- [x] Header / hero / service / portfolio / blog “Book a call” CTAs → `/#contact` (or `#contact` when label includes the anchor)
+- [x] No direct public redirect to Google Calendar from marketing CTAs
 
-### Step 7.3 — Copy notice (optional)
+### Step 7.3 — Lead scheduling email
 
+- [x] `SendLeadSchedulingEmail` listener on `ContactLeadSubmitted`
+- [x] `LeadSchedulingEmail` mailable → lead’s email with `CALENDAR_URL` button
+- [x] Skip (with log warning) when `CALENDAR_URL` is unset
 - [x] Generic “Book a discovery call” wording in place (duration TBD)
 
 ### Step 7.4 — Test
 
-- [ ] Feature or Browser test: scheduling link `href` matches config (no need to hit Google)
+- [x] Feature tests: scheduling email sent / skipped / retries
+- [x] Browser test: schedule CTAs `href` is `/#contact`
 
 ### Stage 7 — Done when
 
-- [ ] Every “Schedule” / primary booking CTA uses `CALENDAR_URL` when set (no `#schedule` fallback in production)
-- [x] Link opens in new tab when URL is external
-- [ ] Href assertion covered by a test
+- [ ] Production `CALENDAR_URL` set so leads receive a real booking link
+- [x] Booking CTAs route to the contact form
+- [x] Contact submit emails the lead a Calendar link when configured
+- [x] Href assertion covered by a test
 
 ---
 
@@ -768,7 +770,7 @@ Document required fields for every service page:
 - [x] Service landings live (6 catalog slugs)
 - [ ] Legal pages
 - [ ] Contact form → email received (staging mail or log driver test)
-- [ ] Schedule CTAs → Calendar (with real `CALENDAR_URL`)
+- [ ] Schedule path → contact form → lead receives Calendar email (with real `CALENDAR_URL`)
 - [ ] Cookie banner → analytics gating
 - [ ] Mobile header + contact form usable
 
@@ -783,7 +785,7 @@ Document required fields for every service page:
 - [ ] All Stage 1–10 checklists complete (remaining: 0.1, 3, 6, 7 leftovers, 8, 9 leftovers, 10)
 - [x] Browser tests: public marketing routes for home, services, portfolio, blog
 - [x] Admin CMS + public Eloquent wiring (Briefing Phase 2 — done early)
-- [ ] Browser tests: contact form + one scheduling href assertion
+- [x] Browser tests: contact form + schedule CTAs point to `/#contact`
 - [x] Brand theme applied throughout marketing surfaces
 
 ---
@@ -805,7 +807,7 @@ Document required fields for every service page:
 
 ## Suggested next implementation order
 
-1. **Stage 7 leftovers** — production `CALENDAR_URL` + href assertion test  
+1. **Stage 7 leftovers** — production `CALENDAR_URL` (leads receive booking email)  
 2. **Stage 3** — Privacy + Terms (inline Vue) + footer links  
 3. **Stage 8** — Cookie consent + GA/Meta (`config/site.php`; links to `/privacy`)  
 4. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
