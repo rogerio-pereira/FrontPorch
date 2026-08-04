@@ -2,7 +2,7 @@
 
 **References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md) · [phase-01-backend.md](./phase-01-backend.md) (CMS — delivered)
 
-**Current state (2026-08-03):** Stages **0 (code), 1, 2, 4, 5, and 6** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit. **Still open (precedence order):** Stage 7 leftovers (production `CALENDAR_URL`) → Stage 3 (legal) → Stage 8 (analytics/consent) → Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage.
+**Current state (2026-08-04):** Stages **0 (code), 1, 2, 3, 4, 5, and 6** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit (local/fictional URL is enough to prove the flow). Stage **3** publishes `/privacy` and `/terms` with footer links. **Still open (precedence order):** Stage 8 (analytics/consent) → Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage. Production `CALENDAR_URL` remains an ops leftover (not blocking Stage 8).
 
 **Phase goal:** A launch-ready site that generates qualified leads — long-form home, service landing pages, legal pages, contact form, Calendar scheduling, and consent-gated analytics.
 
@@ -18,9 +18,9 @@ The Briefing (§18) lists **8 checklist items** for Phase 1. This plan maps **on
 | **Stages 1–2** | Checklist items 1–2 | Marketing copy | **Done** (inline Vue) |
 | **Stages 4–5** | Checklist items 4–5 | Home + service pages | **Done** |
 | **Stage 6** | Checklist item 6 | Lead form (defines personal data collected) | **Done** |
-| **Stage 7** | Checklist item 7 | Scheduling via contact form + email link | Code mostly done; needs production `CALENDAR_URL` |
-| **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Open — next** |
-| **Stage 8** | Checklist item 8 | Analytics + consent (needs `/privacy` link) | **Open — after 3** |
+| **Stage 7** | Checklist item 7 | Scheduling via contact form + email link | Code done; production URL is ops |
+| **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Done** |
+| **Stage 8** | Checklist item 8 | Analytics + consent (needs `/privacy` link) | **Open — next** |
 | **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO | Partial |
 | **Stage 10** | Definition of Done | Final QA and founder sign-off | Open |
 | **CMS (Phase 2)** | Briefing §18 Phase 2 | Admin + public Eloquent wiring | **Done** — see [phase-01-backend.md](./phase-01-backend.md) |
@@ -31,8 +31,8 @@ Each stage is broken into **small steps** (numbered `X.Y`). Treat one step ≈ o
 
 Legal pages must describe **real** site behavior. Drafting Privacy/Terms before the contact form and analytics either invents practices or forces a rewrite. Therefore:
 
-1. **Stage 6** ships the lead form → Privacy can list name, email, optional phone accurately.
-2. **Stage 7 leftovers** — production `CALENDAR_URL` so leads receive a booking email after contact submit.
+1. **Stage 6** ships the lead form → Privacy can list name, email, optional phone, website accurately.
+2. **Stage 7** (code) — booking CTAs → contact form; scheduling email when `CALENDAR_URL` is set (ops sets production URL later).
 3. **Stage 3** publishes Privacy + Terms + footer links → describes the live form and the GA/Meta + consent model that Stage 8 implements next.
 4. **Stage 8** adds consent banner + scripts → banner links to the live `/privacy` page.
 5. **Stages 9–10** polish and accept.
@@ -136,8 +136,8 @@ Already in the repo (see [phase-01-backend.md](./phase-01-backend.md)):
 | `GET /portfolio/study-case/{caseStudy:slug}` | `portfolio-study-case/PortfolioStudyCase` | Done (DB) |
 | `GET /blog` | `blog/Blog` | Done (DB, paginated) |
 | `GET /blog/article/{article:slug}` | `blog-article/BlogArticle` | Done (DB) |
-| `GET /privacy` | — | **Missing** (Stage 3) |
-| `GET /terms` | — | **Missing** (Stage 3) |
+| `GET /privacy` | `privacy/Privacy` | Done (Stage 3) |
+| `GET /terms` | `terms/Terms` | Done (Stage 3) |
 | `POST /contact` | ContactController | **Done** (Stage 6) |
 | `/core/*` | `core/**` | Done (CMS admin; `routes/core.php`) |
 
@@ -161,8 +161,8 @@ public/fonts/                          # Montserrat — DONE
 public/images/branding/                # logos — DONE
 docs/branding/                         # source fonts + logos — DONE
 docs/content/                          # DROPPED — marketing + legal copy are inline Vue
-resources/js/pages/privacy/            # Stage 3 — after Stage 6
-resources/js/pages/terms/              # Stage 3 — after Stage 6
+resources/js/pages/privacy/            # Privacy — DONE (Stage 3)
+resources/js/pages/terms/              # Terms — DONE (Stage 3)
 resources/css/app.css                  # brand tokens — DONE
 resources/js/layouts/AppLayout.vue     # marketing shell — DONE
 resources/js/layouts/app/              # SiteHeader, SiteFooter, SectionShell, CtaBand, CtaButton, …
@@ -390,7 +390,7 @@ Document required fields for every service page:
 **Briefing checklist:** “Draft Privacy Policy and Terms of Service”  
 **Goal:** Legal pages published as readable shells with inline Vue copy that matches live product behavior.  
 **Prerequisites:** Stage 0 tokens; **Stage 6 complete** (so Privacy lists the real contact-form fields and email delivery). Stage 8 may follow immediately after so cookie/analytics sections stay accurate.  
-**Status:** **Not started** — deferred until after Stage 6 (precedence). Footer has no Privacy/Terms links yet.
+**Status:** **Done** — `/privacy` and `/terms` live with inline Vue copy; footer Legal links; Feature + Browser coverage.
 
 **Output location (locked):** inline Vue pages (`resources/js/pages/privacy/**`, `resources/js/pages/terms/**`) — same pattern as marketing copy. No Markdown loader.
 
@@ -398,34 +398,34 @@ Document required fields for every service page:
 
 ### Step 3.1 — Privacy Policy draft
 
-- [ ] AI draft covering: data collected (contact form — after Stage 6), email delivery, analytics cookies (GA/Meta + consent — Stage 8 next), US/Florida baseline, contact email from shared site props, last updated date
-- [ ] Sections: Introduction, Information we collect, How we use it, Cookies, Third parties, Your rights, Contact
+- [x] AI draft covering: data collected (contact form — after Stage 6), email delivery, analytics cookies (GA/Meta + consent — Stage 8 next), US/Florida baseline, contact email from shared site props, last updated date
+- [x] Sections: Introduction, Information we collect, How we use it, Cookies, Third parties, Your rights, Contact
 
 ### Step 3.2 — Terms of Service draft
 
-- [ ] AI draft covering: acceptance, services description, no guarantee of results, limitation of liability, governing law (Florida), contact
+- [x] AI draft covering: acceptance, services description, no guarantee of results, limitation of liability, governing law (Florida), contact
 
 ### Step 3.3 — Founder legal review
 
 - [ ] Founders may request edits after publish (optional attorney review per Briefing §17)
-- [ ] Ship AI draft as published text when Stage 3 is implemented (founder will iterate in-product)
+- [x] Ship AI draft as published text when Stage 3 is implemented (founder will iterate in-product)
 
 ### Step 3.4 — Routes and page shells
 
-- [ ] `GET /privacy` → legal Privacy page (light bg, `max-w-3xl`, prose styling)
-- [ ] `GET /terms` → legal Terms page
-- [ ] Controllers render Inertia pages; copy lives inline in Vue
-- [ ] Footer links to both (`SiteFooter.vue`)
+- [x] `GET /privacy` → legal Privacy page (light bg, `max-w-3xl`, prose styling)
+- [x] `GET /terms` → legal Terms page
+- [x] Controllers render Inertia pages; copy lives inline in Vue
+- [x] Footer links to both (`SiteFooter.vue`)
 
 ### Step 3.5 — Browser smoke test
 
-- [ ] Add `/privacy` and `/terms` to browser/route smoke coverage
+- [x] Add `/privacy` and `/terms` to browser/route smoke coverage
 
 ### Stage 3 — Done when
 
-- [ ] Both legal pages render readable content
-- [ ] Routes publicly accessible
-- [ ] Privacy reflects Stage 6 form behavior; cookie/analytics language matches the Stage 8 model about to ship (or already shipped if Stage 8 was split)
+- [x] Both legal pages render readable content
+- [x] Routes publicly accessible
+- [x] Privacy reflects Stage 6 form behavior; cookie/analytics language matches the Stage 8 model about to ship (or already shipped if Stage 8 was split)
 
 ---
 
@@ -434,13 +434,13 @@ Document required fields for every service page:
 **Briefing checklist:** “Design and implement home page (Inertia + Vue)”  
 **Goal:** Long-form home with all 16 sections, marketing layout, portfolio/blog stubs.  
 **Prerequisites:** Stage 0 complete; Stage 1 copy available. Footer Privacy/Terms links come later with Stage 3 (after Stage 6).  
-**Status:** **Done** (layout + 16 sections). Legal footer links still depend on Stage 3. Portfolio/blog are DB-backed (CMS delivered), not empty stubs.
+**Status:** **Done** (layout + 16 sections). Footer includes Privacy/Terms. Portfolio/blog are DB-backed (CMS delivered), not empty stubs.
 
 ### Step 4.1 — Marketing layout and navigation
 
 - [x] Marketing shell via `AppLayout` + sticky `SiteHeader` / `SiteFooter`
 - [x] Header: horizontal logo, Services dropdown, Portfolio, Blog, Contact `#contact`, Schedule CTA
-- [x] Footer: logo, links, Central Florida service area (Privacy/Terms pending Stage 3)
+- [x] Footer: logo, links, Central Florida service area, Privacy/Terms
 - [x] Mobile: drawer/sheet (Dialog)
 - [x] `data-test` on nav items and primary CTAs
 
@@ -531,7 +531,7 @@ Document required fields for every service page:
 - [x] Marketing layout on home; mobile nav works
 - [x] Portfolio/blog reachable (DB-backed)
 - [x] Home browser tests pass
-- [ ] Footer Privacy/Terms (blocked on Stage 3)
+- [x] Footer Privacy/Terms
 
 ---
 
@@ -713,7 +713,7 @@ Document required fields for every service page:
 ### Step 9.1 — Per-page Head audit
 
 - [x] Unique `<title>` + meta description on home and service landings (incl. content-creation)
-- [ ] Privacy, terms (blocked on Stage 3)
+- [x] Privacy, terms (title + meta description)
 - [x] Portfolio / blog pages have titles
 
 ### Step 9.2 — Open Graph
@@ -799,7 +799,7 @@ Document required fields for every service page:
 | Brand assets missing | Stage 0.2 done |
 | No staging environment | Stage 10 automated tests + production build before deploy |
 | Gmail for leads | Acceptable MVP; WorkMail later |
-| Plan drift (Markdown loader / empty stubs) | Documented above; follow precedence 6 → 7 leftovers → 3 → 8 → 9 → 10 |
+| Plan drift (Markdown loader / empty stubs) | Documented above; follow precedence 8 → 9 → 10 |
 | Legal drafted before product behavior | Mitigated by reordering Stage 3 after Stage 6 and before Stage 8 |
 | Orphaned MinIO/S3 objects | Deferred cleanup follow-up below |
 
@@ -807,11 +807,10 @@ Document required fields for every service page:
 
 ## Suggested next implementation order
 
-1. **Stage 7 leftovers** — production `CALENDAR_URL` (leads receive booking email)  
-2. **Stage 3** — Privacy + Terms (inline Vue) + footer links  
-3. **Stage 8** — Cookie consent + GA/Meta (`config/site.php`; links to `/privacy`)  
-4. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
-5. **Stage 10** — automated + founder QA 
+1. **Stage 8** — Cookie consent + GA/Meta (`config/site.php`; links to `/privacy`)  
+2. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
+3. **Stage 10** — automated + founder QA  
+4. **Ops (parallel)** — production `CALENDAR_URL`, `CONTACT_EMAIL`, analytics IDs, Turnstile, Slack
 
 ---
 
