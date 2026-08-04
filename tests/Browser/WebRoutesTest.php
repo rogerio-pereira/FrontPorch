@@ -20,6 +20,8 @@ it('smoke tests public web routes', function (string $url, string $text) {
     ['/services/content-creation', 'Blog posts and social writing'],
     ['/services/business-automations', 'Give the copy-paste work to the system'],
     ['/services/custom-software-development', 'When ready-made tools do not fit'],
+    ['/privacy', 'Privacy Policy'],
+    ['/terms', 'Terms of Service'],
     ['/login', 'Email address'],
     ['/forgot-password', 'Forgot password'],
 ]);

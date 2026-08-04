@@ -84,7 +84,9 @@ it('expands a faq item on the home page', function () {
         ]);
 
     visit('/')
+        ->assertPresent('@home-faq-trigger-0')
         ->click('@home-faq-trigger-0')
+        ->wait(0.5)
         ->assertSee('That is a fair question.');
 });
 
