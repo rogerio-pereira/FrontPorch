@@ -16,4 +16,8 @@ return [
 
     'calendar_url' => env('CALENDAR_URL'),
 
+    'google_analytics_id' => env('GOOGLE_ANALYTICS_ID'),
+
+    'meta_pixel_id' => env('META_PIXEL_ID'),
+
 ];
