@@ -317,6 +317,7 @@ These pages serve both organic traffic and paid ad campaigns.
 | Multi-language | No (English only) |
 | Online payments | No (Stripe if needed later) |
 | User accounts | No |
+| Cookie consent banner | No (US / Florida MVP — [decision](planning/decisions/2026-08-05-no-cookie-consent-banner.md)) |
 
 ---
 
@@ -562,12 +563,12 @@ Built as part of the website project:
 |------|----------|-------|
 | **Privacy Policy** | ✅ Yes | Form data collection + analytics cookies |
 | **Terms of Service** | ✅ Yes | Recommended for liability, IP, and scheduling |
-| **Cookie consent banner** | ✅ Yes | Follow applicable regulations |
+| **Cookie consent banner** | ❌ No (MVP) | Not required for US / Florida primary audience; see [decision](planning/decisions/2026-08-05-no-cookie-consent-banner.md) |
 
 ### Data Collection
 
-- Contact form: name, email, phone, message
-- Analytics cookies: Google Analytics, Meta Pixel
+- Contact form: name, email, phone, website URL
+- Analytics cookies: Google Analytics, Meta Pixel (load when configured; no consent banner)
 
 ### Compliance Scope
 
@@ -577,6 +578,7 @@ Built as part of the website project:
 | **GDPR** | Not primary concern |
 | **CCPA** | Not primary concern (Florida-focused) |
 | **Florida Digital Bill of Rights** | Follow applicable transparency requirements |
+| **Cookie consent (opt-in banner)** | Out of MVP scope — disclose in Privacy Policy instead |
 | **ADA / WCAG accessibility** | No specific requirement for MVP |
 | **HIPAA / industry regulations** | Not applicable |
 
@@ -721,7 +723,7 @@ These are recommendations for the founders—not website scope items:
 - [x] Implement service landing pages
 - [ ] Implement lead form with email delivery
 - [ ] Integrate Google Calendar redirect _(code wired via `config/site.php`; needs production URL + test)_
-- [ ] Add GA and Meta Pixel with cookie consent banner
+- [ ] Add GA and Meta Pixel (no cookie consent banner — US / Florida MVP)
 
 ### Phase 2 — CMS
 
