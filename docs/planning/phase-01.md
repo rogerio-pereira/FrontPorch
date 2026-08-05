@@ -2,7 +2,7 @@
 
 **References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md) · [phase-01-backend.md](./phase-01-backend.md) (CMS — delivered)
 
-**Current state (2026-08-05):** Stages **0 (code), 1, 2, 3, 4, 5, and 6** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit (local/fictional URL is enough to prove the flow). Stage **3** publishes `/privacy` and `/terms` with footer links. **Locked:** no cookie consent banner ([decision](./decisions/2026-08-05-no-cookie-consent-banner.md)); Privacy copy updated. **Still open (precedence order):** Stage 8 (GA/Meta scripts only) → Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage. Production `CALENDAR_URL` remains an ops leftover (not blocking Stage 8).
+**Current state (2026-08-05):** Stages **0 (code), 1, 2, 3, 4, 5, 6, and 8** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit (local/fictional URL is enough to prove the flow). Stage **3** publishes `/privacy` and `/terms` with footer links. **Locked:** no cookie consent banner ([decision](./decisions/2026-08-05-no-cookie-consent-banner.md)); Privacy copy updated. Stage **8** injects GA4 + Meta Pixel when IDs are set (no consent gate). **Still open (precedence order):** Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage. Production `CALENDAR_URL` and analytics IDs remain ops leftovers.
 
 **Phase goal:** A launch-ready site that generates qualified leads — long-form home, service landing pages, legal pages, contact form, Calendar scheduling, and analytics (GA / Meta) when configured.
 
@@ -20,7 +20,7 @@ The Briefing (§18) lists **8 checklist items** for Phase 1. This plan maps **on
 | **Stage 6** | Checklist item 6 | Lead form (defines personal data collected) | **Done** |
 | **Stage 7** | Checklist item 7 | Scheduling via contact form + email link | Code done; production URL is ops |
 | **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Done** |
-| **Stage 8** | Checklist item 8 | GA + Meta scripts (no consent banner) | **Open — next** |
+| **Stage 8** | Checklist item 8 | GA + Meta scripts (no consent banner) | **Done** |
 | **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO | Partial |
 | **Stage 10** | Definition of Done | Final QA and founder sign-off | Open |
 | **CMS (Phase 2)** | Briefing §18 Phase 2 | Admin + public Eloquent wiring | **Done** — see [phase-01-backend.md](./phase-01-backend.md) |
@@ -152,7 +152,7 @@ Already in the repo (see [phase-01-backend.md](./phase-01-backend.md)):
 | `docs/content/` Markdown loader | Inline landing copy in Vue; lists from Eloquent |
 | `GET /services/{slug}` dynamic | Explicit routes per slug |
 | Empty `/portfolio` and `/blog` stubs | Full DB-backed listing + detail pages + `/core` admin |
-| `config/marketing.php` | **`config/site.php`** (`contact_email`, `calendar_url`); analytics IDs still env-only until Stage 8 scripts |
+| `config/marketing.php` | **`config/site.php`** (`contact_email`, `calendar_url`, `google_analytics_id`, `meta_pixel_id`) |
 
 ### Target / actual file structure
 
@@ -171,7 +171,7 @@ resources/js/pages/service-*/          # six service pages — DONE
 resources/js/pages/portfolio*/         # portfolio listing + study case — DONE (DB)
 resources/js/pages/blog*/              # blog listing + article — DONE (DB)
 resources/js/pages/core/               # admin CMS pages — DONE
-config/site.php                        # DONE (calendar + contact email); extend for Stage 8 analytics IDs
+config/site.php                        # DONE (calendar, contact email, analytics IDs)
 app/Http/Controllers/ContactController.php  # Stage 6
 tests/Feature/ContactFormTest.php      # Stage 6
 docs/planning/decisions/               # Locked product decisions (e.g. no cookie banner)
@@ -675,11 +675,11 @@ Document required fields for every service page:
 **Briefing checklist:** “Add GA and Meta Pixel” (cookie consent banner dropped for US / Florida MVP)  
 **Goal:** Inject GA4 and Meta Pixel when measurement IDs are configured — without a consent banner.  
 **Prerequisites:** Stage 0; Stage 4 layout; GA/Meta IDs in `.env`; Stage 3 Privacy discloses analytics without consent gating.  
-**Status:** **Not started** (scripts). Consent UI **cancelled** — [decision](./decisions/2026-08-05-no-cookie-consent-banner.md). Prefer extending `config/site.php` (same pattern as calendar/email).
+**Status:** **Done** (scripts). Consent UI **cancelled** — [decision](./decisions/2026-08-05-no-cookie-consent-banner.md). IDs live in `config/site.php` (same pattern as calendar/email).
 
 ### Step 8.1 — Config
 
-- [ ] `google_analytics_id`, `meta_pixel_id` in `config/site.php` (+ Inertia shared `site` props if needed)
+- [x] `google_analytics_id`, `meta_pixel_id` in `config/site.php` (+ Inertia shared `site` props)
 - [x] `.env.example` entries (`GOOGLE_ANALYTICS_ID`, `META_PIXEL_ID`)
 
 ### Step 8.2 — Cookie consent UI
@@ -688,19 +688,20 @@ Document required fields for every service page:
 
 ### Step 8.3 — Analytics loader
 
-- [ ] `AnalyticsScripts.vue` (or equivalent) — inject GA4 + Meta Pixel when IDs are set
-- [ ] Mount from marketing layout (`AppLayout` / equivalent)
-- [ ] Do **not** gate on consent
+- [x] `AnalyticsScripts.vue` — inject GA4 + Meta Pixel when IDs are set
+- [x] Mount from marketing layout (`AppLayout`)
+- [x] Do **not** gate on consent
 
 ### Step 8.4 — Tests
 
-- [ ] Feature test: unset IDs → no analytics scripts in response
-- [ ] Feature test: mocked IDs set → tags/IDs present in HTML
+- [x] Feature test: unset IDs → no analytics scripts / null shared props
+- [x] Feature test: mocked IDs set → IDs present in Inertia HTML payload
+- [x] Browser test: configured IDs inject `#ga-gtag-js` and `#meta-pixel-js`
 
 ### Stage 8 — Done when
 
-- [ ] Scripts load when IDs are configured; nothing loads when unset
-- [ ] Privacy Policy copy stays aligned (no consent-banner claims)
+- [x] Scripts load when IDs are configured; nothing loads when unset
+- [x] Privacy Policy copy stays aligned (no consent-banner claims)
 
 ---
 
@@ -754,7 +755,7 @@ Document required fields for every service page:
 # Stage 10 — QA and acceptance
 
 **Goal:** Phase 1 meets Briefing success criteria and repo quality gates.  
-**Status:** Open (blocked on remaining Stage 8 scripts + 7/9 leftovers).
+**Status:** Open (blocked on Stage 9 leftovers + Stage 7/0.1 ops leftovers).
 
 ### Step 10.1 — Automated gates
 
@@ -807,10 +808,9 @@ Document required fields for every service page:
 
 ## Suggested next implementation order
 
-1. **Stage 8** — GA/Meta scripts via `config/site.php` (**no** consent banner — [decision](./decisions/2026-08-05-no-cookie-consent-banner.md))  
-2. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
-3. **Stage 10** — automated + founder QA  
-4. **Ops (parallel)** — production `CALENDAR_URL`, `CONTACT_EMAIL`, analytics IDs, Turnstile, Slack
+1. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
+2. **Stage 10** — automated + founder QA  
+3. **Ops (parallel)** — production `CALENDAR_URL`, `CONTACT_EMAIL`, analytics IDs, Turnstile, Slack
 
 ---
 
