@@ -6,7 +6,7 @@ const page = usePage();
 
 const contactEmail = computed(() => page.props.site.contactEmail);
 
-const lastUpdated = 'August 4, 2026';
+const lastUpdated = 'August 5, 2026';
 </script>
 
 <template>
@@ -89,14 +89,13 @@ const lastUpdated = 'August 4, 2026';
                     We may use Google Analytics and the Meta (Facebook) Pixel to understand
                     how visitors use the Site and to measure advertising performance.
                     These tools can set cookies or similar technologies and collect
-                    usage data.
+                    usage data when their measurement IDs are configured on the Site.
                 </p>
                 <p>
-                    Analytics scripts load only after you accept cookies through our
-                    consent banner. If you reject cookies, we do not load Google Analytics
-                    or the Meta Pixel. You can change your browser settings to block or
-                    delete cookies at any time; some Site features may still work without
-                    analytics cookies.
+                    Because we primarily serve businesses in the United States / Florida,
+                    we do not show a cookie consent banner before loading these tools.
+                    You can change your browser settings to block or delete cookies at any
+                    time; some Site features may still work without analytics cookies.
                 </p>
 
                 <h2>Third parties</h2>
@@ -109,7 +108,7 @@ const lastUpdated = 'August 4, 2026';
                     <li>Email delivery for lead notifications and scheduling links</li>
                     <li>Cloudflare Turnstile for form abuse protection</li>
                     <li>Slack for internal lead alerts</li>
-                    <li>Google Analytics and Meta, only after cookie consent</li>
+                    <li>Google Analytics and Meta</li>
                     <li>Google Calendar (or a similar scheduler) when we email a booking link</li>
                 </ul>
                 <p>
