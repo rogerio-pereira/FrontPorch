@@ -1,6 +1,6 @@
 <?php
 
-it('injects analytics script tags when ids are configured', function () {
+it('includes analytics scripts in the page when ids are configured', function () {
     config([
         'site.google_analytics_id' => 'G-BROWSERTEST',
         'site.meta_pixel_id' => '1122334455',
@@ -9,13 +9,13 @@ it('injects analytics script tags when ids are configured', function () {
     $page = visit('/')
         ->waitForEvent('networkidle');
 
-    $page->assertSourceHas('G-BROWSERTEST')
-        ->assertSourceHas('1122334455')
-        ->assertScript('document.getElementById("ga-gtag-js") !== null', true)
-        ->assertScript('document.getElementById("meta-pixel-js") !== null', true);
+    $page->assertSourceHas('googletagmanager.com')
+        ->assertSourceHas('G-BROWSERTEST')
+        ->assertSourceHas('fbevents.js')
+        ->assertSourceHas('1122334455');
 });
 
-it('does not inject analytics script tags when ids are unset', function () {
+it('does not include analytics scripts when ids are unset', function () {
     config([
         'site.google_analytics_id' => null,
         'site.meta_pixel_id' => null,
@@ -24,6 +24,6 @@ it('does not inject analytics script tags when ids are unset', function () {
     $page = visit('/')
         ->waitForEvent('networkidle');
 
-    $page->assertScript('document.getElementById("ga-gtag-js") === null', true)
-        ->assertScript('document.getElementById("meta-pixel-js") === null', true);
+    $page->assertSourceMissing('googletagmanager.com')
+        ->assertSourceMissing('fbevents.js');
 });
