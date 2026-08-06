@@ -33,8 +33,6 @@ declare module '@inertiajs/core' {
                 contactEmail: string | null;
                 turnstileSiteKey: string | null;
                 turnstileTesting: boolean;
-                googleAnalyticsId: string | null;
-                metaPixelId: string | null;
             };
             servicesNav: Array<{ slug: string; title: string }>;
             [key: string]: unknown;

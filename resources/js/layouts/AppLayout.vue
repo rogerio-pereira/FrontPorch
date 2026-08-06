@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { Toaster } from '@/components/ui/sonner';
-import AnalyticsScripts from '@/layouts/app/AnalyticsScripts.vue';
 import SiteFooter from '@/layouts/app/SiteFooter.vue';
 import SiteHeader from '@/layouts/app/SiteHeader.vue';
 </script>
 
 <template>
     <div class="min-h-screen bg-brand-bg font-sans">
-        <AnalyticsScripts />
         <SiteHeader />
         <main>
             <slot />
