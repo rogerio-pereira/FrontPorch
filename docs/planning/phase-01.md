@@ -688,15 +688,14 @@ Document required fields for every service page:
 
 ### Step 8.3 — Analytics loader
 
-- [x] `AnalyticsScripts.vue` — inject GA4 + Meta Pixel when IDs are set
-- [x] Mount from marketing layout (`AppLayout`)
+- [x] Inject GA4 + Meta Pixel in `resources/views/app.blade.php` when IDs are set
 - [x] Do **not** gate on consent
 
 ### Step 8.4 — Tests
 
-- [x] Feature test: unset IDs → no analytics scripts / null shared props
-- [x] Feature test: mocked IDs set → IDs present in Inertia HTML payload
-- [x] Browser test: configured IDs inject `#ga-gtag-js` and `#meta-pixel-js`
+- [x] Feature test: unset IDs → no analytics scripts in response
+- [x] Feature test: mocked IDs set → tags/IDs present in HTML
+- [x] Browser test: configured IDs appear in page source
 
 ### Stage 8 — Done when
 
