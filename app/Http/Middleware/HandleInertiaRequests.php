@@ -52,28 +52,8 @@ class HandleInertiaRequests extends Middleware
                 'contactEmail' => config('site.contact_email'),
                 'turnstileSiteKey' => config('services.turnstile.key'),
                 'turnstileTesting' => app()->environment('testing'),
-                'googleAnalyticsId' => $this->optionalSiteConfigString('site.google_analytics_id'),
-                'metaPixelId' => $this->optionalSiteConfigString('site.meta_pixel_id'),
             ],
             'servicesNav' => $servicesNav,
         ];
-    }
-
-    /**
-     * Return a non-empty config string, or null when unset.
-     */
-    private function optionalSiteConfigString(string $key): ?string
-    {
-        $value = config($key);
-
-        if (! is_string($value)) {
-            return null;
-        }
-
-        if ($value === '') {
-            return null;
-        }
-
-        return $value;
     }
 }
