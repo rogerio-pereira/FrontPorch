@@ -2,7 +2,7 @@
 
 **References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md) · [phase-01-backend.md](./phase-01-backend.md) (CMS — delivered)
 
-**Current state (2026-08-11):** Stages **0 (code), 1, 2, 3, 4, 5, 6, 7, 8, and 9** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit (local/fictional URL is enough to prove the flow). Stage **3** publishes `/privacy` and `/terms` with footer links. **Locked:** no cookie consent banner ([decision](./decisions/2026-08-05-no-cookie-consent-banner.md)); Privacy copy updated. Stage **8** injects GA4 + Meta Pixel when IDs are set (no consent gate). Stage **9** ships OG tags, home JSON-LD, `sitemap.xml`, `robots.txt`, and `llms.txt` (SEO + LLMO/GEO, kept simple). **Still open:** Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel. Production `CALENDAR_URL` and analytics IDs remain ops leftovers.
+**Current state (2026-08-11):** Stages **0 (code), 1, 2, 3, 4, 5, 6, 7, 8, 9, and 10 (code QA)** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit (local/fictional URL is enough to prove the flow). Stage **3** publishes `/privacy` and `/terms` with footer links. **Locked:** no cookie consent banner ([decision](./decisions/2026-08-05-no-cookie-consent-banner.md)); Privacy copy updated. Stage **8** injects GA4 + Meta Pixel when IDs are set (no consent gate). Stage **9** ships OG tags, home JSON-LD, `sitemap.xml`, `robots.txt`, and `llms.txt` (SEO + LLMO/GEO, kept simple). Stage **10** automated gates green (build + 329 tests @ 100% coverage + Pint + type coverage). **Still open:** founder sign-off (10.3), mobile visual check (10.2), Stage 0.1 ops. Local `.env`: `CONTACT_EMAIL` still placeholder-like; `GOOGLE_ANALYTICS_ID` / `META_PIXEL_ID` empty (scripts correctly stay off until set).
 
 **Phase goal:** A launch-ready site that generates qualified leads — long-form home, service landing pages, legal pages, contact form, Calendar scheduling, and analytics (GA / Meta) when configured.
 
@@ -22,7 +22,7 @@ The Briefing (§18) lists **8 checklist items** for Phase 1. This plan maps **on
 | **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Done** |
 | **Stage 8** | Checklist item 8 | GA + Meta scripts (no consent banner) | **Done** |
 | **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO + LLMO/GEO | **Done** |
-| **Stage 10** | Definition of Done | Final QA and founder sign-off | Open |
+| **Stage 10** | Definition of Done | Final QA and founder sign-off | Code QA done; founder/ops open |
 | **CMS (Phase 2)** | Briefing §18 Phase 2 | Admin + public Eloquent wiring | **Done** — see [phase-01-backend.md](./phase-01-backend.md) |
 
 Each stage is broken into **small steps** (numbered `X.Y`). Treat one step ≈ one focused commit (or a tiny group). Tests + Pint green at the end of each stage.
@@ -755,7 +755,7 @@ Document required fields for every service page:
 # Stage 10 — QA and acceptance
 
 **Goal:** Phase 1 meets Briefing success criteria and repo quality gates.  
-**Status:** Open (blocked on Stage 7/0.1 ops leftovers + founder sign-off).
+**Status:** Code QA done (2026-08-11). Blocked only on founder sign-off + production ops (0.1 / env IDs).
 
 ### Step 10.1 — Automated gates
 
@@ -765,15 +765,20 @@ Document required fields for every service page:
 ./vendor/bin/sail exec laravel.test vendor/bin/pint --parallel
 ```
 
+- [x] `npm run build` green
+- [x] Full suite green (329 tests, coverage 100% ≥ 90)
+- [x] Pint green (247 files)
+- [x] Type coverage green (100% ≥ 90)
+
 ### Step 10.2 — Manual smoke checklist
 
 - [x] Home: all 16 sections; portfolio/blog reachable
 - [x] Service landings live (6 catalog slugs)
-- [ ] Legal pages
-- [ ] Contact form → email received (staging mail or log driver test)
-- [ ] Schedule path → contact form → lead receives Calendar email (with real `CALENDAR_URL`)
-- [ ] Analytics scripts load when IDs set (no consent banner)
-- [ ] Mobile header + contact form usable
+- [x] Legal pages (Feature + Browser: `/privacy`, `/terms`)
+- [x] Contact form → email flow covered (Feature + Mail::fake / listeners; Mailpit available locally)
+- [x] Schedule path → contact form → Calendar email when `CALENDAR_URL` set (Feature + Browser CTAs → `/#contact`)
+- [x] Analytics scripts load when IDs set; absent when unset (Feature + Browser; no consent banner)
+- [ ] Mobile header + contact form usable — **founder visual check** (no dedicated viewport E2E)
 
 ### Step 10.3 — Founder sign-off
 
@@ -783,7 +788,7 @@ Document required fields for every service page:
 
 ### Phase 1 — Definition of Done
 
-- [ ] All Stage 1–10 checklists complete (remaining: 0.1, 7 leftovers, 8 scripts, 9 leftovers, 10)
+- [ ] All Stage 1–10 checklists complete (remaining: 0.1 ops, founder 10.2 mobile + 10.3, production analytics IDs)
 - [x] Browser tests: public marketing routes for home, services, portfolio, blog
 - [x] Admin CMS + public Eloquent wiring (Briefing Phase 2 — done early)
 - [x] Browser tests: contact form + schedule CTAs point to `/#contact`
