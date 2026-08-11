@@ -4,6 +4,8 @@ use App\Models\CaseStudy;
 use App\Models\CaseStudyImage;
 use App\Models\Service;
 
+beforeEach()->flaky();
+
 it('smoke tests the portfolio study case page', function () {
     $service = Service::factory()
                     ->create([

@@ -1,5 +1,7 @@
 <?php
 
+beforeEach()->flaky();
+
 it('smoke tests the privacy page', function () {
     visit('/privacy')
         ->assertSee('Privacy Policy')

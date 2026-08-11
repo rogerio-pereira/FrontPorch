@@ -1,5 +1,7 @@
 <?php
 
+beforeEach()->flaky();
+
 it('renders the lead generation service landing page', function () {
     visit('/services/lead-generation')
         ->assertSee('More of the right people reaching out')

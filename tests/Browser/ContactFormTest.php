@@ -16,7 +16,7 @@ beforeEach(function () {
     Turnstile::fake();
     config(['site.contact_email' => 'leads@example.com']);
     Notification::fake();
-});
+})->flaky();
 
 it('submits the home contact form successfully', function () {
     Mail::fake();

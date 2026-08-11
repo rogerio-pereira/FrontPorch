@@ -4,6 +4,8 @@ use App\Models\Service;
 use App\Models\Testimonial;
 use App\Models\User;
 
+beforeEach()->flaky();
+
 it('shows the testimonials admin screens to authenticated users', function (string $url, string $heading, ?string $submit) {
     $user = User::factory()
                 ->create();

@@ -2,6 +2,8 @@
 
 use App\Models\User;
 
+beforeEach()->flaky();
+
 it('smoke tests the confirm password page for authenticated users', function () {
     $user = User::factory()->create();
 

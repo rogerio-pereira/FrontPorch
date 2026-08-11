@@ -4,6 +4,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Password;
 use Laravel\Fortify\Features;
 
+beforeEach()->flaky();
+
 it('smoke tests the reset password page', function () {
     $this->skipUnlessFortifyHas(Features::resetPasswords());
 

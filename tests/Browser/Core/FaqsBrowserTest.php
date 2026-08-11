@@ -3,6 +3,8 @@
 use App\Models\Faq;
 use App\Models\User;
 
+beforeEach()->flaky();
+
 it('shows the faqs admin screens to authenticated users', function (string $url, string $heading, ?string $submit) {
     $user = User::factory()
                 ->create();

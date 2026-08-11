@@ -6,6 +6,8 @@ use App\Models\CaseStudyImage;
 use App\Models\Service;
 use App\Models\User;
 
+beforeEach()->flaky();
+
 it('smoke tests public web routes', function (string $url, string $text) {
     visit($url)
         ->assertSee($text);

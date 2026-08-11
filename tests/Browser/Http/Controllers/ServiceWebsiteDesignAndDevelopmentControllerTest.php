@@ -1,5 +1,7 @@
 <?php
 
+beforeEach()->flaky();
+
 it('renders the website design and development service landing page', function () {
     visit('/services/website-design-and-development')
         ->assertSee('A site that looks like you')

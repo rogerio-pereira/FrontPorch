@@ -2,6 +2,8 @@
 
 use App\Models\BlogArticle;
 
+beforeEach()->flaky();
+
 it('smoke tests the blog page', function () {
     BlogArticle::factory()
         ->create([

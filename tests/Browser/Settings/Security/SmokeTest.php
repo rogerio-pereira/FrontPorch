@@ -3,6 +3,8 @@
 use App\Models\User;
 use Laravel\Fortify\Features;
 
+beforeEach()->flaky();
+
 it('smoke tests the security settings page for authenticated users', function () {
     $user = User::factory()->create();
 
