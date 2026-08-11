@@ -181,13 +181,15 @@
         @apply space-y-10;
     }
 
-    .legal-prose {
+    .legal-prose,
+    .content-prose {
         color: var(--text-muted-on-light);
         font-size: 1.125rem;
         line-height: 1.75;
     }
 
-    .legal-prose h2 {
+    .legal-prose h2,
+    .content-prose h2 {
         margin-top: 2.5rem;
         margin-bottom: 0.75rem;
         color: var(--text-primary-on-light);
@@ -196,33 +198,92 @@
         line-height: 1.3;
     }
 
-    .legal-prose h2:first-child {
+    .legal-prose h2:first-child,
+    .content-prose h2:first-child,
+    .content-prose > *:first-child {
         margin-top: 0;
     }
 
-    .legal-prose p {
+    .content-prose h3 {
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+        color: var(--text-primary-on-light);
+        font-size: 1.25rem;
+        font-weight: 600;
+        line-height: 1.35;
+    }
+
+    .legal-prose p,
+    .content-prose p {
         margin-top: 0;
         margin-bottom: 1rem;
     }
 
-    .legal-prose ul {
+    .legal-prose ul,
+    .content-prose ul,
+    .content-prose ol {
         margin-top: 0;
         margin-bottom: 1rem;
-        list-style: disc;
         padding-left: 1.5rem;
     }
 
-    .legal-prose li {
+    .legal-prose ul,
+    .content-prose ul {
+        list-style: disc;
+    }
+
+    .content-prose ol {
+        list-style: decimal;
+    }
+
+    .legal-prose li,
+    .content-prose li {
         margin-bottom: 0.5rem;
     }
 
-    .legal-prose li:last-child {
+    .legal-prose li:last-child,
+    .content-prose li:last-child {
         margin-bottom: 0;
     }
 
-    .legal-prose a {
+    .legal-prose a,
+    .content-prose a {
         color: var(--text-accent-on-light);
         text-decoration: underline;
+    }
+
+    .content-prose strong {
+        color: var(--text-primary-on-light);
+        font-weight: 600;
+    }
+
+    .content-prose em {
+        font-style: italic;
+    }
+
+    .content-prose blockquote {
+        margin: 1.5rem 0;
+        padding-left: 1rem;
+        border-left: 3px solid var(--color-brand-accent-muted);
+        color: var(--text-primary-on-light);
+    }
+
+    .content-prose figure {
+        margin: 1.75rem 0;
+    }
+
+    .content-prose img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 0.75rem;
+    }
+
+    .content-prose figcaption {
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        color: var(--text-muted-on-light);
     }
 
     .marketing-grid-bg {
