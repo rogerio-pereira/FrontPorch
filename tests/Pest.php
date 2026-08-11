@@ -18,10 +18,6 @@ pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature', 'Browser', 'Unit');
 
-pest()->beforeEach(function (): void {
-    clearstatcache();
-})->in('Browser');
-
 /*
 |--------------------------------------------------------------------------
 | Expectations
