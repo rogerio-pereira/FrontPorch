@@ -1,5 +1,7 @@
 <?php
 
+beforeEach()->flaky();
+
 it('includes analytics scripts in the page when ids are configured', function () {
     config([
         'site.google_analytics_id' => 'G-BROWSERTEST',

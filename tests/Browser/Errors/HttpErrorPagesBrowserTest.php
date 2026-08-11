@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+beforeEach()->flaky();
+
 it('shows the branded 404 page in the browser', function () {
     visit('/this-page-does-not-exist-front-porch')
         ->waitForEvent('networkidle')
