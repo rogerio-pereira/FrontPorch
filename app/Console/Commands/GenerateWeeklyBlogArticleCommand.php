@@ -36,7 +36,7 @@ class GenerateWeeklyBlogArticleCommand extends Command
                     "Recent article titles (do not duplicate):\n".
                     "{$recentTitles}\n".
                     "Use generate_image for the cover (directory blog) and optional inline images.\n".
-                    "Then call create_blog_article once. Do nothing else.";
+                    'Then call create_blog_article once. Do nothing else.';
 
         $agent = new BlogArticleWriterAgent;
 
