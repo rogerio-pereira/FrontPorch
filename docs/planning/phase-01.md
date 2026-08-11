@@ -2,7 +2,7 @@
 
 **References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md) · [phase-01-backend.md](./phase-01-backend.md) (CMS — delivered)
 
-**Current state (2026-08-05):** Stages **0 (code), 1, 2, 3, 4, 5, 6, and 8** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit (local/fictional URL is enough to prove the flow). Stage **3** publishes `/privacy` and `/terms` with footer links. **Locked:** no cookie consent banner ([decision](./decisions/2026-08-05-no-cookie-consent-banner.md)); Privacy copy updated. Stage **8** injects GA4 + Meta Pixel when IDs are set (no consent gate). **Still open (precedence order):** Stage 9 polish leftovers → Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel with any open stage. Production `CALENDAR_URL` and analytics IDs remain ops leftovers.
+**Current state (2026-08-11):** Stages **0 (code), 1, 2, 3, 4, 5, 6, 7, 8, and 9** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit (local/fictional URL is enough to prove the flow). Stage **3** publishes `/privacy` and `/terms` with footer links. **Locked:** no cookie consent banner ([decision](./decisions/2026-08-05-no-cookie-consent-banner.md)); Privacy copy updated. Stage **8** injects GA4 + Meta Pixel when IDs are set (no consent gate). Stage **9** ships OG tags, home JSON-LD, `sitemap.xml`, `robots.txt`, and `llms.txt` (SEO + LLMO/GEO, kept simple). **Still open:** Stage 10 QA. Stage 0.1 (founders/ops) can run in parallel. Production `CALENDAR_URL` and analytics IDs remain ops leftovers.
 
 **Phase goal:** A launch-ready site that generates qualified leads — long-form home, service landing pages, legal pages, contact form, Calendar scheduling, and analytics (GA / Meta) when configured.
 
@@ -21,7 +21,7 @@ The Briefing (§18) lists **8 checklist items** for Phase 1. This plan maps **on
 | **Stage 7** | Checklist item 7 | Scheduling via contact form + email link | Code done; production URL is ops |
 | **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Done** |
 | **Stage 8** | Checklist item 8 | GA + Meta scripts (no consent banner) | **Done** |
-| **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO | Partial |
+| **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO + LLMO/GEO | **Done** |
 | **Stage 10** | Definition of Done | Final QA and founder sign-off | Open |
 | **CMS (Phase 2)** | Briefing §18 Phase 2 | Admin + public Eloquent wiring | **Done** — see [phase-01-backend.md](./phase-01-backend.md) |
 
@@ -708,7 +708,7 @@ Document required fields for every service page:
 
 **Goal:** Search engines and social previews see a complete, branded site.  
 **Prerequisites:** Stages 4–5 complete for most items; Stage 3 for legal Head/sitemap entries; Stages 6–8 (analytics scripts optional before SEO close-out) before final SEO close-out.  
-**Status:** **Partial.** Branded HTTP error pages (404 / 500 / 503) delivered.
+**Status:** **Done** (KISS: Vue `Head` OG tags, home JSON-LD, static `robots.txt` / `llms.txt`, dynamic `sitemap.xml`).
 
 ### Step 9.1 — Per-page Head audit
 
@@ -719,42 +719,43 @@ Document required fields for every service page:
 ### Step 9.2 — Open Graph
 
 - [x] Service pages: `og:title`, `og:description`, `og:image`
-- [ ] Home + remaining pages: full OG set (`og:url`, shared placeholder image as needed)
+- [x] Home + remaining pages: OG title/description/image (shared default image where needed)
 
-### Step 9.3 — Structured data
+### Step 9.3 — Structured data + LLMO / GEO
 
-- [ ] JSON-LD: `Organization`, `LocalBusiness` (Plant City, FL)
-- [ ] `FAQPage` schema on home (matches FAQ content)
+- [x] JSON-LD on home: `Organization`, `ProfessionalService` (local), `WebSite`, `FAQPage`
+- [x] `public/llms.txt` — plain-language entity summary for LLM / generative engines
+- [x] `robots.txt` allows common AI crawlers and points to the sitemap
 
 ### Step 9.4 — Crawling
 
-- [x] `public/robots.txt` (allow-all baseline)
-- [ ] `public/sitemap.xml` — all Phase 1 public URLs (home, 6 services, portfolio, blog, legal)
+- [x] `public/robots.txt` (allow-all + AI crawlers + sitemap)
+- [x] `GET /sitemap.xml` — Phase 1 public URLs (home, services, portfolio, blog, legal + DB articles/case studies)
 
 ### Step 9.5 — Favicon and cleanup
 
 - [x] Favicon present (`public/favicon.ico`, `favicon.svg`)
-- [ ] Remove unused `Welcome.vue` / starter references if still present
-- [ ] CTA contrast review (accent button text color — WCAG)
+- [x] Remove unused `Welcome.vue` / starter references
+- [x] CTA contrast review (accent button uses `text-brand-bg` on `bg-brand-accent`)
 - [x] Branded error pages (404, 500, 503)
 
 ### Step 9.6 — Open design decisions
 
 - [x] Defaults in CSS: text-on-dark B, light section L1
-- [ ] Confirm with founders (text-on-dark B, light L1, mobile logo scale)
+- [ ] Confirm with founders (text-on-dark B, light L1, mobile logo scale) — Stage 10 sign-off
 
 ### Stage 9 — Done when
 
-- [ ] sitemap lists all public routes
-- [ ] No Laravel starter branding remains on public surfaces
-- [ ] JSON-LD + full OG audit complete
-
+- [x] sitemap lists all public routes
+- [x] No Laravel starter branding remains on public surfaces (`Welcome.vue` removed)
+- [x] JSON-LD + OG audit complete (home structured data; OG on marketing pages)
+- [x] `llms.txt` published for LLMO / GEO
 ---
 
 # Stage 10 — QA and acceptance
 
 **Goal:** Phase 1 meets Briefing success criteria and repo quality gates.  
-**Status:** Open (blocked on Stage 9 leftovers + Stage 7/0.1 ops leftovers).
+**Status:** Open (blocked on Stage 7/0.1 ops leftovers + founder sign-off).
 
 ### Step 10.1 — Automated gates
 
@@ -807,9 +808,8 @@ Document required fields for every service page:
 
 ## Suggested next implementation order
 
-1. **Stage 9 leftovers** — sitemap, JSON-LD, OG home, remove `Welcome.vue`  
-2. **Stage 10** — automated + founder QA  
-3. **Ops (parallel)** — production `CALENDAR_URL`, `CONTACT_EMAIL`, analytics IDs, Turnstile, Slack
+1. **Stage 10** — automated + founder QA  
+2. **Ops (parallel)** — production `CALENDAR_URL`, `CONTACT_EMAIL`, analytics IDs, Turnstile, Slack
 
 ---
 
