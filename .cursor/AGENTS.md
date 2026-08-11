@@ -160,6 +160,7 @@ Target the repository’s default branch (usually `main`).
 
 # Code Styleguide (**IMPORTANT**)
 - Read **AND FOLLOW** `.cursor/rules/style-guide.md`
+- How to start the environment and usefull commands `.cursor/rules/starting-environment.mdc`
 
 ---
 
