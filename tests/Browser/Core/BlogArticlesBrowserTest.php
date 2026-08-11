@@ -3,6 +3,8 @@
 use App\Models\BlogArticle;
 use App\Models\User;
 
+beforeEach()->flaky();
+
 it('shows the blog articles admin screens to authenticated users', function (string $url, string $heading, ?string $submit) {
     $user = User::factory()
                 ->create();

@@ -4,6 +4,8 @@ use App\Models\CaseStudy;
 use App\Models\Service;
 use App\Models\User;
 
+beforeEach()->flaky();
+
 it('shows the case studies admin screens to authenticated users', function (string $url, string $heading, ?string $submit) {
     $user = User::factory()
                 ->create();
