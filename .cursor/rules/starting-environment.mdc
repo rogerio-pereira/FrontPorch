@@ -62,7 +62,13 @@ A path/`--filter` run is allowed only while diagnosing a failure; the task is no
 ./vendor/bin/sail exec laravel.test vendor/bin/pint --parallel
 ```
 
-**Before running tests:** the full suite (including Browser tests per `phpunit.xml`) needs the frontend built or the dev server running. Either run `./vendor/bin/sail npm run build` once, or run `./vendor/bin/sail npm run dev` in a separate terminal and keep it running, then run the test commands above.
+**Before running tests:** the full suite (including Browser tests per `phpunit.xml`) needs a Vite production build:
+
+```
+./vendor/bin/sail npm run build
+```
+
+Browser tests ignore `public/hot` and always load assets from `public/build`, so `npm run dev` alone is not enough for the suite (you may keep `npm run dev` for local browsing).
 
 ### Testing policy (mandatory)
 - Use **Pest Browser** for browser / E2E tests. **Do not** add or use Laravel Dusk.

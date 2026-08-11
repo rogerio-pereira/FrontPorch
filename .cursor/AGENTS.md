@@ -102,7 +102,7 @@ Key commands:
 ./vendor/bin/sail exec laravel.test vendor/bin/pint --parallel
 ```
 
-Before the full suite (including browser tests): `./vendor/bin/sail npm run build` once, or keep `./vendor/bin/sail npm run dev` running.
+Before the full suite (including browser tests): `./vendor/bin/sail npm run build` once. Browser tests load assets from `public/build` (they ignore `public/hot`), so `npm run dev` alone is not enough.
 
 ---
 
