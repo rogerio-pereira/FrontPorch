@@ -13,8 +13,12 @@ use App\Http\Controllers\ServiceCustomSoftwareDevelopmentController;
 use App\Http\Controllers\ServiceEmailMarketingController;
 use App\Http\Controllers\ServiceLeadGenerationController;
 use App\Http\Controllers\ServiceWebsiteDesignAndDevelopmentController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TermsController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/sitemap.xml', SitemapController::class)
+    ->name('sitemap');
 
 Route::get('/', HomeController::class)
     ->name('home');
