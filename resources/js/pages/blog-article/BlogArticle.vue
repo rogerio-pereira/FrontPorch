@@ -17,7 +17,13 @@ defineProps<{
 </script>
 
 <template>
-    <Head :title="`${article.title} | Blog | Front Porch Creative`" />
+    <Head :title="`${article.title} | Blog | Front Porch Creative`">
+        <meta name="description" :content="article.description" />
+        <meta property="og:title" :content="article.title" />
+        <meta property="og:description" :content="article.description" />
+        <meta property="og:image" :content="article.image" />
+        <meta property="og:type" content="article" />
+    </Head>
 
     <section class="relative overflow-hidden bg-brand-bg text-[var(--text-on-dark)]">
         <DecorativeBackground variant="glow" />
