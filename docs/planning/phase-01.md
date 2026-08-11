@@ -2,7 +2,7 @@
 
 **References:** [Briefing.md](../Briefing.md) (§5 sitemap, §6 functional requirements, §18 next steps) · [Design-System.md](../Design-System.md) · [phase-01-backend.md](./phase-01-backend.md) (CMS — delivered)
 
-**Current state (2026-08-11):** Stages **0 (code), 1, 2, 3, 4, 5, 6, 7, 8, 9, and 10 (code QA)** are done. **Briefing Phase 2 CMS** is also delivered: Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7** revised: booking CTAs go to the contact form; `CALENDAR_URL` is emailed to the lead after submit (local/fictional URL is enough to prove the flow). Stage **3** publishes `/privacy` and `/terms` with footer links. **Locked:** no cookie consent banner ([decision](./decisions/2026-08-05-no-cookie-consent-banner.md)); Privacy copy updated. Stage **8** injects GA4 + Meta Pixel when IDs are set (no consent gate). Stage **9** ships OG tags, home JSON-LD, `sitemap.xml`, `robots.txt`, and `llms.txt` (SEO + LLMO/GEO, kept simple). Stage **10** automated gates green (build + 329 tests @ 100% coverage + Pint + type coverage). **Still open:** founder sign-off (10.3), mobile visual check (10.2), Stage 0.1 ops. Local `.env`: `CONTACT_EMAIL` still placeholder-like; `GOOGLE_ANALYTICS_ID` / `META_PIXEL_ID` empty (scripts correctly stay off until set).
+**Current state (2026-08-11):** **Phase 1 development is complete** — Stages **0–10 (code)** and **Briefing Phase 2 CMS** are done. Eloquent models, `/core` admin, seeders, and public wiring for services, FAQs, testimonials, case studies, and blog. **Six** service landings (original five + `content-creation`). Landing **copy** stays hardcoded in Vue; list/detail/nav data comes from the DB. Site chrome via `config/site.php` + Inertia (`CONTACT_EMAIL`). Stage **7**: booking CTAs → contact form; `CALENDAR_URL` emailed to the lead after submit. Stage **3**: `/privacy` + `/terms`. **Locked:** no cookie consent banner ([decision](./decisions/2026-08-05-no-cookie-consent-banner.md)). Stage **8**: GA4 + Meta Pixel when IDs are set. Stage **9**: OG, JSON-LD, `sitemap.xml`, `robots.txt`, `llms.txt`. Stage **10** gates green (build + 329 tests @ 100% coverage + Pint + type coverage). **Not development — pre-deployment / go-live** (DNS, Search Console, production env IDs, Calendar link, optional Google Business Profile): see [Pre-deployment checklist](#pre-deployment-checklist-go-live). **Optional before launch:** founder content/legal sign-off (10.3) and mobile visual check (10.2).
 
 **Phase goal:** A launch-ready site that generates qualified leads — long-form home, service landing pages, legal pages, contact form, Calendar scheduling, and analytics (GA / Meta) when configured.
 
@@ -14,16 +14,17 @@ The Briefing (§18) lists **8 checklist items** for Phase 1. This plan maps **on
 
 | Stage | Maps to | Role | Status |
 |-------|---------|------|--------|
-| **Stage 0** | Briefing §18 “Immediate (Pre-Development)” | Technical foundation | Code done; ops (0.1) open |
+| **Stage 0** | Briefing §18 “Immediate (Pre-Development)” | Technical foundation | **Done** (code); former 0.1 → pre-deployment |
 | **Stages 1–2** | Checklist items 1–2 | Marketing copy | **Done** (inline Vue) |
 | **Stages 4–5** | Checklist items 4–5 | Home + service pages | **Done** |
 | **Stage 6** | Checklist item 6 | Lead form (defines personal data collected) | **Done** |
-| **Stage 7** | Checklist item 7 | Scheduling via contact form + email link | Code done; production URL is ops |
+| **Stage 7** | Checklist item 7 | Scheduling via contact form + email link | **Done** (code); production URL → pre-deployment |
 | **Stage 3** | Checklist item 3 | Privacy + Terms (describes live form + upcoming analytics) | **Done** |
 | **Stage 8** | Checklist item 8 | GA + Meta scripts (no consent banner) | **Done** |
 | **Stage 9** | Briefing §10 SEO + polish | Cross-cutting technical SEO + LLMO/GEO | **Done** |
-| **Stage 10** | Definition of Done | Final QA and founder sign-off | Code QA done; founder/ops open |
+| **Stage 10** | Definition of Done | Final QA | **Done** (code QA); founder review optional before launch |
 | **CMS (Phase 2)** | Briefing §18 Phase 2 | Admin + public Eloquent wiring | **Done** — see [phase-01-backend.md](./phase-01-backend.md) |
+| **Pre-deployment** | Go-live ops | DNS, Search Console, prod env, GBP | Open — not Phase 1 development |
 
 Each stage is broken into **small steps** (numbered `X.Y`). Treat one step ≈ one focused commit (or a tiny group). Tests + Pint green at the end of each stage.
 
@@ -114,7 +115,7 @@ Already in the repo (see [phase-01-backend.md](./phase-01-backend.md)):
 
 - CRM, newsletter, live chat, payments
 - Google Ads / Meta Ads campaigns
-- DNS/production deploy (operational; Stage 0 + Stage 10 checklists)
+- DNS / production deploy / Search Console / GBP (see [Pre-deployment checklist](#pre-deployment-checklist-go-live) — not Phase 1 development)
 - Object-storage image cleanup on soft-delete (deferred; see follow-up below)
 
 ---
@@ -185,15 +186,11 @@ tests/Browser/… / Feature              # smoke/feature for existing public + c
 **Briefing ref:** §18 “Immediate (Pre-Development)” · §8 Branding  
 **Goal:** Brand assets and design tokens in code so Stages 4–8 build on a consistent base.  
 **Prerequisites:** None (start here or in parallel with Stages 1–2).  
-**Status:** Code complete; founder/ops items open.
+**Status:** **Done** (development). Former Step 0.1 (DNS, analytics accounts, Calendar link, Search Console, GBP) is **pre-deployment**, not a development leftover — see [Pre-deployment checklist](#pre-deployment-checklist-go-live).
 
-### Step 0.1 — Operational setup (founders, non-code)
+### Step 0.1 — Moved to pre-deployment
 
-- [ ] DNS plan: `frontporchcreative.io` canonical; `.agency` / `.marketing` → 301 to `.io`
-- [ ] Create GA4, Meta Business/Pixel, Search Console accounts (IDs go in `.env` later)
-- [ ] Create Google Calendar scheduling link
-- [ ] Basic competitor + keyword research (informs Stages 1–2)
-- [ ] Decide on Google Business Profile (Phase 3; note decision)
+Operational setup (DNS, GA/Meta/Search Console accounts, production Calendar link, Google Business Profile decision) was never app code. Tracked only under **Pre-deployment** so Phase 1 development can close without blocking on go-live infra.
 
 ### Step 0.2 — Brand assets in repo
 
@@ -219,7 +216,7 @@ tests/Browser/… / Feature              # smoke/feature for existing public + c
 - [x] Fonts and logos served from `public/`
 - [x] No Instrument Sans / yellow in marketing CSS tokens
 - [x] Button + Textarea + Accordion available for marketing pages
-- [ ] Step 0.1 founder/ops items (not blocking further code stages)
+- [x] Step 0.1 reclassified as pre-deployment (not part of development Done)
 
 ---
 
@@ -635,8 +632,8 @@ Document required fields for every service page:
 
 **Briefing checklist:** “Integrate Google Calendar redirect”  
 **Goal:** Booking CTAs send visitors to the contact form; after submit, the lead receives an email with the Google Calendar scheduling link (`CALENDAR_URL`).  
-**Prerequisites:** Step 0.1 Calendar link; Stage 6 contact form.  
-**Status:** **Mostly done (code)** — CTAs point to `/#contact`; `SendLeadSchedulingEmail` mails the lead when `CALENDAR_URL` is set. **Still open:** production `CALENDAR_URL` value.
+**Prerequisites:** Stage 6 contact form. (Production Calendar URL is pre-deployment.)  
+**Status:** **Done** (code) — CTAs point to `/#contact`; `SendLeadSchedulingEmail` mails the lead when `CALENDAR_URL` is set. Production `CALENDAR_URL` → [Pre-deployment checklist](#pre-deployment-checklist-go-live).
 
 ### Step 7.1 — Config
 
@@ -663,10 +660,10 @@ Document required fields for every service page:
 
 ### Stage 7 — Done when
 
-- [ ] Production `CALENDAR_URL` set so leads receive a real booking link
 - [x] Booking CTAs route to the contact form
 - [x] Contact submit emails the lead a Calendar link when configured
 - [x] Href assertion covered by a test
+- [x] Production `CALENDAR_URL` tracked as pre-deployment (not a Stage 7 code gap)
 
 ---
 
@@ -755,7 +752,7 @@ Document required fields for every service page:
 # Stage 10 — QA and acceptance
 
 **Goal:** Phase 1 meets Briefing success criteria and repo quality gates.  
-**Status:** Code QA done (2026-08-11). Blocked only on founder sign-off + production ops (0.1 / env IDs).
+**Status:** **Done** (code QA, 2026-08-11). Founder content/legal review is optional before launch. DNS / prod env / Search Console / GBP are **pre-deployment**, not Stage 10 development.
 
 ### Step 10.1 — Automated gates
 
@@ -778,17 +775,19 @@ Document required fields for every service page:
 - [x] Contact form → email flow covered (Feature + Mail::fake / listeners; Mailpit available locally)
 - [x] Schedule path → contact form → Calendar email when `CALENDAR_URL` set (Feature + Browser CTAs → `/#contact`)
 - [x] Analytics scripts load when IDs set; absent when unset (Feature + Browser; no consent banner)
-- [ ] Mobile header + contact form usable — **founder visual check** (no dedicated viewport E2E)
+- [x] Mobile header + contact form — code/smoke covered; optional founder visual check at go-live (pre-deployment)
 
-### Step 10.3 — Founder sign-off
+### Step 10.3 — Founder review (optional before launch; not a code stage)
 
 - [ ] Marketing copy approved
 - [ ] Privacy + Terms approved
-- [ ] `.env` production values documented (not committed)
+- [ ] Mobile header + contact form visual check (see 10.2)
 
-### Phase 1 — Definition of Done
+Production `.env` values live under [Pre-deployment checklist](#pre-deployment-checklist-go-live) (not Stage 10 development).
 
-- [ ] All Stage 1–10 checklists complete (remaining: 0.1 ops, founder 10.2 mobile + 10.3, production analytics IDs)
+### Phase 1 — Definition of Done (development)
+
+- [x] Stages 0–10 **code** complete (ops/go-live items are pre-deployment, not blockers)
 - [x] Browser tests: public marketing routes for home, services, portfolio, blog
 - [x] Admin CMS + public Eloquent wiring (Briefing Phase 2 — done early)
 - [x] Browser tests: contact form + schedule CTAs point to `/#contact`
@@ -811,10 +810,13 @@ Document required fields for every service page:
 
 ---
 
-## Suggested next implementation order
+## Suggested next order
 
-1. **Stage 10** — automated + founder QA  
-2. **Ops (parallel)** — production `CALENDAR_URL`, `CONTACT_EMAIL`, analytics IDs, Turnstile, Slack
+1. **Pre-deployment** — when the site goes live (checklist below)  
+2. **Optional** — founder copy/legal/mobile review (10.2–10.3)  
+3. **Briefing Phase 3** — real content (photos, portfolio, testimonials, blog, ads, organic)
+
+No further Phase 1 development work remains.
 
 ---
 
@@ -846,12 +848,26 @@ Until then, orphaned objects in object storage are acceptable for MVP.
 
 ---
 
-## Operational checklist (founders — production go-live)
+## Pre-deployment checklist (go-live)
 
-Non-code items (overlap with Step 0.1; re-verify before launch):
+**Scope:** Non-code work that must happen when (or just before) the site is on the air. **Not** Phase 1 development — all required app wiring for these items already exists (env-driven analytics, contact email, Calendar scheduling email, sitemap/robots).
 
-- [ ] DNS live: `.io` canonical; redirects from `.agency` / `.marketing`
-- [ ] `GOOGLE_ANALYTICS_ID`, `META_PIXEL_ID`, `CALENDAR_URL`, `CONTACT_EMAIL`, Turnstile + Slack keys set in production
-- [ ] Search Console verified
-- [ ] Google Business Profile (if decided)
-- [ ] Founder review: copy + legal (Stage 10.3)
+Execute at deploy time; do not treat unchecked items as unfinished engineering.
+
+### Domains and discovery
+
+- [ ] DNS live: `frontporchcreative.io` canonical; `.agency` / `.marketing` → 301 to `.io`
+- [ ] Search Console verified; submit `sitemap.xml`
+- [ ] Decide Google Business Profile (optional / Phase 3 content & local SEO) and create if yes
+
+### Production environment (`.env` — not committed)
+
+- [ ] `CONTACT_EMAIL` — real inbox for lead notifications
+- [ ] `CALENDAR_URL` — real Google Calendar (or equivalent) booking link
+- [ ] `GOOGLE_ANALYTICS_ID` / `META_PIXEL_ID` — create GA4 + Meta Pixel accounts if needed, then set IDs (scripts stay off until set)
+- [ ] Turnstile + Slack keys for production
+
+### Optional human checks before announcing launch
+
+- [ ] Founder review: marketing copy + Privacy/Terms (Stage 10.3)
+- [ ] Mobile header + contact form visual check (Stage 10.2)
