@@ -4,7 +4,9 @@ use App\Ai\Agents\BlogArticleWriterAgent;
 use App\Ai\Tools\CreateBlogArticleTool;
 use App\Ai\Tools\GenerateImageTool;
 use App\Models\BlogArticle;
+use Illuminate\JsonSchema\JsonSchemaTypeFactory;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Ai\Ai;
@@ -25,10 +27,44 @@ it('schedules the weekly article command on monday at 08:00 America/New_York', f
         ->and($event->expression)->toBe('0 8 * * 1');
 });
 
+it('loads article writer instructions from the prompt file', function () {
+    $agent = new BlogArticleWriterAgent;
+
+    $instructions = (string) $agent->instructions();
+
+    expect($instructions)->toContain('Front Porch Creative')
+        ->and($agent->tools())->toHaveCount(2);
+});
+
+it('falls back to short instructions when the prompt file is missing', function () {
+    $path = base_path('docs/ai/ArticleWritter.md');
+    $backup = $path.'.bak-test';
+
+    File::move($path, $backup);
+
+    try {
+        $instructions = (string) (new BlogArticleWriterAgent)->instructions();
+
+        expect($instructions)->toContain('create_blog_article')
+            ->and($instructions)->toContain('generate_image');
+    } finally {
+        File::move($backup, $path);
+    }
+});
+
 it('creates a blog article via the create tool', function () {
     config(['app.name' => 'Front Porch Creative']);
 
-    $message = (new CreateBlogArticleTool)->handle(new Request([
+    $tool = new CreateBlogArticleTool;
+
+    expect($tool->name())->toBe('create_blog_article')
+        ->and((string) $tool->description())->toContain('Create and publish one blog article');
+
+    $schema = $tool->schema(new JsonSchemaTypeFactory);
+
+    expect($schema)->toHaveKeys(['title', 'description', 'category', 'content', 'image']);
+
+    $message = $tool->handle(new Request([
         'title' => 'A simple automation start',
         'description' => 'One reliable flow is enough.',
         'category' => 'Business automations',
@@ -47,9 +83,28 @@ it('generates and stores an image via the image tool', function () {
     Storage::fake();
     Image::fake([base64_encode('png-bytes')]);
 
-    $url = (new GenerateImageTool)->handle(new Request([
+    $tool = new GenerateImageTool;
+
+    expect($tool->name())->toBe('generate_image')
+        ->and((string) $tool->description())->toContain('Generate an image')
+        ->and($tool->schema(new JsonSchemaTypeFactory))->toHaveKeys(['idea', 'directory']);
+
+    $url = $tool->handle(new Request([
         'idea' => 'Abstract sage shapes',
         'directory' => 'blog',
+    ]));
+
+    expect($url)->toBeString()->not->toBeEmpty()
+        ->and(Storage::allFiles('blog'))->toHaveCount(1);
+});
+
+it('defaults the image directory to blog when the argument is empty', function () {
+    Storage::fake();
+    Image::fake([base64_encode('png-bytes')]);
+
+    $url = (new GenerateImageTool)->handle(new Request([
+        'idea' => 'Calm shapes',
+        'directory' => '',
     ]));
 
     expect($url)->toBeString()->not->toBeEmpty()
