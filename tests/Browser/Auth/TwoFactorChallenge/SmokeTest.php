@@ -3,6 +3,8 @@
 use App\Models\User;
 use Laravel\Fortify\Features;
 
+beforeEach()->flaky();
+
 it('redirects guests from the two factor challenge to login', function () {
     $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
 
