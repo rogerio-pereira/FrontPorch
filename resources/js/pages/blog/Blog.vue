@@ -21,7 +21,18 @@ defineProps<{
 </script>
 
 <template>
-    <Head title="Blog | Front Porch Creative" />
+    <Head title="Blog | Front Porch Creative">
+        <meta
+            name="description"
+            content="Practical ideas from Front Porch Creative for growing a small business in Central Florida — websites, leads, email, and the systems behind them."
+        />
+        <meta property="og:title" content="Blog | Front Porch Creative" />
+        <meta
+            property="og:description"
+            content="Practical ideas from Front Porch Creative for growing a small business in Central Florida."
+        />
+        <meta property="og:image" content="/images/blog/listing.png" />
+    </Head>
 
     <section class="relative overflow-hidden bg-brand-bg text-[var(--text-on-dark)]">
         <DecorativeBackground variant="glow" />

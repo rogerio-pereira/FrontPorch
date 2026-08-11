@@ -31,7 +31,16 @@ const serviceTitles = computed(() =>
 </script>
 
 <template>
-    <Head :title="`${caseStudy.title} | Portfolio | Front Porch Creative`" />
+    <Head :title="`${caseStudy.title} | Portfolio | Front Porch Creative`">
+        <meta name="description" :content="caseStudy.description" />
+        <meta property="og:title" :content="caseStudy.title" />
+        <meta property="og:description" :content="caseStudy.description" />
+        <meta
+            property="og:image"
+            :content="caseStudy.images[0]?.url ?? '/images/portfolio-study-case/cover.png'"
+        />
+        <meta property="og:type" content="article" />
+    </Head>
 
     <section class="relative overflow-hidden bg-brand-bg text-[var(--text-on-dark)]">
         <DecorativeBackground variant="glow" />

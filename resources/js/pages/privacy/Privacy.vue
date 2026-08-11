@@ -10,10 +10,14 @@ const lastUpdated = 'August 5, 2026';
 </script>
 
 <template>
-    <Head>
-        <title>Privacy Policy</title>
+    <Head title="Privacy Policy | Front Porch Creative">
         <meta
             name="description"
+            content="How Front Porch Creative collects, uses, and protects information when you use frontporchcreative.io."
+        />
+        <meta property="og:title" content="Privacy Policy | Front Porch Creative" />
+        <meta
+            property="og:description"
             content="How Front Porch Creative collects, uses, and protects information when you use frontporchcreative.io."
         />
     </Head>

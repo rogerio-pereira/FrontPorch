@@ -10,10 +10,14 @@ const lastUpdated = 'August 4, 2026';
 </script>
 
 <template>
-    <Head>
-        <title>Terms of Service</title>
+    <Head title="Terms of Service | Front Porch Creative">
         <meta
             name="description"
+            content="Terms of Service for Front Porch Creative and the frontporchcreative.io website."
+        />
+        <meta property="og:title" content="Terms of Service | Front Porch Creative" />
+        <meta
+            property="og:description"
             content="Terms of Service for Front Porch Creative and the frontporchcreative.io website."
         />
     </Head>

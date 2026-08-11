@@ -27,7 +27,18 @@ function serviceTitles(caseStudy: PortfolioCaseStudy): string {
 </script>
 
 <template>
-    <Head title="Portfolio | Front Porch Creative" />
+    <Head title="Portfolio | Front Porch Creative">
+        <meta
+            name="description"
+            content="Case studies from Front Porch Creative showing how Central Florida small businesses moved from confusion to clearer marketing and technology."
+        />
+        <meta property="og:title" content="Portfolio | Front Porch Creative" />
+        <meta
+            property="og:description"
+            content="Case studies from Front Porch Creative showing how Central Florida small businesses moved from confusion to clearer marketing and technology."
+        />
+        <meta property="og:image" content="/images/portfolio/case-study-cover.png" />
+    </Head>
 
     <section class="relative overflow-hidden bg-brand-bg text-[var(--text-on-dark)]">
         <DecorativeBackground variant="glow" />

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import CtaBand from '@/layouts/app/CtaBand.vue';
 import AboutSection from '@/pages/home/component/AboutSection.vue';
@@ -13,7 +14,7 @@ import ServicesSection from '@/pages/home/component/ServicesSection.vue';
 import TestimonialsSection from '@/pages/home/component/TestimonialsSection.vue';
 import WhySection from '@/pages/home/component/WhySection.vue';
 
-defineProps<{
+const props = defineProps<{
     faqs: Array<{ question: string; answer: string }>;
     services: Array<{ slug: string; title: string; description: string }>;
     testimonials: Array<{ testimonial: string; person: string }>;
@@ -31,14 +32,80 @@ defineProps<{
         slug: string;
     }>;
 }>();
+
+const homeDescription =
+    'A Plant City agency helping small businesses grow with websites, lead generation, email marketing, automations, and custom software, all working together, not in pieces.';
+
+const jsonLd = computed(() => {
+    const graph: Array<Record<string, unknown>> = [
+        {
+            '@type': 'Organization',
+            name: 'Front Porch Creative',
+            url: '/',
+            logo: '/images/branding/logo-horizontal.png',
+            description: homeDescription,
+            address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Plant City',
+                addressRegion: 'FL',
+                addressCountry: 'US',
+            },
+            areaServed: 'Central Florida',
+        },
+        {
+            '@type': 'ProfessionalService',
+            name: 'Front Porch Creative',
+            url: '/',
+            image: '/images/branding/logo-horizontal.png',
+            description: homeDescription,
+            address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Plant City',
+                addressRegion: 'FL',
+                addressCountry: 'US',
+            },
+            areaServed: 'Central Florida',
+        },
+        {
+            '@type': 'WebSite',
+            name: 'Front Porch Creative',
+            url: '/',
+            inLanguage: 'en-US',
+        },
+    ];
+
+    if (props.faqs.length > 0) {
+        graph.push({
+            '@type': 'FAQPage',
+            mainEntity: props.faqs.map((faq) => ({
+                '@type': 'Question',
+                name: faq.question,
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: faq.answer,
+                },
+            })),
+        });
+    }
+
+    return JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': graph,
+    });
+});
 </script>
 
 <template>
     <Head title="Front Porch Creative | Marketing & Technology for Small Businesses">
-        <meta
-            name="description"
-            content="A Plant City agency helping small businesses grow with websites, lead generation, email marketing, automations, and custom software, all working together, not in pieces."
-        />
+        <meta name="description" :content="homeDescription" />
+        <meta property="og:title" content="Front Porch Creative | Marketing & Technology for Small Businesses" />
+        <meta property="og:description" :content="homeDescription" />
+        <meta property="og:image" content="/images/home/hero.png" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <component :is="'script'" type="application/ld+json">
+            {{ jsonLd }}
+        </component>
     </Head>
 
     <HeroSection />
