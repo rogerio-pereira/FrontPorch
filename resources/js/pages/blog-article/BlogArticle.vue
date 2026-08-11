@@ -64,7 +64,7 @@ defineProps<{
     <article class="bg-[var(--section-light-bg)] text-[var(--text-primary-on-light)]">
         <div class="section-y mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <div
-                class="prose prose-lg max-w-none text-[var(--text-muted-on-light)] prose-headings:text-[var(--text-primary-on-light)] prose-a:text-[var(--text-accent-on-light)]"
+                class="content-prose"
                 data-test="article-content"
                 v-html="article.content"
             />
