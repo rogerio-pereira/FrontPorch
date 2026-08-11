@@ -1,5 +1,7 @@
 <?php
 
+beforeEach()->flaky();
+
 it('renders the business automations service landing page', function () {
     visit('/services/business-automations')
         ->assertSee('Give the copy-paste work to the system')

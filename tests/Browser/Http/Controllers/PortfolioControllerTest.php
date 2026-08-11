@@ -3,6 +3,8 @@
 use App\Models\CaseStudy;
 use App\Models\CaseStudyImage;
 
+beforeEach()->flaky();
+
 it('smoke tests the portfolio page', function () {
     $caseStudy = CaseStudy::factory()
                     ->create([

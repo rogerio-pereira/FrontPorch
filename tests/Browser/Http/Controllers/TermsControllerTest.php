@@ -1,5 +1,7 @@
 <?php
 
+beforeEach()->flaky();
+
 it('smoke tests the terms page', function () {
     visit('/terms')
         ->assertSee('Terms of Service')

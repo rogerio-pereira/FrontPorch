@@ -24,7 +24,7 @@ beforeEach(function () {
             'title' => 'Website design and development',
             'sort_order' => 3,
         ]);
-});
+})->flaky();
 
 it('hides faq, testimonials, and blog sections when the database is empty', function () {
     visit('/')

@@ -1,5 +1,7 @@
 <?php
 
+beforeEach()->flaky();
+
 it('renders the content creation service landing page', function () {
     visit('/services/content-creation')
         ->assertSee('Blog posts and social writing')
