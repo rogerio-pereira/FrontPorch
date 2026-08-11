@@ -42,11 +42,16 @@ Typical stack across repositories using this setup:
 
 ---
 
+## Language (mandatory)
+
+- **All repository files** must be written in **English**: source code, documentation under `docs/`, models/comments, examples, tutorials, commit messages, ADRs, FDRs, planning docs, tests descriptions, UI copy in code, and any other in-repo text.
+- Chat with the human may follow the user's preferred language; **files committed to the repo stay English**.
+
 ## Coding standards
 
 ### PHP
 
-- All code in **English**.
+- Follow the Language rule above (English).
 - PSR style: one statement per line.
 - No ternary operators in PHP (`condition ? a : b`); use `if` / `else` or early returns.
 - Fluent chains: one method call per line; consistent indentation (extra indent for `->` or `.` after assignment).
@@ -97,7 +102,7 @@ Key commands:
 ./vendor/bin/sail exec laravel.test vendor/bin/pint --parallel
 ```
 
-Before the full suite (including browser tests): `./vendor/bin/sail npm run build` once, or keep `./vendor/bin/sail npm run dev` running.
+Before the full suite (including browser tests): `./vendor/bin/sail npm run build` once. Browser tests load assets from `public/build` (they ignore `public/hot`), so `npm run dev` alone is not enough.
 
 ---
 
@@ -152,3 +157,12 @@ Target the repository’s default branch (usually `main`).
 
 - Use `docs/` for product, architecture, feature and setup specifications.
 - Update this guide only when **team-wide** defaults change (stack versions, coverage gates, queue conventions, PR workflow).
+
+# Code Styleguide (**IMPORTANT**)
+- Read **AND FOLLOW** `.cursor/rules/style-guide.md`
+- How to start the environment and usefull commands `.cursor/rules/starting-environment.mdc`
+
+---
+
+# RULES
+- Never run python scripts for anything, you don´t need to rely on python for any simple operation, like, reading logs, acessing pages, understanting text output (including git, logs, tests, etc)

@@ -187,7 +187,7 @@ frontporchcreative.io (canonical)
 ├── /services/{service-slug}   Service landing pages (×5)
 ├── /portfolio                 Full portfolio
 ├── /blog                      Blog listing
-├── /blog/{slug}               Individual articles
+├── /blog/article/{slug}       Individual articles
 ├── /privacy                   Privacy Policy
 └── /terms                     Terms of Service
 
@@ -317,6 +317,7 @@ These pages serve both organic traffic and paid ad campaigns.
 | Multi-language | No (English only) |
 | Online payments | No (Stripe if needed later) |
 | User accounts | No |
+| Cookie consent banner | No (US / Florida MVP — [decision](planning/decisions/2026-08-05-no-cookie-consent-banner.md)) |
 
 ---
 
@@ -548,7 +549,7 @@ Apply service × city combinations within the 60-mile radius:
 Built as part of the website project:
 
 - Portfolio management
-- Blog management with categories
+- Blog management (articles with optional free-text category string; no category taxonomy — see `docs/planning/phase-01-backend/blog.md`)
 - Admin file uploads
 - No public-facing upload endpoints
 
@@ -562,12 +563,12 @@ Built as part of the website project:
 |------|----------|-------|
 | **Privacy Policy** | ✅ Yes | Form data collection + analytics cookies |
 | **Terms of Service** | ✅ Yes | Recommended for liability, IP, and scheduling |
-| **Cookie consent banner** | ✅ Yes | Follow applicable regulations |
+| **Cookie consent banner** | ❌ No (MVP) | Not required for US / Florida primary audience; see [decision](planning/decisions/2026-08-05-no-cookie-consent-banner.md) |
 
 ### Data Collection
 
-- Contact form: name, email, phone, message
-- Analytics cookies: Google Analytics, Meta Pixel
+- Contact form: name, email, phone, website URL
+- Analytics cookies: Google Analytics, Meta Pixel (load when configured; no consent banner)
 
 ### Compliance Scope
 
@@ -577,6 +578,7 @@ Built as part of the website project:
 | **GDPR** | Not primary concern |
 | **CCPA** | Not primary concern (Florida-focused) |
 | **Florida Digital Bill of Rights** | Follow applicable transparency requirements |
+| **Cookie consent (opt-in banner)** | Out of MVP scope — disclose in Privacy Policy instead |
 | **ADA / WCAG accessibility** | No specific requirement for MVP |
 | **HIPAA / industry regulations** | Not applicable |
 
@@ -704,8 +706,8 @@ These are recommendations for the founders—not website scope items:
 
 ### Immediate (Pre-Development)
 
-- [ ] Register brand fonts from `docs/branding/` in the app (self-hosted webfonts)
-- [ ] Add horizontal and vertical logos from `docs/branding/` to the design system / public assets
+- [x] Register brand fonts from `docs/branding/` in the app (self-hosted webfonts)
+- [x] Add horizontal and vertical logos from `docs/branding/` to the design system / public assets
 - [ ] Confirm canonical domain setup and DNS redirects (`.agency`, `.marketing` → `.io`)
 - [ ] Create Google Analytics, Search Console, and Meta Business/Pixel accounts
 - [ ] Set up Google Calendar scheduling link
@@ -714,21 +716,21 @@ These are recommendations for the founders—not website scope items:
 
 ### Phase 1 — Pages
 
-- [ ] Write home page copy (all 16 sections)
-- [ ] Write 5 service landing page copies
+- [x] Write home page copy (all 16 sections)
+- [x] Write service landing page copies (catalog now includes content-creation)
 - [ ] Draft Privacy Policy and Terms of Service
-- [ ] Design and implement home page (Inertia + Vue)
-- [ ] Implement service landing pages
+- [x] Design and implement home page (Inertia + Vue)
+- [x] Implement service landing pages
 - [ ] Implement lead form with email delivery
-- [ ] Integrate Google Calendar redirect
-- [ ] Add GA and Meta Pixel with cookie consent banner
+- [ ] Integrate Google Calendar redirect _(code wired via `config/site.php`; needs production URL + test)_
+- [ ] Add GA and Meta Pixel (no cookie consent banner — US / Florida MVP)
 
 ### Phase 2 — CMS
 
-- [ ] Build internal CMS for portfolio and blog
-- [ ] Implement portfolio page (full) and home portfolio section
-- [ ] Implement blog listing and article pages
-- [ ] Add category support for blog
+- [x] Build internal CMS for portfolio and blog
+- [x] Implement portfolio page (full) and home portfolio section _(DB-backed; admin under `/core`)_
+- [x] Implement blog listing and article pages _(DB-backed; admin under `/core`)_
+- [ ] ~~Add category support for blog~~ _(dropped — articles only; see phase-01-backend/blog.md)_
 
 ### Phase 3 — Content and Marketing
 

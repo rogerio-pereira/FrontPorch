@@ -6,7 +6,11 @@ import { cn } from "@/lib/utils"
 
 import 'vue-sonner/style.css';
 
-const props = defineProps<ToasterProps>()
+const props = withDefaults(defineProps<ToasterProps>(), {
+  richColors: true,
+  closeButton: true,
+  position: 'top-center',
+})
 </script>
 
 <template>
@@ -17,6 +21,18 @@ const props = defineProps<ToasterProps>()
       '--normal-text': 'var(--popover-foreground)',
       '--normal-border': 'var(--border)',
       '--border-radius': 'var(--radius)',
+      '--success-bg': '#166534',
+      '--success-border': '#14532d',
+      '--success-text': '#ffffff',
+      '--info-bg': '#1d4ed8',
+      '--info-border': '#1e40af',
+      '--info-text': '#ffffff',
+      '--warning-bg': '#b45309',
+      '--warning-border': '#92400e',
+      '--warning-text': '#ffffff',
+      '--error-bg': '#b91c1c',
+      '--error-border': '#991b1b',
+      '--error-text': '#ffffff',
     }"
     v-bind="props"
   >

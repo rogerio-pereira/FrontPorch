@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,13 +36,24 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $parentShare = parent::share($request);
+
+        $servicesNav = Service::orderBy('sort_order')
+                        ->get(['slug', 'title']);
+
         return [
-            ...parent::share($request),
+            ...$parentShare,
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'site' => [
+                'contactEmail' => config('site.contact_email'),
+                'turnstileSiteKey' => config('services.turnstile.key'),
+                'turnstileTesting' => app()->environment('testing'),
+            ],
+            'servicesNav' => $servicesNav,
         ];
     }
 }

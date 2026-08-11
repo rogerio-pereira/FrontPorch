@@ -1,14 +1,31 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/app/AppSidebarLayout.vue';
-import type { BreadcrumbItem } from '@/types';
-
-const { breadcrumbs = [] } = defineProps<{
-    breadcrumbs?: BreadcrumbItem[];
-}>();
+import { Toaster } from '@/components/ui/sonner';
+import SiteFooter from '@/layouts/app/SiteFooter.vue';
+import SiteHeader from '@/layouts/app/SiteHeader.vue';
 </script>
 
 <template>
-    <AppLayout :breadcrumbs="breadcrumbs">
-        <slot />
-    </AppLayout>
+    <div class="min-h-screen bg-brand-bg font-sans">
+        <SiteHeader />
+        <main>
+            <slot />
+        </main>
+        <SiteFooter />
+        <Toaster
+            theme="dark"
+            position="bottom-center"
+            close-button
+            :duration="6000"
+            :toast-options="{
+                classNames: {
+                    toast: 'shadow-lg',
+                    success:
+                        '!bg-[#1e2f28] !text-[#f5f5f5] !border-[#8fa894]',
+                    title: '!text-[#f5f5f5] !font-semibold',
+                    description: '!text-[#e8f0ea]',
+                    icon: '!text-[#8fa894]',
+                },
+            }"
+        />
+    </div>
 </template>

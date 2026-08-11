@@ -12,9 +12,9 @@
 
 This document translates the [Briefing](Briefing.md) into implementable design rules for the public marketing site (`frontporchcreative.io`). It covers visual language, tokens, layout, components, motion, imagery, and implementation conventions.
 
-**In scope:** Public site (home long-form landing, service pages, portfolio, blog, legal pages, cookie consent, lead form).
+**In scope:** Public site (home long-form landing, service pages, portfolio, blog, legal pages, lead form).
 
-**Out of scope (MVP):** Admin/CMS UI theming (may reuse tokens later), newsletter, live chat, payments, user accounts.
+**Out of scope (MVP):** Admin/CMS UI theming (may reuse tokens later), newsletter, live chat, payments, user accounts, cookie consent banner ([decision](planning/decisions/2026-08-05-no-cookie-consent-banner.md)).
 
 **Primary conversion goal:** Qualified lead appointments — every pattern should support trust, clarity, and scheduling/contact CTAs without aggressive sales tone.
 
@@ -109,7 +109,7 @@ Same approach: expose all options in theme; pick after first page is built.
 |-------|-------|-----|
 | `surface-base` | `#192630` | Page background |
 | `surface-raised` | `#1e2f3c` | Cards, form fields on dark |
-| `surface-overlay` | `#243847` | Modals, cookie banner, dropdowns |
+| `surface-overlay` | `#243847` | Modals, dropdowns |
 | `border-subtle` | `#FFFFFF` at 8% opacity | Section dividers |
 | `border-default` | `#72887b` at 35% opacity | Inputs, cards |
 | `border-strong` | `#72887b` at 60% opacity | Focus rings, active nav |
@@ -430,10 +430,14 @@ Alternate dark / light backgrounds per §3.2 for visual rhythm.
 
 ### 9.10 Cookie consent banner
 
+**Out of MVP scope** — see [decision: no cookie consent banner](planning/decisions/2026-08-05-no-cookie-consent-banner.md).
+
+Deferred pattern (if ever required for other jurisdictions):
+
 - `surface-overlay`, bottom bar or corner card
 - Primary: Accept; Secondary: Manage / Reject if required
 - Link to Privacy Policy
-- Must load GA / Meta only after consent (implementation detail)
+- Gate GA / Meta until accepted only when a consent model is re-adopted
 
 ### 9.11 Scheduling CTA
 

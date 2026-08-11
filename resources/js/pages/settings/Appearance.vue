@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import Heading from '@/components/Heading.vue';
 import { edit } from '@/routes/appearance';
 
@@ -25,8 +24,15 @@ defineOptions({
         <Heading
             variant="small"
             title="Appearance settings"
-            description="Update the appearance settings for your account"
+            description="The admin panel uses the Front Porch dark brand theme"
         />
-        <AppearanceTabs />
+        <p
+            class="text-sm text-muted-foreground"
+            data-test="appearance-dark-only"
+        >
+            Light and system appearance preferences are not available in the CMS.
+            The panel stays on the brand dark palette for consistency with the
+            public site.
+        </p>
     </div>
 </template>
