@@ -160,3 +160,8 @@ Target the repository’s default branch (usually `main`).
 
 # Code Styleguide (**IMPORTANT**)
 - Read **AND FOLLOW** `.cursor/rules/style-guide.md`
+
+---
+
+# RULES
+- Never run python scripts for anything, you don´t need to rely on python for any simple operation, like, reading logs, acessing pages, understanting text output (including git, logs, tests, etc)
