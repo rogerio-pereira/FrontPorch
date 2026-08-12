@@ -6,11 +6,31 @@ use App\Models\Faq;
 use App\Models\Service;
 use App\Models\Testimonial;
 use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\BlogArticlesSeeder;
+use Database\Seeders\CaseStudiesSeeder;
+use Database\Seeders\FaqHomeSeeder;
+use Database\Seeders\ServicesSeeder;
+use Database\Seeders\TestimonialsSeeder;
+use Database\Seeders\UserLocalSeeder;
 
+/**
+ * These tests intentionally skip UserSeeder: it inserts production founder
+ * accounts with fixed bcrypt cost-12 hashes, which conflict with phpunit's
+ * BCRYPT_ROUNDS=4 via the Eloquent "hashed" cast. Catalog + local demo data
+ * are covered here instead.
+ */
 it('seeds the real catalog and stays idempotent for real data', function () {
-    $this->seed(DatabaseSeeder::class);
-    $this->seed(DatabaseSeeder::class);
+    $this->seed([
+        ServicesSeeder::class,
+        FaqHomeSeeder::class,
+        UserLocalSeeder::class,
+    ]);
+
+    $this->seed([
+        ServicesSeeder::class,
+        FaqHomeSeeder::class,
+        UserLocalSeeder::class,
+    ]);
 
     $userCount = User::where('email', 'test@example.com')
                     ->count();
@@ -59,7 +79,14 @@ it('seeds the real catalog and stays idempotent for real data', function () {
 });
 
 it('seeds fake local content for testimonials case studies and articles', function () {
-    $this->seed(DatabaseSeeder::class);
+    $this->seed([
+        ServicesSeeder::class,
+        FaqHomeSeeder::class,
+        UserLocalSeeder::class,
+        TestimonialsSeeder::class,
+        CaseStudiesSeeder::class,
+        BlogArticlesSeeder::class,
+    ]);
 
     $testimonialCount = Testimonial::count();
 
