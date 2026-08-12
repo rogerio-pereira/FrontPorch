@@ -251,15 +251,15 @@ defineProps<{
         body="Bring that one to a discovery call. We will sketch whether a simple automation can take it off your plate."
         button="Free up my week"
         test-id="service-mid-cta"
+        light
     />
 
     <SectionShell
         overline="Central Florida"
         heading="Built for owners wearing every hat"
-        light
         centered
     >
-        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
+        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-dark)]">
             Small teams around Plant City, Tampa, Lakeland, Orlando, and Sarasota rarely have a "operations person." Automations are how you get some of that support without hiring a whole department, so you can keep the personal service your customers love.
         </p>
     </SectionShell>
@@ -268,21 +268,25 @@ defineProps<{
         heading="We will not automate chaos"
         centered
         tight
+        light
     >
-        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-dark)]">
+        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
             If a process is unclear, we tidy the thinking first. Automating a mess only makes a faster mess. You will always understand what we built and why.
         </p>
     </SectionShell>
 
-    <ServiceRelatedSection :services="relatedServices" />
-
     <ServiceTestimonialsSection :testimonials="testimonials" />
-    <ServiceFaqSection :faqs="faqs" />
+    <ServiceFaqSection
+        :faqs="faqs"
+        light
+    />
+    <ServiceRelatedSection :services="relatedServices" />
 
     <CtaBand
         heading="Ready for a calmer week?"
         body="Let's find the repetitive work that steals your evenings, and put it on autopilot the sensible way."
         button="Free up my week"
         test-id="service-closing-cta"
+        light
     />
 </template>

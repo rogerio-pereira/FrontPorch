@@ -251,15 +251,15 @@ defineProps<{
         body="Bring the platforms you already use. We will suggest a writing plan that fits your week, with no pressure to be everywhere at once."
         button="Talk about content help"
         test-id="service-mid-cta"
+        light
     />
 
     <SectionShell
         overline="Central Florida"
         heading="Local stories for businesses neighbors actually search for"
-        light
         centered
     >
-        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
+        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-dark)]">
             From Plant City to Tampa, Brandon, Lakeland, Wesley Chapel, Orlando, and Sarasota, people look online before they call. Steady, useful writing helps you show up as the familiar choice, not the blank profile they skip.
         </p>
     </SectionShell>
@@ -268,21 +268,25 @@ defineProps<{
         heading="No content mills. No fake expertise."
         centered
         tight
+        light
     >
-        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-dark)]">
+        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
             We write from what you tell us about the business, not keyword soup. If a blog post or social cadence will not help right now, we will say so and point you toward a better first step.
         </p>
     </SectionShell>
 
-    <ServiceRelatedSection :services="relatedServices" />
-
     <ServiceTestimonialsSection :testimonials="testimonials" />
-    <ServiceFaqSection :faqs="faqs" />
+    <ServiceFaqSection
+        :faqs="faqs"
+        light
+    />
+    <ServiceRelatedSection :services="relatedServices" />
 
     <CtaBand
         heading="Ready for writing that shows up when you cannot?"
         body="Let's sketch a simple content plan for your blog and social presence, focused on words that sound like you."
         button="Talk about content help"
         test-id="service-closing-cta"
+        light
     />
 </template>

@@ -251,15 +251,15 @@ defineProps<{
         body="Bring what you have. We will look together and suggest the smallest change that actually helps, with no pressure to buy the biggest package."
         button="Talk about a better website"
         test-id="service-mid-cta"
+        light
     />
 
     <SectionShell
         overline="Central Florida"
         heading="Websites for businesses people search for nearby"
-        light
         centered
     >
-        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
+        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-dark)]">
             From Plant City to Tampa, Brandon, Lakeland, Wesley Chapel, Orlando, and Sarasota, local customers compare options online before they call. A clear, mobile-friendly site helps you show up as the obvious choice, not the one they skip because the page felt confusing.
         </p>
     </SectionShell>
@@ -268,21 +268,25 @@ defineProps<{
         heading="No mystery rebuilds"
         centered
         tight
+        light
     >
-        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-dark)]">
+        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
             We explain what we recommend and why, including when a full redesign is overkill. Sometimes a focused refresh beats starting over. You will always get a written proposal before we build.
         </p>
     </SectionShell>
 
-    <ServiceRelatedSection :services="relatedServices" />
-
     <ServiceTestimonialsSection :testimonials="testimonials" />
-    <ServiceFaqSection :faqs="faqs" />
+    <ServiceFaqSection
+        :faqs="faqs"
+        light
+    />
+    <ServiceRelatedSection :services="relatedServices" />
 
     <CtaBand
         heading="Ready for a site that works while you are working?"
         body="Let's talk about what your visitors need to see, and how to make the next step feel easy."
         button="Talk about a better website"
         test-id="service-closing-cta"
+        light
     />
 </template>

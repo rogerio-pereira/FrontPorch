@@ -70,46 +70,47 @@ defineProps<{
         overline="Why custom can be the simpler path"
         heading="Built around your process, not the other way around"
         intro="The best tool is the one your team will actually use. Sometimes that means building it with intention."
+        light
         wide
     >
         <div class="mx-auto max-w-3xl space-y-5">
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Fits the way you already work
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     Screens and steps that match your real day, not a generic template.
                 </p>
             </article>
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Fewer workarounds
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     Less bouncing between apps and patching gaps with spreadsheets.
                 </p>
             </article>
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Clarity for your team
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     One place for the job at hand, with less training theater.
                 </p>
             </article>
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Room to evolve
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     Start with what matters most; grow the tool as the business grows.
                 </p>
             </article>
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Honest scoping
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     We say when a simpler existing tool is enough, custom is not always the answer.
                 </p>
             </article>
@@ -119,12 +120,11 @@ defineProps<{
     <SectionShell
         overline="The right question"
         heading="Not &quot;can we build it?&quot;, but &quot;should we?&quot;"
-        light
         wide
     >
         <div class="grid items-center gap-10 lg:grid-cols-2 lg:[&>*:first-child]:order-2">
             <div class="stack-default max-w-xl">
-                <p class="text-body-lg text-[var(--text-muted-on-light)]">
+                <p class="text-body-lg text-[var(--text-muted-on-dark)]">
                     Custom software is a bigger commitment than a landing page. We treat that seriously. First we dig into the pain: Is the problem a missing tool, a messy process, or both? If a lighter fix will do, we will tell you. If building is the clear win, we keep the scope focused so you get value without boiling the ocean.
                 </p>
             </div>
@@ -140,51 +140,52 @@ defineProps<{
     <SectionShell
         overline="How we build"
         heading="Small steps. Clear checkpoints. No surprise black boxes."
+        light
         wide
         centered
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-white p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
                     1
                 </div>
-                <h3 class="font-semibold">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Diagnose the real need
                 </h3>
-                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
                     What hurts today, who uses it, and what "better" looks like.
                 </p>
             </article>
-            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-white p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
                     2
                 </div>
-                <h3 class="font-semibold">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Shape a focused plan
                 </h3>
-                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
                     Scope you can understand: what is in, what is out, and why.
                 </p>
             </article>
-            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-white p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
                     3
                 </div>
-                <h3 class="font-semibold">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Build in visible slices
                 </h3>
-                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
                     You see progress early and can steer before everything is "done."
                 </p>
             </article>
-            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-white p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
                     4
                 </div>
-                <h3 class="font-semibold">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Launch and support
                 </h3>
-                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
                     Go live with training that sticks, then refine based on real use.
                 </p>
             </article>
@@ -219,10 +220,15 @@ defineProps<{
         </p>
     </SectionShell>
 
-    <ServiceRelatedSection :services="relatedServices" />
-
-    <ServiceTestimonialsSection :testimonials="testimonials" />
+    <ServiceTestimonialsSection
+        :testimonials="testimonials"
+        light
+    />
     <ServiceFaqSection :faqs="faqs" />
+    <ServiceRelatedSection
+        :services="relatedServices"
+        light
+    />
 
     <CtaBand
         heading="Ready for tools that finally feel like yours?"

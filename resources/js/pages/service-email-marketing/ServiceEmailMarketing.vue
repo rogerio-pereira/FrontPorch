@@ -70,46 +70,47 @@ defineProps<{
         overline="Why email still matters"
         heading="A quiet channel that keeps working while you are busy"
         intro="Social posts disappear fast. Email lands where your customer already checks every day, when the tone is right."
+        light
         wide
     >
         <div class="mx-auto max-w-3xl space-y-5">
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Welcome people the right way
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     New customers feel looked after, not sold to, from day one.
                 </p>
             </article>
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Follow up without awkwardness
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     Gentle reminders that bring people back before they forget you.
                 </p>
             </article>
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Stay memorable between visits
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     Useful notes that keep your name familiar when they need you again.
                 </p>
             </article>
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Own the relationship
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     Your list is yours, not rented from an algorithm that can change overnight.
                 </p>
             </article>
-            <article class="rounded-xl border border-border-default bg-surface-raised p-5 sm:p-6">
-                <h3 class="font-semibold text-[var(--text-on-dark)]">
+            <article class="rounded-xl border border-border-default bg-white p-5 sm:p-6">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Simple enough to keep going
                 </h3>
-                <p class="mt-2 text-body text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-body text-[var(--text-muted-on-light)]">
                     Systems you can stick with, not a campaign that dies after week two.
                 </p>
             </article>
@@ -119,12 +120,11 @@ defineProps<{
     <SectionShell
         overline="The feeling we aim for"
         heading="Like a note from someone who knows your business, not a megaphone"
-        light
         wide
     >
         <div class="grid items-center gap-10 lg:grid-cols-2 lg:[&>*:first-child]:order-2">
             <div class="stack-default max-w-xl">
-                <p class="text-body-lg text-[var(--text-muted-on-light)]">
+                <p class="text-body-lg text-[var(--text-muted-on-dark)]">
                     Good email marketing sounds like you: clear, warm, and useful. We help you say the right thing at the right moment, a welcome after someone buys, a nudge when a quote is waiting, a seasonal note that feels timely instead of pushy.
                 </p>
             </div>
@@ -140,51 +140,52 @@ defineProps<{
     <SectionShell
         overline="How we work"
         heading="From first list to emails that feel like you"
+        light
         wide
         centered
     >
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-white p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
                     1
                 </div>
-                <h3 class="font-semibold">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Understand your rhythm
                 </h3>
-                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
                     When do customers usually hear from you? What should never feel salesy?
                 </p>
             </article>
-            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-white p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
                     2
                 </div>
-                <h3 class="font-semibold">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Map the key moments
                 </h3>
-                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
                     Welcome, follow-up, re-engagement: only the messages that earn their place.
                 </p>
             </article>
-            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-white p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
                     3
                 </div>
-                <h3 class="font-semibold">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Write and set it up
                 </h3>
-                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
                     Friendly copy and a simple system so sends actually happen.
                 </p>
             </article>
-            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-surface-raised p-5 text-left">
+            <article class="marketing-card-hover relative rounded-xl border border-border-default bg-white p-5 text-left">
                 <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-brand-accent text-sm font-bold text-brand-bg">
                     4
                 </div>
-                <h3 class="font-semibold">
+                <h3 class="font-semibold text-[var(--text-primary-on-light)]">
                     Learn and refine
                 </h3>
-                <p class="mt-2 text-sm text-[var(--text-muted-on-dark)]">
+                <p class="mt-2 text-sm text-[var(--text-muted-on-light)]">
                     Watch what people open and respond to, then improve without reinventing everything.
                 </p>
             </article>
@@ -219,10 +220,15 @@ defineProps<{
         </p>
     </SectionShell>
 
-    <ServiceRelatedSection :services="relatedServices" />
-
-    <ServiceTestimonialsSection :testimonials="testimonials" />
+    <ServiceTestimonialsSection
+        :testimonials="testimonials"
+        light
+    />
     <ServiceFaqSection :faqs="faqs" />
+    <ServiceRelatedSection
+        :services="relatedServices"
+        light
+    />
 
     <CtaBand
         heading="Want customers to hear from you, and be glad they did?"

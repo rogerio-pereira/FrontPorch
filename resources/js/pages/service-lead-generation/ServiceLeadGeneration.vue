@@ -251,15 +251,15 @@ defineProps<{
         body="That is exactly what a discovery call is for. We will talk through your goals and say so if lead generation is not the right first step."
         button="Talk about getting more leads"
         test-id="service-mid-cta"
+        light
     />
 
     <SectionShell
         overline="Central Florida"
         heading="Built for businesses around Plant City, Tampa, Orlando, and Sarasota"
-        light
         centered
     >
-        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
+        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-dark)]">
             We are based in Plant City and work with small businesses across Central Florida, including Tampa, Brandon, Lakeland, Wesley Chapel, Orlando, and Sarasota. Local context helps us speak your customers' language. If you are a little farther out and it is a good fit, we can still help.
         </p>
     </SectionShell>
@@ -268,21 +268,25 @@ defineProps<{
         heading="Honest about where we are"
         centered
         tight
+        light
     >
-        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-dark)]">
+        <p class="mx-auto max-w-2xl text-center text-body-lg text-[var(--text-muted-on-light)]">
             We are a newer agency. We will not invent case-study numbers to impress you. What we will do is listen carefully, explain options in plain English, and measure what actually brings inquiries, so you always know what you are paying for.
         </p>
     </SectionShell>
 
-    <ServiceRelatedSection :services="relatedServices" />
-
     <ServiceTestimonialsSection :testimonials="testimonials" />
-    <ServiceFaqSection :faqs="faqs" />
+    <ServiceFaqSection
+        :faqs="faqs"
+        light
+    />
+    <ServiceRelatedSection :services="relatedServices" />
 
     <CtaBand
         heading="Ready for more of the right conversations?"
         body="Tell us who you want to reach. We will help you figure out a sensible way to get in front of them, and turn interest into real inquiries."
         button="Talk about getting more leads"
         test-id="service-closing-cta"
+        light
     />
 </template>
