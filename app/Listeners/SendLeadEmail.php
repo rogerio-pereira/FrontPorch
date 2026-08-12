@@ -31,13 +31,18 @@ class SendLeadEmail
                 Mail::to($recipient)
                     ->send($mail);
 
+                Log::info('Lead email sent.', [
+                    'recipient' => $recipient,
+                    'lead_email' => $event->lead['email'],
+                    'attempt' => $attempt,
+                ]);
+
                 return;
             } catch (Throwable $exception) {
-                $message = $exception->getMessage();
-
                 $context = [
                     'attempt' => $attempt,
-                    'message' => $message,
+                    'message' => $exception->getMessage(),
+                    'exception' => $exception::class,
                 ];
 
                 Log::warning('Lead email attempt failed.', $context);

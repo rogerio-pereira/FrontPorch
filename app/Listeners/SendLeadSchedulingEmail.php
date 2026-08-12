@@ -32,13 +32,18 @@ class SendLeadSchedulingEmail
                 Mail::to($recipient)
                     ->send($mail);
 
+                Log::info('Lead scheduling email sent.', [
+                    'recipient' => $recipient,
+                    'calendar_url' => $calendarUrl,
+                    'attempt' => $attempt,
+                ]);
+
                 return;
             } catch (Throwable $exception) {
-                $message = $exception->getMessage();
-
                 $context = [
                     'attempt' => $attempt,
-                    'message' => $message,
+                    'message' => $exception->getMessage(),
+                    'exception' => $exception::class,
                 ];
 
                 Log::warning('Lead scheduling email attempt failed.', $context);

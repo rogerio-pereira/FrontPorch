@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ContactLeadSubmitted;
 use App\Http\Requests\ContactRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ContactController extends Controller
@@ -20,6 +21,11 @@ class ContactController extends Controller
         if (empty($lead['website'])) {
             $lead['website'] = null;
         }
+
+        Log::info('Contact lead submitted.', [
+            'lead_email' => $lead['email'],
+            'lead_name' => $lead['name'],
+        ]);
 
         /*
          * Listeners are registered manually in App\Providers\EventServiceProvider:

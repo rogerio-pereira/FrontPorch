@@ -52,7 +52,8 @@ it('retries mail failures and logs an error after all attempts', function () {
         ->withArgs(function (string $message, array $context): bool {
             return $message === 'Lead scheduling email attempt failed.'
                 && isset($context['attempt'])
-                && $context['message'] === 'SMTP unavailable';
+                && $context['message'] === 'SMTP unavailable'
+                && $context['exception'] === RuntimeException::class;
         });
 
     Log::shouldReceive('error')
@@ -71,6 +72,15 @@ it('sends the scheduling email to the lead on the first successful attempt', fun
     Mail::fake();
 
     config(['site.calendar_url' => 'https://calendar.example.com/book']);
+
+    Log::shouldReceive('info')
+        ->once()
+        ->withArgs(function (string $message, array $context): bool {
+            return $message === 'Lead scheduling email sent.'
+                && $context['recipient'] === 'alex@example.com'
+                && $context['calendar_url'] === 'https://calendar.example.com/book'
+                && $context['attempt'] === 1;
+        });
 
     $listener = new SendLeadSchedulingEmail;
     $listener->handle(schedulingLeadPayload());

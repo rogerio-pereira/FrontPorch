@@ -52,7 +52,8 @@ it('retries mail failures and logs an error after all attempts', function () {
         ->withArgs(function (string $message, array $context): bool {
             return $message === 'Lead email attempt failed.'
                 && isset($context['attempt'])
-                && $context['message'] === 'SMTP unavailable';
+                && $context['message'] === 'SMTP unavailable'
+                && $context['exception'] === RuntimeException::class;
         });
 
     Log::shouldReceive('error')
@@ -71,6 +72,15 @@ it('sends the lead email on the first successful attempt', function () {
     Mail::fake();
 
     config(['site.contact_email' => 'leads@example.com']);
+
+    Log::shouldReceive('info')
+        ->once()
+        ->withArgs(function (string $message, array $context): bool {
+            return $message === 'Lead email sent.'
+                && $context['recipient'] === 'leads@example.com'
+                && $context['lead_email'] === 'alex@example.com'
+                && $context['attempt'] === 1;
+        });
 
     $listener = new SendLeadEmail;
     $listener->handle(contactLeadPayload([
