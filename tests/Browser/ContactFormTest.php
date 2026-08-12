@@ -33,12 +33,11 @@ it('submits the home contact form successfully', function () {
         ->type('website', 'https://example.com')
         ->type('phone', '(813) 555-0100')
         ->click('@contact-services-trigger')
-        ->click('@contact-service-option-'.$service->slug)
+        ->click('@contact-services-option-'.$service->slug)
         ->click('@contact-submit')
         ->assertPathIs('/');
 
     Mail::assertSent(LeadEmail::class, function (LeadEmail $mail) use ($service): bool {
-        return $mail->lead['services'] === [$service->title]
-            && $mail->servicesDisplay === $service->title;
+        return $mail->lead['services'] === $service->title;
     });
 });

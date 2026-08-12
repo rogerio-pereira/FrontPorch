@@ -14,8 +14,7 @@ function schedulingLeadPayload(array $overrides = []): ContactLeadSubmitted
         'email' => 'alex@example.com',
         'phone' => '(813) 555-0100',
         'website' => 'https://example.com',
-        'services' => ['Lead generation'],
-        'servicesDisplay' => 'Lead generation',
+        'services' => 'Lead generation',
     ], $overrides);
 
     return new ContactLeadSubmitted($lead);

@@ -52,8 +52,7 @@ it('accepts a valid contact submission and sends email', function () {
             && $mail->lead['email'] === 'alex@example.com'
             && $mail->lead['phone'] === '(813) 555-0100'
             && $mail->lead['website'] === 'https://example.com'
-            && $mail->lead['services'] === ['Lead generation']
-            && $mail->servicesDisplay === 'Lead generation'
+            && $mail->lead['services'] === 'Lead generation'
             && $mail->hasTo('leads@example.com');
     });
 
@@ -115,11 +114,7 @@ it('accepts a submission with selected services', function () {
     $response->assertRedirect('/');
 
     Mail::assertSent(LeadEmail::class, function (LeadEmail $mail) use ($emailMarketing): bool {
-        return $mail->lead['services'] === [
-            $emailMarketing->title,
-            'Lead generation',
-        ]
-            && $mail->servicesDisplay === 'Email marketing, Lead generation';
+        return $mail->lead['services'] === $emailMarketing->title.', Lead generation';
     });
 });
 
