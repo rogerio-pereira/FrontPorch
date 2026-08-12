@@ -26,9 +26,38 @@ class ImageCompressor
         $canvas = $this->flattenOntoWhiteBackground($source);
         imagedestroy($source);
 
+        return $this->encodeToJpeg($canvas, $quality);
+    }
+
+    protected function createCanvas(int $width, int $height): GdImage|false
+    {
+        return imagecreatetruecolor($width, $height);
+    }
+
+    /**
+     * @return array{0: bool, 1: string}
+     */
+    protected function attemptJpegEncode(GdImage $canvas, int $quality): array
+    {
         ob_start();
-        $encoded = imagejpeg($canvas, null, $quality);
+        $encoded = $this->writeJpeg($canvas, $quality);
         $contents = (string) ob_get_clean();
+
+        if ($encoded === true) {
+            return [true, $contents];
+        }
+
+        return [false, $contents];
+    }
+
+    protected function writeJpeg(GdImage $canvas, int $quality): bool
+    {
+        return imagejpeg($canvas, null, $quality);
+    }
+
+    private function encodeToJpeg(GdImage $canvas, int $quality): string
+    {
+        [$encoded, $contents] = $this->attemptJpegEncode($canvas, $quality);
         imagedestroy($canvas);
 
         if ($encoded === false || $contents === '') {
@@ -42,7 +71,7 @@ class ImageCompressor
     {
         $width = imagesx($source);
         $height = imagesy($source);
-        $canvas = imagecreatetruecolor($width, $height);
+        $canvas = $this->createCanvas($width, $height);
 
         if ($canvas === false) {
             throw new RuntimeException('Unable to create image canvas for compression.');
