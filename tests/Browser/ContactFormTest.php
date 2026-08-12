@@ -38,6 +38,7 @@ it('submits the home contact form successfully', function () {
         ->assertPathIs('/');
 
     Mail::assertSent(LeadEmail::class, function (LeadEmail $mail) use ($service): bool {
-        return $mail->lead['services'] === [$service->title];
+        return $mail->lead['services'] === [$service->title]
+            && $mail->servicesDisplay === $service->title;
     });
 });
