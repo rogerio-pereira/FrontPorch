@@ -8,21 +8,24 @@ use Illuminate\Database\Seeder;
 class UserSeeder extends Seeder
 {
     /**
-     * Seed the default local development user.
+     * Seed production admin users.
      */
     public function run(): void
     {
-        $user = User::where('email', 'test@example.com')
-                    ->first();
+        User::firstOrCreate(
+            ['email' => 'rodu.pereira@gmail.com'],
+            [
+                'name' => 'Rogerio Pereira',
+                'password' => '$2y$12$cmP2pvkQuYnz1SoXnnIYc.6b8HoJ/v510pm6HYRv./d8hg4rZ/oEy',
+            ]
+        );
 
-        if ($user !== null) {
-            return;
-        }
-
-        User::factory()
-            ->create([
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-            ]);
+        User::firstOrCreate(
+            ['email' => 'saahjessicaxp@gmail.com'],
+            [
+                'name' => 'Sarah Jessica Xavier Pereira',
+                'password' => '$2y$12$7eC6j0PlU5GbRkYxgMZ2futB7ATNTadIxTT/us1P38PBpF0upn7O.',
+            ]
+        );
     }
 }

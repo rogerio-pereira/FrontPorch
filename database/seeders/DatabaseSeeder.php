@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\UserSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ServicesSeeder::class,
             FaqHomeSeeder::class,
+            UserSeeder::class,
         ]);
 
         /*
@@ -36,7 +38,7 @@ class DatabaseSeeder extends Seeder
             $currentEnv === 'testing'
         ) {
             $this->call([
-                UserSeeder::class,
+                UserLocalSeeder::class,
                 TestimonialsSeeder::class,
                 CaseStudiesSeeder::class,
                 BlogArticlesSeeder::class,
