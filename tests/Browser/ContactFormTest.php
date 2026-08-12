@@ -45,6 +45,8 @@ it('submits the home contact form successfully', function () {
         ->assertPathIs('/');
 
     Mail::assertSent(LeadEmail::class);
-    Mail::assertSent(LeadSchedulingEmail::class);
     Notification::assertSentOnDemand(SlackNotification::class);
+    // Temporarily disabled: SendLeadSchedulingEmail is commented out in EventServiceProvider.
+    // Mail::assertSent(LeadSchedulingEmail::class);
+    Mail::assertNotSent(LeadSchedulingEmail::class);
 });
