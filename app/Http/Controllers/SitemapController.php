@@ -23,12 +23,12 @@ class SitemapController extends Controller
             $urls[] = url('/services/'.$slug);
         }
 
-        foreach (BlogArticle::pluck('slug') as $slug) {
-            $urls[] = url('/blog/article/'.$slug);
-        }
-
         foreach (CaseStudy::pluck('slug') as $slug) {
             $urls[] = url('/portfolio/study-case/'.$slug);
+        }
+
+        foreach (BlogArticle::pluck('slug') as $slug) {
+            $urls[] = url('/blog/article/'.$slug);
         }
 
         $body = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
