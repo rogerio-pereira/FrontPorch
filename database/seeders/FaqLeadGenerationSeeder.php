@@ -71,7 +71,7 @@ class FaqLeadGenerationSeeder extends Seeder
                 'question' => 'How much budget do I need to start?',
             ],
             [
-                'answer' => 'A solid starting point for many small businesses is about $300 to $500 per month in ad spend, paid directly to Google or Meta. That can be higher or lower depending on your market, competition, offer, and how quickly you want to learn. We recommend a number after a discovery call and put it in writing so you know what you are committing to.',
+                'answer' => 'A solid starting point for many small businesses is about $300 to $600 per month in ad spend, paid directly to Google or Meta. That can be higher or lower depending on your market, competition, offer, and how quickly you want to learn. We recommend a number after a discovery call and put it in writing so you know what you are committing to.',
                 'sort_order' => 5,
             ]
         );

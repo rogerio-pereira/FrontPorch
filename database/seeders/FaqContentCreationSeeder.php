@@ -119,7 +119,7 @@ class FaqContentCreationSeeder extends Seeder
                 'question' => 'Do you use AI to write my content?',
             ],
             [
-                'answer' => 'Yes, as a drafting aid. AI helps us move faster on first drafts and ideas so you get more consistent publishing without waiting weeks. Every piece still gets human editing for voice, accuracy, and whether it actually sounds like your business. Nothing goes live until you approve it.',
+                'answer' => 'Yes, as a drafting aid. AI helps us move faster on first drafts and ideas so you get more consistent publishing without waiting weeks. We also use AI to automate posting on a defined schedule, so your content goes out when it should without you having to remember. Every piece still gets human editing for voice, accuracy, and whether it actually sounds like your business. Nothing goes live until you approve it.',
                 'sort_order' => 9,
             ]
         );

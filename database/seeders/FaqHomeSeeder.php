@@ -43,7 +43,7 @@ class FaqHomeSeeder extends Seeder
                 'question' => 'Where do you work with clients?',
             ],
             [
-                'answer' => 'We are based in Plant City, Florida, and focus on small businesses in Central Florida, roughly within 60 miles, including areas like Tampa, Lakeland, Brandon, Wesley Chapel, and Sarasota. Being local helps us understand your market. For the right fit, we can work remotely too.',
+                'answer' => 'We are based in Plant City, Florida, and focus on small businesses in Central Florida, roughly within 60 miles, including areas like Tampa, Orlando, Lakeland, Brandon, Wesley Chapel, and Sarasota. Being local helps us understand your market. For the right fit, we can work remotely too.',
                 'sort_order' => 3,
             ]
         );

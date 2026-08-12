@@ -23,7 +23,7 @@ class FaqBusinessAutomationsSeeder extends Seeder
                 'question' => 'What counts as a business automation?',
             ],
             [
-                'answer' => 'Anything repetitive that a system can run so you do not have to babysit it. That can be as simple as an auto-reply when someone fills a form, a reminder before an appointment, or moving a new lead into a spreadsheet or CRM. It can also be more involved: chaining several tools together, syncing data between apps, routing work to the right person, or kicking off multi-step follow-ups. And it goes beyond day-to-day sales tasks, things like scheduled backups, report summaries, inventory alerts, or nightly cleanups that keep the business humming while you sleep. The goal is less copy-paste, fewer dropped balls, and more time with customers.',
+                'answer' => 'Any repetitive task a computer can handle so you do not have to. Common examples: an automatic reply when someone fills out a form, a reminder before an appointment, or sending a new lead into your contact list. The goal is simple: less busywork, fewer things falling through the cracks, and more time with customers.',
                 'sort_order' => 1,
             ]
         );
@@ -35,7 +35,7 @@ class FaqBusinessAutomationsSeeder extends Seeder
                 'question' => 'Do I need to buy new software first?',
             ],
             [
-                'answer' => 'Not always. Sometimes the apps you already have are enough; sometimes a small external tool or integrator is the cleanest way to connect them. Either path still needs real setup: mapping how work should flow, building the workflows, and testing handoffs so nothing falls through. We handle that side for you. If a new tool would help, we explain the cost (some tools are free) and why before anything changes.',
+                'answer' => 'Not always. We often start with the tools you already use. If a new app would help, we explain the cost (some are free) and why before anything changes. Either way, we handle the setup so you do not have to figure it out alone.',
                 'sort_order' => 2,
             ]
         );

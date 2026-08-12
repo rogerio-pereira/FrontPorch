@@ -35,7 +35,7 @@ class FaqCustomSoftwareDevelopmentSeeder extends Seeder
                 'question' => 'Do you only build large enterprise systems?',
             ],
             [
-                'answer' => 'No. We build focused tools for small businesses: portals, internal dashboards, booking flows, inventory helpers, and similar pieces that match how you actually work, without enterprise bloat.',
+                'answer' => 'No. Most of our work is focused tools for small businesses: portals, internal dashboards, booking flows, inventory helpers, and similar pieces that match how you actually work, without unnecessary complexity. When a project calls for it, we can also build larger enterprise systems.',
                 'sort_order' => 2,
             ]
         );
@@ -59,7 +59,7 @@ class FaqCustomSoftwareDevelopmentSeeder extends Seeder
                 'question' => 'Is custom software always expensive and slow?',
             ],
             [
-                'answer' => 'It costs more than a template site, and thoughtful builds take time, but we scope tightly so you are not paying for features you will never use. A small, well-aimed tool often pays for itself by cutting hours of manual work.',
+                'answer' => 'It costs more than a landing page or website, and thoughtful builds take time, but we scope tightly so you are not paying for features you will never use. A small, well-aimed tool often pays for itself by cutting hours of manual work.',
                 'sort_order' => 4,
             ]
         );
