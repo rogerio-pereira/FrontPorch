@@ -38,7 +38,7 @@ class BlogArticleWriterAgent implements Agent, HasTools
     public function tools(): iterable
     {
         return [
-            new GenerateImageTool,
+            app(GenerateImageTool::class),
             new CreateBlogArticleTool,
         ];
     }

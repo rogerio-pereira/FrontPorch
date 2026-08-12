@@ -2,6 +2,7 @@
 
 namespace App\Ai\Tools;
 
+use App\Services\ImageCompressor;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\JsonSchema\Types\Type;
 use Illuminate\Support\Facades\Storage;
@@ -14,6 +15,10 @@ use Stringable;
 
 class GenerateImageTool implements Tool
 {
+    public function __construct(
+        private readonly ImageCompressor $imageCompressor,
+    ) {}
+
     public function name(): string
     {
         return 'generate_image';
@@ -40,12 +45,18 @@ class GenerateImageTool implements Tool
             $rules = (string) file_get_contents($rulesPath);
         }
 
-        $response = Image::of(trim($idea."\n\n".$rules))
+        $imageAi = Image::of(trim($idea."\n\n".$rules))
                         ->landscape()
                         ->generate(Lab::OpenAI);
 
-        $filename = Str::uuid()->toString().'.png';
-        $path = $response->storePubliclyAs($directory, $filename);
+        $imageWeb = $this->imageCompressor->forWeb((string) $imageAi);
+        $filename = Str::uuid()->toString().'.jpg';
+        $path = trim($directory.'/'.$filename, '/');
+
+        Storage::put($path, $imageWeb, [
+            'visibility' => 'public',
+            'ContentType' => 'image/jpeg',
+        ]);
 
         return Storage::url($path);
     }
