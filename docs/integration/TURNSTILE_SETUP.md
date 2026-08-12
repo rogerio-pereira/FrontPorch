@@ -95,8 +95,8 @@ The package reads these keys automatically.
 
 ### 4. Frontend (Inertia + Vue)
 
-- Scripts: `<x-turnstile.scripts />` in `resources/views/app.blade.php`
-- Widget on the contact form: a `div` with class `cf-turnstile` and `data-sitekey` from the shared Inertia prop `site.turnstileSiteKey`
+- Scripts: Turnstile API with `?render=explicit` in `resources/views/app.blade.php` (required for Vue — implicit auto-render often runs before the contact widget exists in the DOM)
+- Widget on the contact form: `ContactSection.vue` calls `window.turnstile.render()` on mount using the shared Inertia prop `site.turnstileSiteKey`
 - In automated browser tests (`APP_ENV=testing`), the form submits a hidden `cf-turnstile-response` token while `Turnstile::fake()` handles verification
 
 ### 5. Backend validation

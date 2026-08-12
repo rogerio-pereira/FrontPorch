@@ -1,7 +1,14 @@
 import type { Auth } from '@/types/auth';
 
 interface TurnstileApi {
+    render: (
+        container: string | HTMLElement,
+        params: {
+            sitekey: string;
+        },
+    ) => string;
     reset: (widget?: string | HTMLElement) => void;
+    remove: (widget?: string | HTMLElement) => void;
 }
 
 declare global {

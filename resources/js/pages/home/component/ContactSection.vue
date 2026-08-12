@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Form, usePage } from '@inertiajs/vue3';
 import { vMaska } from 'maska/vue';
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +11,8 @@ import SectionShell from '@/layouts/app/SectionShell.vue';
 
 const page = usePage();
 const turnstileWidget = ref<HTMLElement | null>(null);
+const turnstileWidgetId = ref<string | null>(null);
+let turnstilePollId: number | null = null;
 
 const turnstileSiteKey = computed(() => {
     return page.props.site.turnstileSiteKey ?? '';
@@ -20,8 +22,12 @@ const turnstileTesting = computed(() => {
     return page.props.site.turnstileTesting === true;
 });
 
-function resetTurnstile(): void {
+function renderTurnstile(): void {
     if (turnstileTesting.value) {
+        return;
+    }
+
+    if (turnstileSiteKey.value === '') {
         return;
     }
 
@@ -29,8 +35,91 @@ function resetTurnstile(): void {
         return;
     }
 
-    window.turnstile?.reset(turnstileWidget.value);
+    if (!window.turnstile) {
+        return;
+    }
+
+    if (turnstileWidgetId.value !== null) {
+        return;
+    }
+
+    turnstileWidgetId.value = window.turnstile.render(turnstileWidget.value, {
+        sitekey: turnstileSiteKey.value,
+    });
 }
+
+function scheduleTurnstileRender(): void {
+    if (turnstileTesting.value) {
+        return;
+    }
+
+    if (window.turnstile) {
+        renderTurnstile();
+
+        return;
+    }
+
+    const maxAttempts = 50;
+    let attempts = 0;
+
+    turnstilePollId = window.setInterval(() => {
+        attempts++;
+
+        if (window.turnstile) {
+            if (turnstilePollId !== null) {
+                window.clearInterval(turnstilePollId);
+                turnstilePollId = null;
+            }
+
+            renderTurnstile();
+
+            return;
+        }
+
+        if (attempts >= maxAttempts && turnstilePollId !== null) {
+            window.clearInterval(turnstilePollId);
+            turnstilePollId = null;
+        }
+    }, 100);
+}
+
+function resetTurnstile(): void {
+    if (turnstileTesting.value) {
+        return;
+    }
+
+    if (!window.turnstile) {
+        return;
+    }
+
+    if (turnstileWidgetId.value === null) {
+        return;
+    }
+
+    window.turnstile.reset(turnstileWidgetId.value);
+}
+
+onMounted(() => {
+    scheduleTurnstileRender();
+});
+
+onBeforeUnmount(() => {
+    if (turnstilePollId !== null) {
+        window.clearInterval(turnstilePollId);
+        turnstilePollId = null;
+    }
+
+    if (!window.turnstile) {
+        return;
+    }
+
+    if (turnstileWidgetId.value === null) {
+        return;
+    }
+
+    window.turnstile.remove(turnstileWidgetId.value);
+    turnstileWidgetId.value = null;
+});
 </script>
 
 <template>
@@ -131,8 +220,6 @@ function resetTurnstile(): void {
                     <div
                         v-else-if="turnstileSiteKey !== ''"
                         ref="turnstileWidget"
-                        class="cf-turnstile"
-                        :data-sitekey="turnstileSiteKey"
                         data-test="contact-turnstile"
                     />
                     <p

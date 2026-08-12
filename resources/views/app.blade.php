@@ -45,10 +45,8 @@
 
         @unless (app()->environment('testing'))
             @fonts
-        @endunless
-
-        @unless (app()->environment('testing'))
-            <x-turnstile.scripts />
+            {{-- Explicit render: Vue mounts the widget after this script may already have loaded. --}}
+            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
         @endunless
 
         @php
