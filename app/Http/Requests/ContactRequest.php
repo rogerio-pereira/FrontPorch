@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use RyanChandler\LaravelCloudflareTurnstile\Rules\Turnstile;
 
 class ContactRequest extends FormRequest
@@ -29,6 +30,12 @@ class ContactRequest extends FormRequest
                 'regex:/^\(\d{3}\) \d{3}-\d{4}$/',
             ],
             'website' => ['nullable', 'url', 'max:255'],
+            'services' => ['nullable', 'array', 'max:20'],
+            'services.*' => [
+                'string',
+                'distinct',
+                Rule::exists('services', 'slug')->whereNull('deleted_at'),
+            ],
             'cf-turnstile-response' => ['required', new Turnstile],
         ];
     }

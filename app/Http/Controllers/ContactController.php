@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ContactLeadSubmitted;
 use App\Http\Requests\ContactRequest;
+use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
@@ -19,6 +20,17 @@ class ContactController extends Controller
 
         if (empty($lead['website'])) {
             $lead['website'] = null;
+        }
+
+        $serviceSlugs = $lead['services'] ?? [];
+
+        if (! is_array($serviceSlugs) || $serviceSlugs === []) {
+            $lead['services'] = [];
+        } else {
+            $lead['services'] = Service::whereIn('slug', $serviceSlugs)
+                                    ->orderBy('sort_order')
+                                    ->pluck('title')
+                                    ->all();
         }
 
         /*
