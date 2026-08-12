@@ -21,7 +21,7 @@ class ContactController extends Controller
             $lead['website'] = null;
         }
 
-        $lead['servicesDisplay'] = implode(', ', $lead['services']);
+        $lead['services'] = implode(', ', $lead['services']);
 
         /*
          * Listeners are registered manually in App\Providers\EventServiceProvider:

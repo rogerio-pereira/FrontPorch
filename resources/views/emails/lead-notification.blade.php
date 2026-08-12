@@ -9,7 +9,7 @@
 
 **Website:** {{ $websiteDisplay }}
 
-**Services:** {{ $servicesDisplay }}
+**Services:** {{ $lead['services'] }}
 
 Thanks,<br>
 {{ config('app.name') }}

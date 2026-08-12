@@ -17,10 +17,8 @@ class LeadEmail extends Mailable
 
     public string $websiteDisplay;
 
-    public string $servicesDisplay;
-
     /**
-     * @param  array{name: string, email: string, phone: string|null, website: string|null, services: list<string>, servicesDisplay: string}  $lead
+     * @param  array{name: string, email: string, phone: string|null, website: string|null, services: string}  $lead
      */
     public function __construct(
         public array $lead,
@@ -36,8 +34,6 @@ class LeadEmail extends Mailable
         } else {
             $this->websiteDisplay = $this->lead['website'];
         }
-
-        $this->servicesDisplay = $this->lead['servicesDisplay'];
     }
 
     public function envelope(): Envelope
@@ -57,7 +53,6 @@ class LeadEmail extends Mailable
                 'lead' => $this->lead,
                 'phoneDisplay' => $this->phoneDisplay,
                 'websiteDisplay' => $this->websiteDisplay,
-                'servicesDisplay' => $this->servicesDisplay,
             ],
         );
     }
