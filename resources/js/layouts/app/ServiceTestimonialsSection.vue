@@ -4,6 +4,7 @@ import SectionShell from '@/layouts/app/SectionShell.vue';
 
 defineProps<{
     testimonials: Array<{ testimonial: string; person: string }>;
+    light?: boolean;
 }>();
 </script>
 
@@ -12,6 +13,7 @@ defineProps<{
         v-if="testimonials.length > 0"
         overline="Client stories"
         heading="What people say about this work"
+        :light="light"
         wide
         centered
     >
@@ -22,14 +24,27 @@ defineProps<{
             <blockquote
                 v-for="(item, index) in testimonials"
                 :key="index"
-                class="relative rounded-xl border border-border-default bg-surface-raised p-8 text-left"
+                :class="[
+                    light ? 'bg-white' : 'bg-surface-raised',
+                    'relative rounded-xl border border-border-default p-8 text-left',
+                ]"
                 :data-test="`service-testimonial-${index}`"
             >
                 <Quote class="mb-4 size-8 text-brand-accent/50" />
-                <p class="text-lg leading-relaxed">
+                <p
+                    :class="[
+                        light ? 'text-[var(--text-primary-on-light)]' : 'text-[var(--text-on-dark)]',
+                        'text-lg leading-relaxed',
+                    ]"
+                >
                     "{{ item.testimonial }}"
                 </p>
-                <footer class="mt-4 text-sm text-[var(--text-muted-on-dark)]">
+                <footer
+                    :class="[
+                        light ? 'text-[var(--text-muted-on-light)]' : 'text-[var(--text-muted-on-dark)]',
+                        'mt-4 text-sm',
+                    ]"
+                >
                     - {{ item.person }}
                 </footer>
             </blockquote>
