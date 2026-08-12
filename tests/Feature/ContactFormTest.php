@@ -64,7 +64,26 @@ it('accepts a submission without phone', function () {
     });
 });
 
-it('validates required name email and website', function () {
+it('accepts a submission without website', function () {
+    Mail::fake();
+    Notification::fake();
+
+    $response = $this->from('/')
+        ->post('/contact', [
+            'name' => 'Alex Rivera',
+            'email' => 'alex@example.com',
+            'cf-turnstile-response' => Turnstile::dummy(),
+        ]);
+
+    $response->assertRedirect('/');
+
+    Mail::assertSent(LeadEmail::class, function (LeadEmail $mail): bool {
+        return $mail->lead['website'] === null
+            && $mail->websiteDisplay === '(not provided)';
+    });
+});
+
+it('validates required name and email', function () {
     Mail::fake();
 
     $response = $this->from('/')
@@ -75,7 +94,25 @@ it('validates required name email and website', function () {
         ]);
 
     $response->assertRedirect('/');
-    $response->assertSessionHasErrors(['name', 'email', 'website']);
+    $response->assertSessionHasErrors(['name', 'email']);
+    $response->assertSessionDoesntHaveErrors(['website']);
+
+    Mail::assertNothingSent();
+});
+
+it('rejects an invalid website url', function () {
+    Mail::fake();
+
+    $response = $this->from('/')
+        ->post('/contact', [
+            'name' => 'Alex Rivera',
+            'email' => 'alex@example.com',
+            'website' => 'not-a-url',
+            'cf-turnstile-response' => Turnstile::dummy(),
+        ]);
+
+    $response->assertRedirect('/');
+    $response->assertSessionHasErrors(['website']);
 
     Mail::assertNothingSent();
 });

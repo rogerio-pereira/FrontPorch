@@ -28,7 +28,7 @@ class ContactRequest extends FormRequest
                 // US phone only: (813) 555-0100
                 'regex:/^\(\d{3}\) \d{3}-\d{4}$/',
             ],
-            'website' => ['required', 'url', 'max:255'],
+            'website' => ['nullable', 'url', 'max:255'],
             'cf-turnstile-response' => ['required', new Turnstile],
         ];
     }
