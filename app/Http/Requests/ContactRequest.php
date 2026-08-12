@@ -29,6 +29,12 @@ class ContactRequest extends FormRequest
                 'regex:/^\(\d{3}\) \d{3}-\d{4}$/',
             ],
             'website' => ['nullable', 'url', 'max:255'],
+            'services' => ['required', 'array', 'min:1'],
+            'services.*' => [
+                'string',
+                'distinct',
+                'exists:services,title',
+            ],
             'cf-turnstile-response' => ['required', new Turnstile],
         ];
     }
@@ -40,6 +46,8 @@ class ContactRequest extends FormRequest
     {
         return [
             'phone.regex' => 'Please enter a valid US phone number as (555) 555-5555.',
+            'services.required' => 'Please select at least one service.',
+            'services.min' => 'Please select at least one service.',
             'cf-turnstile-response.required' => 'Please complete the security check.',
         ];
     }

@@ -18,7 +18,7 @@ class LeadEmail extends Mailable
     public string $websiteDisplay;
 
     /**
-     * @param  array{name: string, email: string, phone: string|null, website: string|null}  $lead
+     * @param  array{name: string, email: string, phone: string|null, website: string|null, services: string}  $lead
      */
     public function __construct(
         public array $lead,

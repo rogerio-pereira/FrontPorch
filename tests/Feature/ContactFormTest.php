@@ -2,6 +2,7 @@
 
 use App\Mail\LeadEmail;
 use App\Mail\LeadSchedulingEmail;
+use App\Models\Service;
 use App\Notifications\SlackNotification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -13,20 +14,36 @@ beforeEach(function () {
         'site.contact_email' => 'leads@example.com',
         'site.calendar_url' => 'https://calendar.example.com/book',
     ]);
+
+    Service::factory()->create([
+        'title' => 'Lead generation',
+        'sort_order' => 1,
+    ]);
 });
+
+/**
+ * @param  array<string, mixed>  $overrides
+ * @return array<string, mixed>
+ */
+function contactFormPayload(array $overrides = []): array
+{
+    return array_merge([
+        'name' => 'Alex Rivera',
+        'email' => 'alex@example.com',
+        'services' => ['Lead generation'],
+        'cf-turnstile-response' => Turnstile::dummy(),
+    ], $overrides);
+}
 
 it('accepts a valid contact submission and sends email', function () {
     Mail::fake();
     Notification::fake();
 
     $response = $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'phone' => '(813) 555-0100',
             'website' => 'https://example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ]);
+        ]));
 
     $response->assertRedirect('/');
 
@@ -35,6 +52,7 @@ it('accepts a valid contact submission and sends email', function () {
             && $mail->lead['email'] === 'alex@example.com'
             && $mail->lead['phone'] === '(813) 555-0100'
             && $mail->lead['website'] === 'https://example.com'
+            && $mail->lead['services'] === 'Lead generation'
             && $mail->hasTo('leads@example.com');
     });
 
@@ -49,12 +67,9 @@ it('accepts a submission without phone', function () {
     Notification::fake();
 
     $response = $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'website' => 'https://example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ]);
+        ]));
 
     $response->assertRedirect('/');
 
@@ -69,11 +84,7 @@ it('accepts a submission without website', function () {
     Notification::fake();
 
     $response = $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ]);
+        ->post('/contact', contactFormPayload());
 
     $response->assertRedirect('/');
 
@@ -83,15 +94,67 @@ it('accepts a submission without website', function () {
     });
 });
 
+it('accepts a submission with selected services', function () {
+    Mail::fake();
+    Notification::fake();
+
+    $emailMarketing = Service::factory()->create([
+        'title' => 'Email marketing',
+        'sort_order' => 2,
+    ]);
+
+    $response = $this->from('/')
+        ->post('/contact', contactFormPayload([
+            'services' => [
+                $emailMarketing->title,
+                'Lead generation',
+            ],
+        ]));
+
+    $response->assertRedirect('/');
+
+    Mail::assertSent(LeadEmail::class, function (LeadEmail $mail) use ($emailMarketing): bool {
+        return $mail->lead['services'] === $emailMarketing->title.', Lead generation';
+    });
+});
+
+it('rejects a submission without services', function () {
+    Mail::fake();
+    Notification::fake();
+
+    $response = $this->from('/')
+        ->post('/contact', contactFormPayload([
+            'services' => [],
+        ]));
+
+    $response->assertRedirect('/');
+    $response->assertSessionHasErrors(['services']);
+
+    Mail::assertNothingSent();
+});
+
+it('rejects unknown service titles', function () {
+    Mail::fake();
+
+    $response = $this->from('/')
+        ->post('/contact', contactFormPayload([
+            'services' => ['Not a real service'],
+        ]));
+
+    $response->assertRedirect('/');
+    $response->assertSessionHasErrors(['services.0']);
+
+    Mail::assertNothingSent();
+});
+
 it('validates required name and email', function () {
     Mail::fake();
 
     $response = $this->from('/')
-        ->post('/contact', [
+        ->post('/contact', contactFormPayload([
             'name' => '',
             'email' => 'not-an-email',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ]);
+        ]));
 
     $response->assertRedirect('/');
     $response->assertSessionHasErrors(['name', 'email']);
@@ -104,12 +167,9 @@ it('rejects an invalid website url', function () {
     Mail::fake();
 
     $response = $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'website' => 'not-a-url',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ]);
+        ]));
 
     $response->assertRedirect('/');
     $response->assertSessionHasErrors(['website']);
@@ -121,13 +181,10 @@ it('rejects an invalid us phone number', function () {
     Mail::fake();
 
     $response = $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'phone' => '123',
             'website' => 'https://example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ]);
+        ]));
 
     $response->assertRedirect('/');
     $response->assertSessionHasErrors(['phone']);
@@ -139,13 +196,10 @@ it('rejects phone numbers outside the (555) 555-5555 format', function () {
     Mail::fake();
 
     $response = $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'phone' => '813-555-0100',
             'website' => 'https://example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ]);
+        ]));
 
     $response->assertRedirect('/');
     $response->assertSessionHasErrors(['phone']);
@@ -159,12 +213,9 @@ it('rejects when turnstile verification fails', function () {
     Turnstile::fake()->fail();
 
     $response = $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'website' => 'https://example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ]);
+        ]));
 
     $response->assertRedirect('/');
     $response->assertSessionHasErrors(['cf-turnstile-response']);
@@ -182,12 +233,9 @@ it('notifies slack when configured', function () {
     ]);
 
     $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'website' => 'https://example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ])
+        ]))
         ->assertRedirect('/');
 
     Notification::assertSentOnDemand(SlackNotification::class, function (SlackNotification $notification, array $channels, object $notifiable): bool {
@@ -206,12 +254,9 @@ it('skips slack when token is missing', function () {
     ]);
 
     $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'website' => 'https://example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ])
+        ]))
         ->assertRedirect('/');
 
     Mail::assertSent(LeadEmail::class);
@@ -226,12 +271,9 @@ it('skips the scheduling email when calendar url is missing', function () {
     config(['site.calendar_url' => null]);
 
     $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'website' => 'https://example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ])
+        ]))
         ->assertRedirect('/');
 
     Mail::assertSent(LeadEmail::class);
@@ -244,21 +286,15 @@ it('throttles contact submissions', function () {
 
     for ($i = 0; $i < 3; $i++) {
         $this->from('/')
-            ->post('/contact', [
-                'name' => 'Alex Rivera',
-                'email' => 'alex@example.com',
+            ->post('/contact', contactFormPayload([
                 'website' => 'https://example.com',
-                'cf-turnstile-response' => Turnstile::dummy(),
-            ])
+            ]))
             ->assertRedirect('/');
     }
 
     $this->from('/')
-        ->post('/contact', [
-            'name' => 'Alex Rivera',
-            'email' => 'alex@example.com',
+        ->post('/contact', contactFormPayload([
             'website' => 'https://example.com',
-            'cf-turnstile-response' => Turnstile::dummy(),
-        ])
+        ]))
         ->assertStatus(429);
 });

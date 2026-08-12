@@ -6,7 +6,7 @@ const page = usePage();
 
 const contactEmail = computed(() => page.props.site.contactEmail);
 
-const lastUpdated = 'August 5, 2026';
+const lastUpdated = 'August 12, 2026';
 </script>
 
 <template>
@@ -55,8 +55,9 @@ const lastUpdated = 'August 5, 2026';
                 <ul>
                     <li>Your name</li>
                     <li>Your email address</li>
-                    <li>Your phone number (optional)</li>
+                    <li>The service(s) you are interested in</li>
                     <li>Your website URL (optional)</li>
+                    <li>Your phone number (optional)</li>
                 </ul>
                 <p>
                     We also use Cloudflare Turnstile on the form as a security check to

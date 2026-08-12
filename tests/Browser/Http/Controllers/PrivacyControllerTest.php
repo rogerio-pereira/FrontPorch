@@ -8,6 +8,7 @@ it('smoke tests the privacy page', function () {
         ->assertPresent('@privacy-heading')
         ->assertPresent('@privacy-content')
         ->assertSee('Information we collect')
+        ->assertSee('The service(s) you are interested in')
         ->assertSee('Cookies and analytics')
         ->assertSee('we do not show a cookie consent banner')
         ->assertDontSee('Analytics scripts load only after you accept');

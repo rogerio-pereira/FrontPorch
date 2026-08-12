@@ -6,11 +6,21 @@ import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { MultiSelectCombobox } from '@/components/ui/multi-select-combobox';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
 
 const page = usePage();
 const turnstileWidget = ref<HTMLElement | null>(null);
+const serviceOptions = computed(() => {
+    return page.props.servicesNav.map((service) => {
+        return {
+            value: service.title,
+            label: service.title,
+            key: service.slug,
+        };
+    });
+});
 const turnstileWidgetId = ref<string | null>(null);
 let turnstilePollId: number | null = null;
 
@@ -175,6 +185,23 @@ onBeforeUnmount(() => {
                         data-test="contact-email"
                     />
                     <InputError :message="errors.email" />
+                </div>
+
+                <div class="grid gap-2">
+                    <Label for="contact-services">
+                        Services interested in
+                        <span class="font-normal text-[var(--text-muted-on-light)]">(select one or more)</span>
+                    </Label>
+                    <MultiSelectCombobox
+                        name="services"
+                        input-id="contact-services"
+                        data-test="contact-services"
+                        :options="serviceOptions"
+                        placeholder="Search and select services…"
+                        empty-text="No service found."
+                    />
+                    <InputError :message="errors.services" />
+                    <InputError :message="errors['services.0']" />
                 </div>
 
                 <div class="grid gap-2">

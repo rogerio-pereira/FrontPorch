@@ -21,6 +21,8 @@ class ContactController extends Controller
             $lead['website'] = null;
         }
 
+        $lead['services'] = implode(', ', $lead['services']);
+
         /*
          * Listeners are registered manually in App\Providers\EventServiceProvider:
          *      SendLeadEmail: notifies CONTACT_EMAIL
