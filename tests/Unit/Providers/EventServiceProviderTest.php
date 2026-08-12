@@ -21,10 +21,11 @@ it('registers contact lead listeners explicitly', function () {
         SendLeadEmail::class,
     );
 
-    Event::assertListening(
-        ContactLeadSubmitted::class,
-        SendLeadSchedulingEmail::class,
-    );
+    // Temporarily disabled: SendLeadSchedulingEmail is commented out in EventServiceProvider.
+    // Event::assertListening(
+    //     ContactLeadSubmitted::class,
+    //     SendLeadSchedulingEmail::class,
+    // );
 
     Event::assertListening(
         ContactLeadSubmitted::class,
@@ -39,7 +40,16 @@ it('exposes the contact lead listeners in the provider map', function () {
     expect($listen)->toHaveKey(ContactLeadSubmitted::class);
     expect($listen[ContactLeadSubmitted::class])->toBe([
         SendLeadEmail::class,
-        SendLeadSchedulingEmail::class,
         SendLeadSlackNotification::class,
+        // SendLeadSchedulingEmail::class,
     ]);
 });
+
+it('registers the scheduling listener when re-enabled', function () {
+    Event::fake();
+
+    Event::assertListening(
+        ContactLeadSubmitted::class,
+        SendLeadSchedulingEmail::class,
+    );
+})->skip('SendLeadSchedulingEmail is temporarily disabled in EventServiceProvider');

@@ -56,10 +56,12 @@ it('accepts a valid contact submission and sends email', function () {
             && $mail->hasTo('leads@example.com');
     });
 
-    Mail::assertSent(LeadSchedulingEmail::class, function (LeadSchedulingEmail $mail): bool {
-        return $mail->hasTo('alex@example.com')
-            && $mail->calendarUrl === 'https://calendar.example.com/book';
-    });
+    // Temporarily disabled: SendLeadSchedulingEmail is commented out in EventServiceProvider.
+    // Mail::assertSent(LeadSchedulingEmail::class, function (LeadSchedulingEmail $mail): bool {
+    //     return $mail->hasTo('alex@example.com')
+    //         && $mail->calendarUrl === 'https://calendar.example.com/book';
+    // });
+    Mail::assertNotSent(LeadSchedulingEmail::class);
 });
 
 it('accepts a submission without phone', function () {
@@ -260,11 +262,14 @@ it('skips slack when token is missing', function () {
         ->assertRedirect('/');
 
     Mail::assertSent(LeadEmail::class);
-    Mail::assertSent(LeadSchedulingEmail::class);
+    // Temporarily disabled: SendLeadSchedulingEmail is commented out in EventServiceProvider.
+    // Mail::assertSent(LeadSchedulingEmail::class);
+    Mail::assertNotSent(LeadSchedulingEmail::class);
     Notification::assertNothingSent();
 });
 
 it('skips the scheduling email when calendar url is missing', function () {
+    // Still valid while SendLeadSchedulingEmail is disabled: the form must not send it.
     Mail::fake();
     Notification::fake();
 

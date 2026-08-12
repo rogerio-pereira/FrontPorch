@@ -20,8 +20,8 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         ContactLeadSubmitted::class => [
             SendLeadEmail::class, // notifies CONTACT_EMAIL
-            SendLeadSchedulingEmail::class, // emails the lead a Calendar booking link
             SendLeadSlackNotification::class, // optional Slack ping
+            // SendLeadSchedulingEmail::class, // emails the lead a Calendar booking link
         ],
     ];
 
