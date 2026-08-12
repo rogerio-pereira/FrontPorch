@@ -17,8 +17,10 @@ class LeadEmail extends Mailable
 
     public string $websiteDisplay;
 
+    public string $servicesDisplay;
+
     /**
-     * @param  array{name: string, email: string, phone: string|null, website: string|null}  $lead
+     * @param  array{name: string, email: string, phone: string|null, website: string|null, services?: list<string>}  $lead
      */
     public function __construct(
         public array $lead,
@@ -33,6 +35,14 @@ class LeadEmail extends Mailable
             $this->websiteDisplay = '(not provided)';
         } else {
             $this->websiteDisplay = $this->lead['website'];
+        }
+
+        $services = $this->lead['services'] ?? [];
+
+        if ($services === []) {
+            $this->servicesDisplay = '(not provided)';
+        } else {
+            $this->servicesDisplay = implode(', ', $services);
         }
     }
 
@@ -53,6 +63,7 @@ class LeadEmail extends Mailable
                 'lead' => $this->lead,
                 'phoneDisplay' => $this->phoneDisplay,
                 'websiteDisplay' => $this->websiteDisplay,
+                'servicesDisplay' => $this->servicesDisplay,
             ],
         );
     }

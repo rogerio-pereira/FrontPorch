@@ -9,6 +9,8 @@
 
 **Website:** {{ $websiteDisplay }}
 
+**Services:** {{ $servicesDisplay }}
+
 Thanks,<br>
 {{ config('app.name') }}
 </x-mail::message>
