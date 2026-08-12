@@ -38,7 +38,8 @@ class BlogArticleWriterAgent implements Agent, HasTools
     public function tools(): iterable
     {
         return [
-            new GenerateImageTool,
+            // Using app() instead of new because GenerateImageTool has a dependency injection of ImageCompressor.
+            app(GenerateImageTool::class),
             new CreateBlogArticleTool,
         ];
     }
