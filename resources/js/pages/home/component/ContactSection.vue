@@ -8,9 +8,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import DecorativeBackground from '@/layouts/app/DecorativeBackground.vue';
 import SectionShell from '@/layouts/app/SectionShell.vue';
+import ServicesCombobox from '@/pages/home/component/ServicesCombobox.vue';
 
 const page = usePage();
 const turnstileWidget = ref<HTMLElement | null>(null);
+const serviceOptions = computed(() => page.props.servicesNav);
 const turnstileWidgetId = ref<string | null>(null);
 let turnstilePollId: number | null = null;
 
@@ -207,6 +209,16 @@ onBeforeUnmount(() => {
                         data-test="contact-phone"
                     />
                     <InputError :message="errors.phone" />
+                </div>
+
+                <div class="grid gap-2">
+                    <Label for="contact-services">
+                        Services interested in
+                        <span class="font-normal text-[var(--text-muted-on-light)]">(optional)</span>
+                    </Label>
+                    <ServicesCombobox :options="serviceOptions" />
+                    <InputError :message="errors.services" />
+                    <InputError :message="errors['services.0']" />
                 </div>
 
                 <div class="grid gap-2">
