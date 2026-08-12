@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
      * Comment out or remove a listener here to disable it.
      *
      * @var array<class-string, array<int, class-string>>
+     * 
+     * IMPORTANT:
+     * If you comment out a listener you must restart sail, because of octane caching.
      */
     protected $listen = [
         ContactLeadSubmitted::class => [
