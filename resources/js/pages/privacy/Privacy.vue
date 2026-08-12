@@ -56,7 +56,7 @@ const lastUpdated = 'August 5, 2026';
                     <li>Your name</li>
                     <li>Your email address</li>
                     <li>Your phone number (optional)</li>
-                    <li>Your website URL</li>
+                    <li>Your website URL (optional)</li>
                 </ul>
                 <p>
                     We also use Cloudflare Turnstile on the form as a security check to
