@@ -79,11 +79,12 @@ it('creates a blog article via the create tool', function () {
         ->and($article->published_by)->toBe('Front Porch Creative');
 });
 
-it('generates and stores an image via the image tool', function () {
+it('generates and stores a web-optimized jpeg via the image tool', function () {
     Storage::fake();
-    Image::fake([base64_encode('png-bytes')]);
+    $png = createAiTestPngBinary(320, 240);
+    Image::fake([base64_encode($png)]);
 
-    $tool = new GenerateImageTool;
+    $tool = app(GenerateImageTool::class);
 
     expect($tool->name())->toBe('generate_image')
         ->and((string) $tool->description())->toContain('Generate an image')
@@ -94,21 +95,29 @@ it('generates and stores an image via the image tool', function () {
         'directory' => 'blog',
     ]));
 
+    $storedFiles = Storage::allFiles('blog');
+    $storedPath = $storedFiles[0];
+    $storedBinary = Storage::get($storedPath);
+
     expect($url)->toBeString()->not->toBeEmpty()
-        ->and(Storage::allFiles('blog'))->toHaveCount(1);
+        ->and($storedFiles)->toHaveCount(1)
+        ->and($storedPath)->toEndWith('.jpg')
+        ->and(strlen($storedBinary))->toBeLessThan(strlen($png))
+        ->and(substr($storedBinary, 0, 2))->toBe("\xFF\xD8");
 });
 
 it('defaults the image directory to blog when the argument is empty', function () {
     Storage::fake();
-    Image::fake([base64_encode('png-bytes')]);
+    Image::fake([base64_encode(createAiTestPngBinary(16, 16))]);
 
-    $url = (new GenerateImageTool)->handle(new Request([
+    $url = app(GenerateImageTool::class)->handle(new Request([
         'idea' => 'Calm shapes',
         'directory' => '',
     ]));
 
     expect($url)->toBeString()->not->toBeEmpty()
-        ->and(Storage::allFiles('blog'))->toHaveCount(1);
+        ->and(Storage::allFiles('blog'))->toHaveCount(1)
+        ->and(Storage::allFiles('blog')[0])->toEndWith('.jpg');
 });
 
 it('runs the weekly command with a faked agent and creates one article', function () {
@@ -117,7 +126,7 @@ it('runs the weekly command with a faked agent and creates one article', functio
         'app.name' => 'Front Porch Creative',
         'blog.weekly_article_enabled' => true,
     ]);
-    Image::fake([base64_encode('cover')]);
+    Image::fake([base64_encode(createAiTestPngBinary(16, 16))]);
 
     Ai::fakeAgent(BlogArticleWriterAgent::class, [
         new ToolCall('1', 'generate_image', [
@@ -129,7 +138,7 @@ it('runs the weekly command with a faked agent and creates one article', functio
             'description' => 'A short tip for Monday.',
             'category' => 'Business automations',
             'content' => '<p>Keep one follow-up from getting forgotten.</p>',
-            'image' => 'https://example.com/storage/blog/cover.png',
+            'image' => 'https://example.com/storage/blog/cover.jpg',
         ]),
         'Done.',
     ]);
@@ -145,3 +154,30 @@ it('skips generation when the weekly article agent is disabled', function () {
     expect(Artisan::call('blog:generate-weekly-article'))->toBe(0)
         ->and(BlogArticle::count())->toBe(0);
 });
+
+function createAiTestPngBinary(int $width, int $height): string
+{
+    $image = imagecreatetruecolor($width, $height);
+
+    for ($y = 0; $y < $height; $y++) {
+        for ($x = 0; $x < $width; $x++) {
+            $red = (int) (120 + 80 * sin($x / 40) + 20 * sin($y / 30));
+            $green = (int) (100 + 70 * cos($x / 50) + 15 * cos($y / 25));
+            $blue = (int) (90 + 60 * sin(($x + $y) / 60));
+            $color = imagecolorallocate(
+                $image,
+                max(0, min(255, $red)),
+                max(0, min(255, $green)),
+                max(0, min(255, $blue)),
+            );
+            imagesetpixel($image, $x, $y, $color);
+        }
+    }
+
+    ob_start();
+    imagepng($image, null, 0);
+    $binary = (string) ob_get_clean();
+    imagedestroy($image);
+
+    return $binary;
+}
