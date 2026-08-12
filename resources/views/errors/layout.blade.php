@@ -7,6 +7,7 @@
         <title>@yield('title') — {{ config('app.name', 'Front Porch Creative') }}</title>
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <style>
             @font-face {
                 font-family: 'Montserrat Alt';
