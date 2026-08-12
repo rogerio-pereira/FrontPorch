@@ -11,7 +11,7 @@ class ContactLeadSubmitted
     use SerializesModels;
 
     /**
-     * @param  array{name: string, email: string, phone: string|null, website: string|null, services: list<string>}  $lead
+     * @param  array{name: string, email: string, phone: string|null, website: string|null, services: list<string>, servicesDisplay: string}  $lead
      */
     public function __construct(
         public array $lead,

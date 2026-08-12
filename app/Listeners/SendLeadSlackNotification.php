@@ -30,20 +30,12 @@ class SendLeadSlackNotification
             $website = '(not provided)';
         }
 
-        $services = $lead['services'] ?? [];
-
-        if ($services === []) {
-            $servicesDisplay = '(not provided)';
-        } else {
-            $servicesDisplay = implode(', ', $services);
-        }
-
         $text = "New website lead\n"
             ."Name: {$lead['name']}\n"
             ."Email: {$lead['email']}\n"
             ."Phone: {$phone}\n"
             ."Website: {$website}\n"
-            ."Services: {$servicesDisplay}";
+            ."Services: {$lead['servicesDisplay']}";
 
         $notification = new SlackNotification($text);
 

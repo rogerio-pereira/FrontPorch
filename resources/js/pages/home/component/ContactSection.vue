@@ -214,7 +214,6 @@ onBeforeUnmount(() => {
                 <div class="grid gap-2">
                     <Label for="contact-services">
                         Services interested in
-                        <span class="font-normal text-[var(--text-muted-on-light)]">(optional)</span>
                     </Label>
                     <ServicesCombobox :options="serviceOptions" />
                     <InputError :message="errors.services" />

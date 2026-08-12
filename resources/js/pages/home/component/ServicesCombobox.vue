@@ -24,17 +24,17 @@ const props = defineProps<{
     options: ServiceOption[];
 }>();
 
-const selectedSlugs = ref<string[]>([]);
+const selectedTitles = ref<string[]>([]);
 
 const selectedServices = computed(() => {
     return props.options.filter((service) => {
-        return selectedSlugs.value.includes(service.slug);
+        return selectedTitles.value.includes(service.title);
     });
 });
 
-function removeService(slug: string): void {
-    selectedSlugs.value = selectedSlugs.value.filter((selected) => {
-        return selected !== slug;
+function removeService(title: string): void {
+    selectedTitles.value = selectedTitles.value.filter((selected) => {
+        return selected !== title;
     });
 }
 </script>
@@ -42,15 +42,15 @@ function removeService(slug: string): void {
 <template>
     <div class="grid gap-2" data-test="contact-services">
         <input
-            v-for="slug in selectedSlugs"
-            :key="slug"
+            v-for="title in selectedTitles"
+            :key="title"
             type="hidden"
             name="services[]"
-            :value="slug"
+            :value="title"
         >
 
         <ComboboxRoot
-            v-model="selectedSlugs"
+            v-model="selectedTitles"
             multiple
             :open-on-click="true"
             :reset-search-term-on-select="true"
@@ -68,7 +68,7 @@ function removeService(slug: string): void {
                     type="button"
                     class="inline-flex max-w-full items-center gap-1 rounded-md bg-[#e4ece6] px-2 py-0.5 text-xs font-medium text-[var(--text-primary-on-light)]"
                     :data-test="`contact-service-chip-${service.slug}`"
-                    @click.stop="removeService(service.slug)"
+                    @click.stop="removeService(service.title)"
                 >
                     <span class="truncate">{{ service.title }}</span>
                     <X class="size-3 shrink-0 opacity-70" aria-hidden="true" />
@@ -106,7 +106,7 @@ function removeService(slug: string): void {
                         <ComboboxItem
                             v-for="service in options"
                             :key="service.slug"
-                            :value="service.slug"
+                            :value="service.title"
                             :text-value="service.title"
                             :class="cn(
                                 'relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none',
