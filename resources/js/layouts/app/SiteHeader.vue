@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { Menu } from '@lucide/vue';
+import { ChevronDown, Menu } from '@lucide/vue';
 import { computed, ref } from 'vue';
 import CtaButton from '@/layouts/app/CtaButton.vue';
 import { Button } from '@/components/ui/button';
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import {
     Dialog,
     DialogContent,
@@ -23,6 +28,7 @@ const page = usePage();
 const services = computed(() => page.props.servicesNav);
 
 const mobileOpen = ref(false);
+const mobileServicesOpen = ref(false);
 
 const navItems = [
     { label: 'Portfolio', href: '/portfolio', test: 'nav-portfolio' },
@@ -93,19 +99,30 @@ const navItems = [
                         <DialogTitle>Menu</DialogTitle>
                     </DialogHeader>
                     <nav class="flex flex-col gap-4">
-                        <p class="text-overline text-[var(--text-muted-on-dark)]">
-                            Services
-                        </p>
-                        <Link
-                            v-for="service in services"
-                            :key="service.slug"
-                            :href="`/services/${service.slug}`"
-                            class="text-sm font-medium"
-                            :data-test="`nav-mobile-service-${service.slug}`"
-                            @click="mobileOpen = false"
-                        >
-                            {{ service.title }}
-                        </Link>
+                        <Collapsible v-model:open="mobileServicesOpen">
+                            <CollapsibleTrigger
+                                class="flex w-full items-center justify-between text-sm font-medium"
+                                data-test="nav-mobile-services"
+                            >
+                                Services
+                                <ChevronDown
+                                    class="size-4 transition-transform duration-200"
+                                    :class="{ 'rotate-180': mobileServicesOpen }"
+                                />
+                            </CollapsibleTrigger>
+                            <CollapsibleContent class="mt-3 flex flex-col gap-3 border-l border-border-subtle pl-4">
+                                <Link
+                                    v-for="service in services"
+                                    :key="service.slug"
+                                    :href="`/services/${service.slug}`"
+                                    class="text-sm font-medium text-[var(--text-muted-on-dark)] hover:text-brand-accent"
+                                    :data-test="`nav-mobile-service-${service.slug}`"
+                                    @click="mobileOpen = false"
+                                >
+                                    {{ service.title }}
+                                </Link>
+                            </CollapsibleContent>
+                        </Collapsible>
                         <Link
                             v-for="item in navItems"
                             :key="item.href"
