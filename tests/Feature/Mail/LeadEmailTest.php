@@ -20,6 +20,7 @@ it('builds markdown content with lead and phone display', function () {
     expect($content->with)->toBe([
         'lead' => $lead,
         'phoneDisplay' => '(813) 555-0100',
+        'websiteDisplay' => 'https://example.com',
     ]);
 });
 
@@ -37,4 +38,19 @@ it('renders the lead notification markdown', function () {
     expect($html)->toContain('alex@example.com');
     expect($html)->toContain('(not provided)');
     expect($html)->toContain('https://example.com');
+});
+
+it('renders not provided when website is missing', function () {
+    $mail = new LeadEmail([
+        'name' => 'Alex Rivera',
+        'email' => 'alex@example.com',
+        'phone' => '(813) 555-0100',
+        'website' => null,
+    ]);
+
+    $html = $mail->render();
+
+    expect($html)->toContain('(813) 555-0100');
+    expect($html)->toContain('(not provided)');
+    expect($mail->websiteDisplay)->toBe('(not provided)');
 });
