@@ -15,8 +15,10 @@ class LeadEmail extends Mailable
 
     public string $phoneDisplay;
 
+    public string $websiteDisplay;
+
     /**
-     * @param  array{name: string, email: string, phone: string|null, website: string}  $lead
+     * @param  array{name: string, email: string, phone: string|null, website: string|null}  $lead
      */
     public function __construct(
         public array $lead,
@@ -25,6 +27,12 @@ class LeadEmail extends Mailable
             $this->phoneDisplay = '(not provided)';
         } else {
             $this->phoneDisplay = $this->lead['phone'];
+        }
+
+        if (empty($this->lead['website'])) {
+            $this->websiteDisplay = '(not provided)';
+        } else {
+            $this->websiteDisplay = $this->lead['website'];
         }
     }
 
@@ -44,6 +52,7 @@ class LeadEmail extends Mailable
             with: [
                 'lead' => $this->lead,
                 'phoneDisplay' => $this->phoneDisplay,
+                'websiteDisplay' => $this->websiteDisplay,
             ],
         );
     }

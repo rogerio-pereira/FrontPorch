@@ -14,7 +14,7 @@ class LeadSchedulingEmail extends Mailable
     use SerializesModels;
 
     /**
-     * @param  array{name: string, email: string, phone: string|null, website: string}  $lead
+     * @param  array{name: string, email: string, phone: string|null, website: string|null}  $lead
      */
     public function __construct(
         public array $lead,

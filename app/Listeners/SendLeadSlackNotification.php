@@ -24,11 +24,17 @@ class SendLeadSlackNotification
             $phone = '(not provided)';
         }
 
+        $website = $lead['website'];
+
+        if (empty($website)) {
+            $website = '(not provided)';
+        }
+
         $text = "New website lead\n"
             ."Name: {$lead['name']}\n"
             ."Email: {$lead['email']}\n"
             ."Phone: {$phone}\n"
-            ."Website: {$lead['website']}";
+            ."Website: {$website}";
 
         $notification = new SlackNotification($text);
 

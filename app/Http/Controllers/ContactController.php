@@ -17,6 +17,10 @@ class ContactController extends Controller
             $lead['phone'] = null;
         }
 
+        if (empty($lead['website'])) {
+            $lead['website'] = null;
+        }
+
         /*
          * Dispatch event (will call following listeners)
          *      SendLeadEmail: notifies CONTACT_EMAIL

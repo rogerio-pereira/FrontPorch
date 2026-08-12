@@ -7,7 +7,7 @@
 
 **Phone:** {{ $phoneDisplay }}
 
-**Website:** {{ $lead['website'] }}
+**Website:** {{ $websiteDisplay }}
 
 Thanks,<br>
 {{ config('app.name') }}
