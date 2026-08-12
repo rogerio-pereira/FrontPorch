@@ -22,7 +22,7 @@ class ContactController extends Controller
         }
 
         /*
-         * Dispatch event (will call following listeners)
+         * Listeners are registered manually in App\Providers\EventServiceProvider:
          *      SendLeadEmail: notifies CONTACT_EMAIL
          *      SendLeadSchedulingEmail: emails the lead a Calendar booking link
          *      SendLeadSlackNotification: optional Slack ping
