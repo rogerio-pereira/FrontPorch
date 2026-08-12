@@ -40,7 +40,7 @@ defineProps<{
                     {{ faq.question }}
                 </AccordionTrigger>
                 <AccordionContent
-                    class="text-[var(--text-muted-on-light)]"
+                    class="text-base leading-relaxed text-[var(--text-muted-on-light)]"
                     :data-test="`home-faq-content-${index}`"
                 >
                     {{ faq.answer }}

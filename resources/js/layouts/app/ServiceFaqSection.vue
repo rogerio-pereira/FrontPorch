@@ -47,7 +47,10 @@ defineProps<{
                     {{ faq.question }}
                 </AccordionTrigger>
                 <AccordionContent
-                    :class="light ? 'text-[var(--text-muted-on-light)]' : 'text-[var(--text-muted-on-dark)]'"
+                    :class="[
+                        light ? 'text-[var(--text-muted-on-light)]' : 'text-[var(--text-muted-on-dark)]',
+                        'text-base leading-relaxed',
+                    ]"
                     :data-test="`service-faq-content-${index}`"
                 >
                     {{ faq.answer }}
