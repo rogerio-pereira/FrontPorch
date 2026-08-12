@@ -5,11 +5,11 @@
 
 **Email:** {{ $lead['email'] }}
 
-**Phone:** {{ $phoneDisplay }}
+**Services:** {{ $lead['services'] }}
 
 **Website:** {{ $websiteDisplay }}
 
-**Services:** {{ $lead['services'] }}
+**Phone:** {{ $phoneDisplay }}
 
 Thanks,<br>
 {{ config('app.name') }}

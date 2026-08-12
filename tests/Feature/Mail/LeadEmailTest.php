@@ -38,9 +38,11 @@ it('renders the lead notification markdown', function () {
 
     expect($html)->toContain('Alex Rivera');
     expect($html)->toContain('alex@example.com');
-    expect($html)->toContain('(not provided)');
-    expect($html)->toContain('https://example.com');
     expect($html)->toContain('Lead generation');
+    expect($html)->toContain('https://example.com');
+    expect($html)->toContain('(not provided)');
+    expect(strpos($html, 'Services:'))->toBeLessThan(strpos($html, 'Website:'));
+    expect(strpos($html, 'Website:'))->toBeLessThan(strpos($html, 'Phone:'));
 });
 
 it('renders not provided when website is missing', function () {
