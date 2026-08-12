@@ -8,24 +8,21 @@ use Illuminate\Database\Seeder;
 class UserSeeder extends Seeder
 {
     /**
-     * Seed production admin users.
+     * Seed the default local development user.
      */
     public function run(): void
     {
-        User::firstOrCreate(
-            ['email' => 'rodu.pereira@gmail.com'],
-            [
+        User::factory()
+            ->create([
                 'name' => 'Rogerio Pereira',
-                'password' => '$2y$12$cmP2pvkQuYnz1SoXnnIYc.6b8HoJ/v510pm6HYRv./d8hg4rZ/oEy',
-            ]
-        );
-
-        User::firstOrCreate(
-            ['email' => 'saahjessicaxp@gmail.com'],
-            [
+                'email' => 'rodu.pereira@gmail.com',
+                'password' => '\$2y\$12\$cmP2pvkQuYnz1SoXnnIYc.6b8HoJ/v510pm6HYRv./d8hg4rZ/oEy',
+            ]);
+        User::factory()
+            ->create([
                 'name' => 'Sarah Jessica Xavier Pereira',
-                'password' => '$2y$12$7eC6j0PlU5GbRkYxgMZ2futB7ATNTadIxTT/us1P38PBpF0upn7O.',
-            ]
-        );
+                'email' => 'saahjessicaxp@gmail.com',
+                'password' => '\$2y\$12\$7eC6j0PlU5GbRkYxgMZ2futB7ATNTadIxTT/us1P38PBpF0upn7O.',
+            ]);
     }
 }
