@@ -14,6 +14,7 @@ function contactLeadPayload(array $overrides = []): ContactLeadSubmitted
         'email' => 'alex@example.com',
         'phone' => '(813) 555-0100',
         'website' => 'https://example.com',
+        'services' => [],
     ], $overrides);
 
     return new ContactLeadSubmitted($lead);

@@ -21,16 +21,23 @@ beforeEach(function () {
 it('submits the home contact form successfully', function () {
     Mail::fake();
 
+    $service = Service::query()->firstOrFail();
+
     visit('/')
         ->assertPresent('@contact-form')
         ->assertPresent('@contact-submit')
+        ->assertPresent('@contact-services')
         ->assertSee('We will email you the discovery-call link.')
         ->type('name', 'Alex Rivera')
         ->type('email', 'alex@example.com')
         ->type('website', 'https://example.com')
         ->type('phone', '(813) 555-0100')
+        ->click('@contact-services-trigger')
+        ->click('@contact-service-option-'.$service->slug)
         ->click('@contact-submit')
         ->assertPathIs('/');
 
-    Mail::assertSent(LeadEmail::class);
+    Mail::assertSent(LeadEmail::class, function (LeadEmail $mail) use ($service): bool {
+        return $mail->lead['services'] === [$service->title];
+    });
 });

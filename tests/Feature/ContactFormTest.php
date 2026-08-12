@@ -2,6 +2,7 @@
 
 use App\Mail\LeadEmail;
 use App\Mail\LeadSchedulingEmail;
+use App\Models\Service;
 use App\Notifications\SlackNotification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -81,6 +82,77 @@ it('accepts a submission without website', function () {
         return $mail->lead['website'] === null
             && $mail->websiteDisplay === '(not provided)';
     });
+});
+
+it('accepts a submission with selected services', function () {
+    Mail::fake();
+    Notification::fake();
+
+    $leadGeneration = Service::factory()->create([
+        'title' => 'Lead generation',
+        'sort_order' => 1,
+    ]);
+    $emailMarketing = Service::factory()->create([
+        'title' => 'Email marketing',
+        'sort_order' => 2,
+    ]);
+
+    $response = $this->from('/')
+        ->post('/contact', [
+            'name' => 'Alex Rivera',
+            'email' => 'alex@example.com',
+            'services' => [
+                $emailMarketing->slug,
+                $leadGeneration->slug,
+            ],
+            'cf-turnstile-response' => Turnstile::dummy(),
+        ]);
+
+    $response->assertRedirect('/');
+
+    Mail::assertSent(LeadEmail::class, function (LeadEmail $mail) use ($leadGeneration, $emailMarketing): bool {
+        return $mail->lead['services'] === [
+            $leadGeneration->title,
+            $emailMarketing->title,
+        ]
+            && $mail->servicesDisplay === 'Lead generation, Email marketing';
+    });
+});
+
+it('accepts a submission without services', function () {
+    Mail::fake();
+    Notification::fake();
+
+    $response = $this->from('/')
+        ->post('/contact', [
+            'name' => 'Alex Rivera',
+            'email' => 'alex@example.com',
+            'cf-turnstile-response' => Turnstile::dummy(),
+        ]);
+
+    $response->assertRedirect('/');
+
+    Mail::assertSent(LeadEmail::class, function (LeadEmail $mail): bool {
+        return $mail->lead['services'] === []
+            && $mail->servicesDisplay === '(not provided)';
+    });
+});
+
+it('rejects unknown service slugs', function () {
+    Mail::fake();
+
+    $response = $this->from('/')
+        ->post('/contact', [
+            'name' => 'Alex Rivera',
+            'email' => 'alex@example.com',
+            'services' => ['not-a-real-service'],
+            'cf-turnstile-response' => Turnstile::dummy(),
+        ]);
+
+    $response->assertRedirect('/');
+    $response->assertSessionHasErrors(['services.0']);
+
+    Mail::assertNothingSent();
 });
 
 it('validates required name and email', function () {
