@@ -31,13 +31,13 @@ const navItems = [
 </script>
 
 <template>
-    <header class="sticky top-0 z-50 border-b border-border-subtle bg-brand-bg/95 backdrop-blur">
+    <header class="sticky top-0 z-50 border-b border-border-subtle bg-[#192630]">
         <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <Link href="/" class="flex items-center" data-test="nav-home">
+            <Link href="/" class="flex h-full items-center" data-test="nav-home">
                 <img
                     src="/images/branding/logo-horizontal.png"
                     alt="Front Porch Creative"
-                    class="h-8 w-auto"
+                    class="h-[95%] w-auto"
                 />
             </Link>
 

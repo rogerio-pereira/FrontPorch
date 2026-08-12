@@ -89,12 +89,14 @@ function resetTurnstile(): void {
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="contact-website">Website</Label>
+                    <Label for="contact-website">
+                        Website
+                        <span class="font-normal text-[var(--text-muted-on-light)]">(optional)</span>
+                    </Label>
                     <Input
                         id="contact-website"
                         name="website"
                         type="url"
-                        required
                         placeholder="https://yourbusiness.com"
                         data-test="contact-website"
                     />
